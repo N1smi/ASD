@@ -69,3 +69,7 @@ TEST(TestCircleLib, IdenticalCircles) {
   EXPECT_EQ(coincidence, result);
 }
 
+TEST(TestCircleLib, ThrowWhenTryCreateWithNegativeRad) {
+  ASSERT_ANY_THROW(Circle c1(Point(0,0),-10));
+}
+
