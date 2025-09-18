@@ -36,25 +36,25 @@ public:
   Matrix<T>& operator=(const Matrix<T>& other);
 
   friend std::istream& operator>>(std::istream& is, Matrix<T>& matrix) {
-    size_t lines, columns;
-    is >> lines >> columns;
+    /*size_t lines, columns;
+    is >> lines >> columns;*/
 
-    matrix._lines = lines;
-    matrix._columns = columns;
-    matrix.resize(lines);
+    //matrix._lines = lines;
+    //matrix._columns = columns;
+    //matrix.resize(lines);
 
-    for (size_t i = 0; i < lines; i++) {
-      matrix[i] = MVector<T>(columns);
-      for (size_t j = 0; j < columns; j++) {
-        is >> matrix[i][j];
-      }
-    }
+    //for (size_t i = 0; i < lines; i++) {
+    //  matrix[i] = MVector<T>(columns);
+    //  for (size_t j = 0; j < columns; j++) {
+    //    is >> matrix[i][j];
+    //  }
+    //}
     return is;
   }
 
   friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix) {
     // os << matrix._lines << " X " << matrix._columns << "\n";
-    if (matrix._lines == 0 && matrix._columns == 0) {
+   /* if (matrix._lines == 0 && matrix._columns == 0) {
       os << "EMPTY MATRIX";
       return os;
     }
@@ -68,15 +68,14 @@ public:
       if (i < matrix._lines - 1) {
         os << "\n";
       }
-    }
+    }*/
     return os;
   }
 };
 
 template <class T>
 Matrix<T>::Matrix(size_t lines, size_t columns) {
-  _lines = lines;
-  _columns = columns;
+
 }
 
 template <class T>

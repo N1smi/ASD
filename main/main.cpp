@@ -88,89 +88,138 @@ int main() {
 #include <iostream>
 #include <windows.h>
 #include "../lib_matrix/matrix.h"
+#include "../lib_triangle_matrix/triangle_matrix.h"
 
 template<class T>
-void MatrixCalculator() {
-  system("cls");
-  Matrix<T> A, B, result;
-  int TypeOp;
+void MatrixInput() {
+  int matrixType;
 
-  std::cout << "=== MATRIX CALCULATOR ===\n\n";
-
-  std::cout << "Enter the matrix A (first the number of lines and columns, then the elements): \n";
-  std::cin >> A;
-
-  std::cout << "Enter the matrix B (first the number of lines and columns, then the elements): \n";
-  std::cin >> B;
-  do {
-  system("cls");
-  std::cout << "=== MATRIX CALCULATOR ===\n";
-  std::cout << "\n=== SELECT AN OPERATION ===\n";
-  std::cout << "1. Addition (A + B)\n";
-  std::cout << "2. Subtraction (A - B)\n";
-  std::cout << "3. Multiplication (A * B)\n";
-  std::cout << "0. Back\n";
-  std::cout << "Selection: ";
-  std::cin >> TypeOp;
-
-  try {
-    switch (TypeOp) {
-    case 1:
-      result = A + B;
-      std::cout << "\nTHE RESULT OF THE ADDITION:\n";
-      std::cout << A;
-      std::cout << "\n+\n";
-      std::cout << B;
-      std::cout << "\n=\n";
-      std::cout << result;
+  while (true) {
+    system("cls");
+    std::cout << "=== MATRIX CALCULATOR ===\n";
+    std::cout << "Select matrix type:\n";
+    std::cout << "1. Regular matrices\n";
+    std::cout << "2. Triangular matrices\n";
+    std::cout << "Choice: ";
+    std::cin >> matrixType;
+    if (matrixType == 1 || matrixType == 2) {
       break;
-
-    case 2:
-      result = A - B;
-      std::cout << "\nTHE RESULT OF THE SUBTRACTION:\n";
-      std::cout << A;
-      std::cout << "\n-\n";
-      std::cout << B;
-      std::cout << "\n=\n";
-      std::cout << result;
-      break;
-
-    case 3:
-      result = A * B;
-      std::cout << "\nTHE RESULT OF THE MULTIPLICATION:\n";
-      std::cout << A;
-      std::cout << "\n*\n";
-      std::cout << B;
-      std::cout << "\n=\n";
-      std::cout << result;
-      break;
-
-    case 0:
-      system("cls");
-      break;
-
-    default:
-      std::cout << "\nWrong choice! Try again.\n";
-      break;
+    } else {
+      std::cout << "Wrong choice. Try again!\n";
+      Sleep(2000);
     }
+  }
 
-    if (TypeOp != 0) {
-      std::cout << "\nPress Enter to continue...";
+  system("cls");
+
+  std::cout << "=== MATRIX CALCULATOR ===\n";
+
+  if (matrixType == 1) {
+    Matrix<T> A, B;
+
+    std::cout << "Enter the matrix A (first the number of lines and columns, then the elements): \n";
+    std::cin >> A;
+
+    std::cout << "Enter the matrix B (first the number of lines and columns, then the elements): \n";
+    std::cin >> B;
+
+    system("pause");
+
+    MatrixCalculator<Matrix<T>>(A, B);
+
+  } else {
+    TriangleMatrix<T> A, B;
+
+    std::cout << "Enter the triangle matrix A (first the dimension, then the elements): \n";
+    std::cin >> A;
+
+    std::cout << "Enter the triangle matrix B (first the dimension, then the elements): \n";
+    std::cin >> B;
+
+    system("pause");
+
+    MatrixCalculator<TriangleMatrix<T>>(A, B);
+  }
+}
+
+template<class Q>
+void MatrixCalculator(Q& A, Q& B) {
+  std::cout << "=== MATRIX CALCULATOR ===\n";
+
+  int TypeOp;
+  Q result;
+
+  do {
+    system("cls");
+    std::cout << "=== MATRIX CALCULATOR ===\n";
+    std::cout << "Select an operation:\n";
+    std::cout << "1. Addition (A + B)\n";
+    std::cout << "2. Subtraction (A - B)\n";
+    std::cout << "3. Multiplication (A * B)\n";
+    std::cout << "0. Back\n";
+    std::cout << "Selection: ";
+    std::cin >> TypeOp;
+
+    try {
+      switch (TypeOp) {
+      case 1:
+        result = A + B;
+        std::cout << "\nTHE RESULT OF THE ADDITION:\n";
+        std::cout << A;
+        std::cout << "\n+\n";
+        std::cout << B;
+        std::cout << "\n=\n";
+        std::cout << result;
+        break;
+
+      case 2:
+        result = A - B;
+        std::cout << "\nTHE RESULT OF THE SUBTRACTION:\n";
+        std::cout << A;
+        std::cout << "\n-\n";
+        std::cout << B;
+        std::cout << "\n=\n";
+        std::cout << result;
+        break;
+
+      case 3:
+        result = A * B;
+        std::cout << "\nTHE RESULT OF THE MULTIPLICATION:\n";
+        std::cout << A;
+        std::cout << "\n*\n";
+        std::cout << B;
+        std::cout << "\n=\n";
+        std::cout << result;
+        break;
+
+      case 0:
+        system("cls");
+        break;
+
+      default:
+        std::cout << "\nWrong choice! Try again.\n";
+        break;
+      }
+
+      if (TypeOp != 0) {
+        std::cout << "\nPress Enter to continue...";
+        std::cin.ignore();
+        std::cin.get();
+        system("cls");
+      }
+
+    }
+    catch (const std::exception& e) {
+      std::cout << "Error: " << e.what() << "\n";
+      std::cout << "Press Enter to continue...";
       std::cin.ignore();
       std::cin.get();
-      system("cls");
     }
+  } while (TypeOp != 0);
 
-  }
-  catch (const std::exception& e) {
-    std::cout << "Error: " << e.what() << "\n";
-    std::cout << "Press Enter to continue...";
-    std::cin.ignore();
-    std::cin.get();
-  }
-} while (TypeOp != 0);
 
 }
+
 int main() {
   while (true) {
     std::cout << "=== MATRIX CALCULATOR ===\n";
@@ -186,13 +235,13 @@ int main() {
 
     switch (TypeChoice) {
     case 1:
-      MatrixCalculator<int>();
+      MatrixInput<int>();
       break;
     case 2:
-      MatrixCalculator<double>();
+      MatrixInput<double>();
       break;
     case 3:
-      MatrixCalculator<float>();
+      MatrixInput<float>();
       break;
     case 0:
       return 0;
