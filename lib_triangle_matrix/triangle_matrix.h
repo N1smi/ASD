@@ -22,6 +22,8 @@ class TriangleMatrix : public Matrix<T> {
    TriangleMatrix<T>& operator=(const TriangleMatrix<T>& other);
 
    friend std::istream& operator>>(std::istream& is, TriangleMatrix<T>& tmatrix) {
+     std::cout << "\n[Work istream function TM]\n\n";
+
      return is;
    }
 
