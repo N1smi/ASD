@@ -1,7 +1,7 @@
 // Copyright 2025 Smirnov Nikita
 
-#ifndef LIB_MATHVECTOR_MATHVECTOR_H_ 
-#define LIB_MATHVECTOR_MATHVECTOR_H_ 
+#ifndef LIB_MATHVECTOR_MATHVECTOR_H_
+#define LIB_MATHVECTOR_MATHVECTOR_H_
 
 #include<stdexcept>
 #include "../lib_tvector/tvector.h"
@@ -34,7 +34,7 @@ class MVector : public TVector<T> {
 };
 
 template <class T>
-MVector<T>::MVector(size_t size, size_t start_index) 
+MVector<T>::MVector(size_t size, size_t start_index)
   : TVector<T>(size), _start_index(start_index) {}
 
 template <class T>
@@ -44,7 +44,7 @@ template <class T>
 MVector<T>::MVector(std::initializer_list<T> initList) : TVector<T>(initList) {}
 
 template <class T>
-MVector<T>::MVector(const MVector<T>& other) 
+MVector<T>::MVector(const MVector<T>& other)
   : TVector<T>(other), _start_index(other._start_index) {}
 
 template <class T>
@@ -160,4 +160,4 @@ T MVector<T>::operator*(MVector<T> vec) {
   return result;
 }
 
-#endif  // LIB_MATHVECTOR_MATHVECTOR_H_ 
+#endif  // LIB_MATHVECTOR_MATHVECTOR_H_

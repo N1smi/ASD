@@ -275,7 +275,6 @@ void MatrixCalculator(Q& A, Q& B) {
         std::cin.get();
         system("cls");
       }
-
     }
     catch (const std::exception& e) {
       std::cout << "Error: " << e.what() << "\n";

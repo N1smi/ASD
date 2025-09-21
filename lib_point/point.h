@@ -8,7 +8,7 @@ class Point {
   int _y;
 
  public:
-  Point(int x = 0, int y = 0);
+  explicit Point(int x = 0, int y = 0);
 
   Point(const Point& other);
 

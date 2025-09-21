@@ -1,4 +1,4 @@
-﻿// Copyright 2025 Smirnov Nikita
+﻿//  Copyright 2025 Smirnov Nikita
 
 #ifndef LIB_MATRIX_MATRIX_H_
 #define LIB_MATRIX_MATRIX_H_
@@ -11,7 +11,7 @@ class Matrix : public MVector<MVector<T>> {
   size_t _lines, _columns;
 
  public:
-  Matrix(size_t lines = 0, size_t columns = 0);
+  explicit Matrix(size_t lines = 0, size_t columns = 0);
   Matrix(size_t lines, size_t columns, const T* data);
   Matrix(const Matrix<T>& other);
   ~Matrix();
