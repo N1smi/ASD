@@ -1,4 +1,4 @@
-﻿//  Copyright 2025 Smirnov Nikita
+﻿// Copyright 2025 Smirnov Nikita  // NOLINT
 
 #ifndef LIB_MATRIX_MATRIX_H_
 #define LIB_MATRIX_MATRIX_H_
