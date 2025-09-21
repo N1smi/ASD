@@ -1,12 +1,13 @@
 // Copyright 2025 Smirnov Nikita
 
-//#define EASY_EXAMPLE
-//#define CIRCLE_EXAMPLE
+// #define EASY_EXAMPLE
+// #define CIRCLE_EXAMPLE
 #define MATRIX_CALCULATOR
+
+#include <iostream>
 
 #ifdef EASY_EXAMPLE
 
-#include <iostream>
 #include <iomanip>
 #include "../lib_easy_example/easy_example.h"
 
@@ -44,7 +45,6 @@ int main() {
 #include "../lib_circle/circle.h"
 
 int main() {
-  setlocale(LC_ALL, "rus");
   Point center1(0, 0);
   Circle circle1(center1, 2);
 
@@ -53,29 +53,32 @@ int main() {
 
   loc result = Circle::location_of_the_circles(circle1, circle2);
 
-  std::cout << "Окружность 1: центр (" << circle1.get_x() << ", " << circle1.get_y()
-    << "), радиус = " << circle1.get_rad() << std::endl;
-  std::cout << "Окружность 2: центр (" << circle2.get_x() << ", " << circle2.get_y()
-    << "), радиус = " << circle2.get_rad() << std::endl;
+  std::cout << "Circle 1: the center (" << circle1.get_x()
+    << ", " << circle1.get_y()
+    << "), radius =" << circle1.get_rad() << std::endl;
+  std::cout << "Circle 2: the center ("
+    << circle2.get_x() << ", " << circle2.get_y()
+    << "), radius =" << circle2.get_rad() << std::endl;
 
   switch (result) {
   case coincidence:
-    std::cout << "Результат: окружности совпадают" << std::endl;
+    std::cout << "Result: the circles match" << std::endl;
     break;
   case touch_in:
-    std::cout << "Результат: внутреннее касание" << std::endl;
+    std::cout << "The result: an inner touch" << std::endl;
     break;
   case touch_out:
-    std::cout << "Результат: внешнее касание" << std::endl;
+    std::cout << "Result: external touch" << std::endl;
     break;
   case without_interaction:
-    std::cout << "Результат: окружности не взаимодействуют" << std::endl;
+    std::cout << "Result: the circles don't interact." << std::endl;
     break;
   case entry:
-    std::cout << "Результат: одна окружность внутри другой" << std::endl;
+    std::cout << "Result: one circle inside the other" << std::endl;
     break;
   case interaction:
-    std::cout << "Результат: окружности пересекаются в двух точках" << std::endl;
+    std::cout << "Result: the circles intersect at two points"
+      << std::endl;
     break;
   }
 
@@ -85,7 +88,6 @@ int main() {
 
 #ifdef MATRIX_CALCULATOR
 
-#include <iostream>
 #include <windows.h>
 #include "../lib_matrix/matrix.h"
 #include "../lib_triangle_matrix/triangle_matrix.h"
@@ -96,7 +98,8 @@ void RegularMatrixInput() {
   size_t lines_B, columns_B;
 
   while (true) {
-    std::cout << "Enter the matrix A (first the number of lines and columns, then the elements): \n";
+    std::cout << "Enter the matrix A "
+      "(first the number of lines and columns, then the elements) : \n";
 
     if (!(std::cin >> lines_A >> columns_A)) {
       std::cin.clear();
@@ -112,7 +115,8 @@ void RegularMatrixInput() {
   std::cin >> A;
 
   while (true) {
-    std::cout << "Enter the matrix B (first the number of lines and columns, then the elements): \n";
+    std::cout << "Enter the matrix B "
+      "(first the number of lines and columns, then the elements): \n";
 
     if (!(std::cin >> lines_B >> columns_B)) {
       std::cin.clear();
@@ -139,7 +143,8 @@ void TriangleMatrixInput() {
   size_t dimension_A, dimension_B;
 
   while (true) {
-    std::cout << "Enter the triangle matrix A (first the dimension, then the elements): \n";
+    std::cout << "Enter the triangle matrix A "
+      "(first the dimension, then the elements): \n";
 
     if (!(std::cin >> dimension_A)) {
       std::cin.clear();
@@ -153,7 +158,8 @@ void TriangleMatrixInput() {
 
   std::cin >> A;
   while (true) {
-    std::cout << "Enter the triangle matrix B (first the dimension, then the elements): \n";
+    std::cout << "Enter the triangle matrix B "
+      "(first the dimension, then the elements): \n";
 
     if (!(std::cin >> dimension_B)) {
       std::cin.clear();
@@ -278,8 +284,6 @@ void MatrixCalculator(Q& A, Q& B) {
       std::cin.get();
     }
   } while (TypeOp != 0);
-
-
 }
 
 typedef int TYPE;

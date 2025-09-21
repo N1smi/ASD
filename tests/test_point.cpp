@@ -19,8 +19,8 @@ TEST(TestPointLib, CreatePointWithParams) {
 
 TEST(TestPointLib, CreatePointWithCopy) {
   Point original(7, 3);
-  Point copy(original);
+  Point copyIt(original);
 
-  EXPECT_EQ(7, copy.get_x());
-  EXPECT_EQ(3, copy.get_y());
+  EXPECT_EQ(7, copyIt.get_x());
+  EXPECT_EQ(3, copyIt.get_y());
 }

@@ -19,8 +19,8 @@ TEST(TestPoint3DLib, CreatePoint3DWithParams) {
 
 TEST(TestPoint3DLib, CreatePoint3DWithCopy) {
   Point3D original(7, 3, 12);
-  Point3D copy(original);
-  EXPECT_EQ(copy.get_x(), 7);
-  EXPECT_EQ(copy.get_y(), 3);
-  EXPECT_EQ(copy.get_z(), 12);
+  Point3D copyIt(original);
+  EXPECT_EQ(copyIt.get_x(), 7);
+  EXPECT_EQ(copyIt.get_y(), 3);
+  EXPECT_EQ(copyIt.get_z(), 12);
 }

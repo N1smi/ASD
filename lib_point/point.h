@@ -6,7 +6,8 @@
 class Point {
   int _x;
   int _y;
-public:
+
+ public:
   Point(int x = 0, int y = 0);
 
   Point(const Point& other);

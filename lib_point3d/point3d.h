@@ -7,7 +7,8 @@
 
 class Point3D : public Point {
   int _z;
-public:
+
+ public:
   Point3D(int x = 0, int y = 0, int z = 0);
   Point3D(const Point3D& other);
 

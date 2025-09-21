@@ -1,17 +1,18 @@
 // Copyright 2025 Smirnov Nikita
 
-#ifndef LIB_MVECTOR_MVECTOR_H_
-#define LIB_MVECTOR_MVECTOR_H_
+#ifndef LIB_MATHVECTOR_MATHVECTOR_H_ 
+#define LIB_MATHVECTOR_MATHVECTOR_H_ 
 
-#include "../lib_tvector/tvector.h"
 #include<stdexcept>
+#include "../lib_tvector/tvector.h"
 
 template <class T>
 class MVector : public TVector<T> {
   size_t _start_index = 0;
-public:
+
+ public:
   MVector(size_t size, size_t start_index);
-  MVector(size_t size = 0);
+  explicit MVector(size_t size = 0);
   MVector(std::initializer_list<T>);
   MVector(const MVector<T>& other);
   ~MVector();
@@ -33,7 +34,8 @@ public:
 };
 
 template <class T>
-MVector<T>::MVector(size_t size, size_t start_index) : TVector<T>(size), _start_index(start_index) {}
+MVector<T>::MVector(size_t size, size_t start_index) 
+  : TVector<T>(size), _start_index(start_index) {}
 
 template <class T>
 MVector<T>::MVector(size_t size) : TVector<T>(size) {}
@@ -42,7 +44,8 @@ template <class T>
 MVector<T>::MVector(std::initializer_list<T> initList) : TVector<T>(initList) {}
 
 template <class T>
-MVector<T>::MVector(const MVector<T>& other) : TVector<T>(other), _start_index(other._start_index) {}
+MVector<T>::MVector(const MVector<T>& other) 
+  : TVector<T>(other), _start_index(other._start_index) {}
 
 template <class T>
 MVector<T>::~MVector() = default;
@@ -79,14 +82,15 @@ inline T& MVector<T>::at(size_t index) {
     static T zero = T();
     return zero;
   }
-  
+
   return TVector<T>::at(index - _start_index);
 }
 
 template <class T>
 MVector<T>& MVector<T>::operator+=(const MVector<T>& vec) {
   if (this->size() != vec.size()) {
-    throw std::logic_error("Size error: vectors cannot have different sizes in the addition operation!");
+    throw std::logic_error
+    ("Size error: vectors have different sizes in the addition operation!");
   }
   for (size_t i = 0; i < vec.size(); i++) {
     (*this)[i] += vec[i];
@@ -98,7 +102,8 @@ MVector<T>& MVector<T>::operator+=(const MVector<T>& vec) {
 template <class T>
 MVector<T>& MVector<T>::operator-=(const MVector<T>& vec) {
   if (this->size() != vec.size()) {
-    throw std::logic_error("Size error: vectors cannot have different sizes in the subtraction operation!");
+    throw std::logic_error
+    ("Size error: vectors have different sizes in the subtraction operation!");
   }
 
   for (size_t i = 0; i < vec.size(); i++) {
@@ -141,7 +146,9 @@ MVector<T> MVector<T>::operator*(T val) {
 template <class T>
 T MVector<T>::operator*(MVector<T> vec) {
   if (this->size() != vec.size()) {
-    throw std::logic_error("Size error: vectors cannot have different sizes in the multiplication operation!");
+    throw std::logic_error
+    ("Size error: vectors have different sizes "
+      "in the multiplication operation!");
   }
 
   T result = T();
@@ -153,5 +160,4 @@ T MVector<T>::operator*(MVector<T> vec) {
   return result;
 }
 
-
-#endif // LIB_MVECTOR_MVECTOR_H_
+#endif  // LIB_MATHVECTOR_MATHVECTOR_H_ 

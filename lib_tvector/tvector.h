@@ -18,7 +18,7 @@ class TVector {
   size_t _deleted;
   State* _states;
 
-public:
+ public:
   explicit TVector(size_t size = 0);
   TVector(std::initializer_list<T>);
   TVector(const TVector<T>& other);
@@ -90,7 +90,7 @@ public:
   template<typename T>
   friend TVector<T*> find(TVector<T>& vec, const T& value);
 
-private:
+ private:
   void defragment();
   size_t real_pos(size_t pos) const;
   T* real_address(size_t pos);
@@ -364,8 +364,7 @@ void TVector<T>::insert(size_t pos, size_t count, const T& value) {
   for (size_t i = start_pos; i < insert_pos && count_deleted < count; i++) {
     if (_states[i] == deleted) {
       count_deleted++;
-    }
-    else {
+    } else {
       count_deleted = 0;
       break;
     }
@@ -759,8 +758,7 @@ T median_of_three(T a, T b, T c) {
     if (b < c) return b;
     else if (a < c) return c;
     else return a;
-  }
-  else {
+  } else {
     if (a < c) return a;
     else if (b < c) return c;
     else return b;
@@ -887,7 +885,8 @@ inline bool TVector<T>::is_full() const noexcept {
 template<class T>
 bool TVector<T>::reallocate(size_t new_size) {
   if (new_size <= _capacity) return false;
-  size_t new_capacity = ((new_size - _deleted) / STEP_OF_CAPACITY + 1) * STEP_OF_CAPACITY;
+  size_t new_capacity = ((new_size - _deleted)
+    / STEP_OF_CAPACITY + 1) * STEP_OF_CAPACITY;
   T* new_data;
   State* new_states;
 

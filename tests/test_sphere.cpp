@@ -23,11 +23,11 @@ TEST(TestSphereLib, CreateSphereWithParams) {
 TEST(TestSphereLib, CreateSphereWithCopy) {
   Point3D center(3, 6, 9);
   Sphere original(center, 12);
-  Sphere copy(original);
-  EXPECT_EQ(copy.get_x(), 3);
-  EXPECT_EQ(copy.get_y(), 6);
-  EXPECT_EQ(copy.get_z(), 9);
-  EXPECT_EQ(copy.get_rad(), 12);
+  Sphere copyIt(original);
+  EXPECT_EQ(copyIt.get_x(), 3);
+  EXPECT_EQ(copyIt.get_y(), 6);
+  EXPECT_EQ(copyIt.get_z(), 9);
+  EXPECT_EQ(copyIt.get_rad(), 12);
 }
 
 TEST(TestSphereLib, SphereNoIntersection) {

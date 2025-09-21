@@ -1,6 +1,7 @@
 // Copyright 2025 Smirnov Nikita
 
 #include <gtest/gtest.h>
+#include<string>
 #include "../lib_tvector/tvector.h"
 
 TEST(TestTVectorLib, CreateDefaultVector) {
