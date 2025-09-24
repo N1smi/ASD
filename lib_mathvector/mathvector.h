@@ -118,7 +118,6 @@ MVector<T>& MVector<T>::operator*=(T val) {
   for (size_t i = 0; i < (*this).size(); i++) {
     (*this)[i] *= val;
   }
-
   return *this;
 }
 
