@@ -76,7 +76,7 @@ TEST(TestMatrixLib, OperatorPlusEqualThrowWhenDifferentSizes) {
   EXPECT_ANY_THROW(matrix1 += matrix2);
 }
 
-TEST(TestMatrixLib, OperatorEqual) {
+TEST(TestMatrixLib, OperatorEqualMatrix) {
   int data1[] = { 1, 2, 3, 4, 5, 6 };
   Matrix<int> original(2, 3, data1);
 
@@ -256,4 +256,30 @@ TEST(TestMatrixLib, MatrixMultiplicationIncompatibleSizes) {
   Matrix<int> matrix2(3, 2, data2);
 
   EXPECT_ANY_THROW(Matrix<int> result = matrix1 * matrix2);
+}
+
+TEST(TestMatrixLib, OperatorEqualMatrixAndMVector) {
+  MVector<int> vec({ 1, 2, 3, 4, 5 });
+  Matrix<int> matrix;
+
+  matrix = vec;
+
+  EXPECT_EQ(matrix.get_lines(), 5);
+  EXPECT_EQ(matrix.get_columns(), 1);
+
+  EXPECT_EQ(matrix[0][0], 1);
+  EXPECT_EQ(matrix[1][0], 2);
+  EXPECT_EQ(matrix[2][0], 3);
+  EXPECT_EQ(matrix[3][0], 4);
+  EXPECT_EQ(matrix[4][0], 5);
+}
+
+TEST(TestMatrixLib, OperatorEqualMatrixAndScalar) {
+  Matrix<int> matrix(3, 3);
+
+  matrix = 42;
+
+  EXPECT_EQ(matrix.get_lines(), 1);
+  EXPECT_EQ(matrix.get_columns(), 1);
+  EXPECT_EQ(matrix[0][0], 42);
 }

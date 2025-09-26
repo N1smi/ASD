@@ -12,25 +12,36 @@ class MVector : public TVector<T> {
 
  public:
   MVector(size_t size, size_t start_index);
+
   explicit MVector(size_t size = 0);
+
   MVector(std::initializer_list<T>);
+
   MVector(const MVector<T>& other);
+
   ~MVector();
 
   inline size_t start_index() const noexcept;
 
   const T& operator[](size_t index) const;
+
   T& operator[](size_t index);
 
   inline T& at(size_t index);
 
   MVector<T>& operator+=(const MVector<T>& vec);
+
   MVector<T>& operator-=(const MVector<T>& vec);
+
   MVector<T>& operator*=(T val);
-  MVector<T> operator+(MVector<T> vec);
-  MVector<T> operator-(MVector<T> vec);
-  MVector<T> operator*(T val);
-  T operator*(MVector<T> vec);
+
+  MVector<T> operator+(const MVector<T>& vec) const;
+
+  MVector<T> operator-(const MVector<T>& vec) const;
+
+  MVector<T> operator*(T val) const;
+
+  T operator*(const MVector<T>& vec) const;
 };
 
 template <class T>
@@ -122,28 +133,28 @@ MVector<T>& MVector<T>::operator*=(T val) {
 }
 
 template <class T>
-MVector<T> MVector<T>::operator+(MVector<T> vec) {
+MVector<T> MVector<T>::operator+(const MVector<T>& vec) const {
   MVector<T> result = *this;
   result += vec;
   return result;
 }
 
 template <class T>
-MVector<T> MVector<T>::operator-(MVector<T> vec) {
+MVector<T> MVector<T>::operator-(const MVector<T>& vec) const {
   MVector<T> result = *this;
   result -= vec;
   return result;
 }
 
 template <class T>
-MVector<T> MVector<T>::operator*(T val) {
+MVector<T> MVector<T>::operator*(T val) const {
   MVector<T> result = *this;
   result *= val;
   return result;
 }
 
 template <class T>
-T MVector<T>::operator*(MVector<T> vec) {
+T MVector<T>::operator*(const MVector<T>& vec) const {
   if (this->size() != vec.size()) {
     throw std::logic_error
     ("Size error: vectors have different sizes "

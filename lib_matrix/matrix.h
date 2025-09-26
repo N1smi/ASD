@@ -13,8 +13,11 @@ class Matrix : public MVector<MVector<T>> {
 
  public:
   explicit Matrix(size_t lines = 0, size_t columns = 0);
+
   Matrix(size_t lines, size_t columns, const T* data);
+
   Matrix(const Matrix<T>& other);
+
   ~Matrix();
 
   inline size_t get_lines() const {
@@ -37,11 +40,15 @@ class Matrix : public MVector<MVector<T>> {
 
   Matrix<T> operator*(T val) const;
 
-  MVector<T> operator*(MVector<T> vec);
+  MVector<T> operator*(const MVector<T>& vec) const;
 
-  Matrix<T> operator*(Matrix<T> other);
+  Matrix<T> operator*(const Matrix<T>& other) const;
 
   Matrix<T>& operator=(const Matrix<T>& other);
+
+  Matrix<T>& operator=(const MVector<T>& vec);
+
+  Matrix<T>& operator=(T val);
 
   bool operator==(const Matrix<T>& other) const;
 
@@ -113,7 +120,7 @@ Matrix<T>::~Matrix() {
 template <class T>
 Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& other) {
   if (_lines != other._lines || _columns != other._columns) {
-    throw std::logic_error("Size error: the matrices must have equal sizes"
+    throw std::logic_error("Size error: the matrices must have equal sizes "
       "in the addition operation!");
   }
   for (size_t i = 0; i < _lines; i++) {
@@ -125,7 +132,7 @@ Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& other) {
 template <class T>
 Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& other) {
   if (_lines != other._lines || _columns != other._columns) {
-    throw std::logic_error("Size error: the matrices must have equal sizes"
+    throw std::logic_error("Size error: the matrices must have equal sizes "
       "in the subtraction operation!");
   }
   for (size_t i = 0; i < _lines; i++) {
@@ -164,9 +171,9 @@ Matrix<T> Matrix<T>::operator*(T val) const {
 }
 
 template <class T>
-MVector<T> Matrix<T>::operator*(MVector<T> vec) {
+MVector<T> Matrix<T>::operator*(const MVector<T>& vec) const {
   if (_columns != vec.size()) {
-    throw std::logic_error("Matrix columns must match"
+    throw std::logic_error("Matrix columns must match "
       "vector size for multiplication");
   }
 
@@ -180,7 +187,7 @@ MVector<T> Matrix<T>::operator*(MVector<T> vec) {
 }
 
 template <class T>
-Matrix<T> Matrix<T>::operator*(Matrix<T> other) {
+Matrix<T> Matrix<T>::operator*(const Matrix<T>& other) const {
   if (_columns != other._lines) {
     throw std::logic_error("Matrix dimensions must be compatible for multiplication");
   }
@@ -205,6 +212,28 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& other) {
       (*this)[i] = other[i];
     }
   }
+  return *this;
+}
+
+template <class T>
+Matrix<T>& Matrix<T>::operator=(const MVector<T>& vec) {
+  _lines = vec.size();
+  _columns = 1;
+  this->resize(_lines);
+  for (size_t i = 0; i < _lines; i++) {
+    (*this)[i] = MVector<T>(1);
+    (*this)[i][0] = vec[i];
+  }
+  return *this;
+}
+
+template <class T>
+Matrix<T>& Matrix<T>::operator=(T val) {
+  _lines = 1;
+  _columns = 1;
+  this->resize(1);
+  (*this)[0] = MVector<T>(1);
+  (*this)[0][0] = val;
   return *this;
 }
 
