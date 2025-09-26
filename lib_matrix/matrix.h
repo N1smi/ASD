@@ -79,11 +79,12 @@ class Matrix : public MVector<MVector<T>> {
   }
 
  private:
-   MVector<T> get_column(size_t column_index) const;
+  MVector<T> get_column(size_t column_index) const;
 };
 
 template <class T>
-Matrix<T>::Matrix(size_t lines, size_t columns) : _lines(lines), _columns(columns) {
+Matrix<T>::Matrix(size_t lines, size_t columns)
+  : _lines(lines), _columns(columns) {
   if (lines > 0 && columns > 0) {
     this->resize(lines);
     for (size_t i = 0; i < lines; i++) {
@@ -93,7 +94,8 @@ Matrix<T>::Matrix(size_t lines, size_t columns) : _lines(lines), _columns(column
 }
 
 template <class T>
-Matrix<T>::Matrix(size_t lines, size_t columns, const T* data) : _lines(lines), _columns(columns) {
+Matrix<T>::Matrix(size_t lines, size_t columns, const T* data)
+  : _lines(lines), _columns(columns) {
   if (lines > 0 && columns > 0) {
     this->resize(lines);
     for (size_t i = 0; i < lines; i++) {
@@ -106,7 +108,8 @@ Matrix<T>::Matrix(size_t lines, size_t columns, const T* data) : _lines(lines), 
 }
 
 template <class T>
-Matrix<T>::Matrix(const Matrix<T>& other) : _lines(other._lines), _columns(other._columns) {
+Matrix<T>::Matrix(const Matrix<T>& other)
+  : _lines(other._lines), _columns(other._columns) {
   this->resize(_lines);
   for (size_t i = 0; i < _lines; i++) {
     (*this)[i] = other[i];
@@ -189,7 +192,8 @@ MVector<T> Matrix<T>::operator*(const MVector<T>& vec) const {
 template <class T>
 Matrix<T> Matrix<T>::operator*(const Matrix<T>& other) const {
   if (_columns != other._lines) {
-    throw std::logic_error("Matrix dimensions must be compatible for multiplication");
+    throw std::logic_error("Matrix dimensions "
+      "must be compatible for multiplication");
   }
 
   Matrix<T> result(_lines, other._columns);
