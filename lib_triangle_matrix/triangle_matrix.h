@@ -10,15 +10,18 @@ template <class T>
 class TriangleMatrix : public Matrix<T> {
  public:
   explicit TriangleMatrix(size_t dimension = 0);
+
   TriangleMatrix(size_t dimension, const T* data);
+
   TriangleMatrix(const TriangleMatrix<T>& other);
-  ~TriangleMatrix();
 
-  TriangleMatrix<T> operator+(const TriangleMatrix<T>& other);
+  ~TriangleMatrix() = default;
 
-  TriangleMatrix<T> operator-(const TriangleMatrix<T>& other);
+  TriangleMatrix<T> operator+(const TriangleMatrix<T>& other) const;
 
-  TriangleMatrix<T> operator*(TriangleMatrix<T> matr);
+  TriangleMatrix<T> operator-(const TriangleMatrix<T>& other) const;
+
+  TriangleMatrix<T> operator*(const TriangleMatrix<T>& other) const;
 
   TriangleMatrix<T>& operator=(const TriangleMatrix<T>& other);
 
@@ -48,23 +51,19 @@ TriangleMatrix<T>::TriangleMatrix(const TriangleMatrix<T>& other) {
 }
 
 template <class T>
-TriangleMatrix<T>::~TriangleMatrix() {
-}
-
-template <class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator+
-(const TriangleMatrix<T>& other) {
+(const TriangleMatrix<T>& other) const {
   return *this;
 }
 
 template <class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator-
-(const TriangleMatrix<T>& other) {
+(const TriangleMatrix<T>& other) const  {
   return *this;
 }
 
 template <class T>
-TriangleMatrix<T> TriangleMatrix<T>::operator*(TriangleMatrix<T> matr) {
+TriangleMatrix<T> TriangleMatrix<T>::operator*(const TriangleMatrix<T>& other) const {
   return *this;
 }
 

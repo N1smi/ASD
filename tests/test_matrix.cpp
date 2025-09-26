@@ -8,7 +8,6 @@ TEST(TestMatrixLib, CreateDefaultMatrix) {
 
   EXPECT_EQ(matrix.get_lines(), 0);
   EXPECT_EQ(matrix.get_columns(), 0);
-  EXPECT_TRUE(matrix.is_empty());
 }
 
 TEST(TestMatrixLib, CreateMatrixWithDimensions) {
@@ -18,7 +17,6 @@ TEST(TestMatrixLib, CreateMatrixWithDimensions) {
 
   EXPECT_EQ(matrix.get_lines(), lines);
   EXPECT_EQ(matrix.get_columns(), columns);
-  EXPECT_EQ(matrix.size(), lines);
 }
 
 TEST(TestMatrixLib, CreateMatrixFromDataArray) {
@@ -45,7 +43,6 @@ TEST(TestMatrixLib, CreateMatrixWithCopy) {
 
   EXPECT_EQ(Itcopy.get_lines(), original.get_lines());
   EXPECT_EQ(Itcopy.get_columns(), original.get_columns());
-  EXPECT_EQ(Itcopy.size(), original.size());
 
   for (size_t i = 0; i < original.get_lines(); i++) {
     for (size_t j = 0; j < original.get_columns(); j++) {

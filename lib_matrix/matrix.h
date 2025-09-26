@@ -84,33 +84,27 @@ class Matrix : public MVector<MVector<T>> {
 
 template <class T>
 Matrix<T>::Matrix(size_t lines, size_t columns)
-  : _lines(lines), _columns(columns) {
-  if (lines > 0 && columns > 0) {
-    this->resize(lines);
-    for (size_t i = 0; i < lines; i++) {
-      (*this)[i] = MVector<T>(columns);
-    }
+  : MVector<MVector<T>>(lines), _lines(lines), _columns(columns) {
+  for (size_t i = 0; i < lines; i++) {
+    (*this)[i] = MVector<T>(columns);
   }
 }
 
 template <class T>
 Matrix<T>::Matrix(size_t lines, size_t columns, const T* data)
-  : _lines(lines), _columns(columns) {
-  if (lines > 0 && columns > 0) {
-    this->resize(lines);
-    for (size_t i = 0; i < lines; i++) {
-      (*this)[i] = MVector<T>(columns);
-      for (size_t j = 0; j < columns; j++) {
-        (*this)[i][j] = data[i * columns + j];
-      }
+  : MVector<MVector<T>>(lines), _lines(lines), _columns(columns) {
+  for (size_t i = 0; i < lines; i++) {
+    (*this)[i] = MVector<T>(columns);
+    for (size_t j = 0; j < columns; j++) {
+      (*this)[i][j] = data[i * columns + j];
     }
   }
 }
 
 template <class T>
 Matrix<T>::Matrix(const Matrix<T>& other)
-  : _lines(other._lines), _columns(other._columns) {
-  this->resize(_lines);
+  : MVector<MVector<T>>(other._lines), _lines(other._lines),
+  _columns(other._columns) {
   for (size_t i = 0; i < _lines; i++) {
     (*this)[i] = other[i];
   }
@@ -211,10 +205,8 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& other) {
   if (this != &other) {
     _lines = other._lines;
     _columns = other._columns;
-    this->resize(_lines);
-    for (size_t i = 0; i < _lines; i++) {
-      (*this)[i] = other[i];
-    }
+
+    MVector<MVector<T>>::operator=(other);
   }
   return *this;
 }
@@ -223,11 +215,14 @@ template <class T>
 Matrix<T>& Matrix<T>::operator=(const MVector<T>& vec) {
   _lines = vec.size();
   _columns = 1;
-  this->resize(_lines);
+
+  MVector<MVector<T>>::operator=(MVector<MVector<T>>(vec.size()));
+
   for (size_t i = 0; i < _lines; i++) {
     (*this)[i] = MVector<T>(1);
     (*this)[i][0] = vec[i];
   }
+
   return *this;
 }
 
@@ -235,9 +230,12 @@ template <class T>
 Matrix<T>& Matrix<T>::operator=(T val) {
   _lines = 1;
   _columns = 1;
-  this->resize(1);
+
+  MVector<MVector<T>>::operator=(MVector<MVector<T>>(1));
+
   (*this)[0] = MVector<T>(1);
   (*this)[0][0] = val;
+
   return *this;
 }
 
