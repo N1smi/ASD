@@ -21,7 +21,7 @@ TEST(TestMatrixLib, CreateMatrixWithDimensions) {
 
 TEST(TestMatrixLib, CreateMatrixFromDataArray) {
   int data[] = { 1, 2, 3, 4, 5, 6 };
-  Matrix<int> matrix(2, 3, data);
+  Matrix<int> matrix(2, 3, data, 6);
 
   EXPECT_EQ(matrix.get_lines(), 2);
   EXPECT_EQ(matrix.get_columns(), 3);
@@ -32,6 +32,18 @@ TEST(TestMatrixLib, CreateMatrixFromDataArray) {
   EXPECT_EQ(matrix[1][0], 4);
   EXPECT_EQ(matrix[1][1], 5);
   EXPECT_EQ(matrix[1][2], 6);
+}
+
+TEST(TestMatrixLib, CreateMatrixFromDataArrayThrowWhenNullptr) {
+  int* data = nullptr;
+
+  EXPECT_ANY_THROW(Matrix<int> matrix(2, 3, data, 6));
+}
+
+TEST(TestMatrixLib, CreateMatrixFromDataArrayThrowWhenIncorrectSize) {
+  int data[] = { 1, 2, 3, 4, 5};
+
+  EXPECT_ANY_THROW(Matrix<int> matrix(2, 3, data, 5));
 }
 
 TEST(TestMatrixLib, CreateMatrixWithCopy) {
@@ -53,10 +65,10 @@ TEST(TestMatrixLib, CreateMatrixWithCopy) {
 
 TEST(TestMatrixLib, OperatorPlusEqual) {
   int data1[] = {1, 2, 3, 4};
-  Matrix<int> matrix1(2, 2, data1);
+  Matrix<int> matrix1(2, 2, data1, 4);
 
   int data2[] = {5, 6, 7, 8};
-  Matrix<int> matrix2(2, 2, data2);
+  Matrix<int> matrix2(2, 2, data2, 4);
 
   matrix1 += matrix2;
 
@@ -75,7 +87,7 @@ TEST(TestMatrixLib, OperatorPlusEqualThrowWhenDifferentSizes) {
 
 TEST(TestMatrixLib, OperatorEqualMatrix) {
   int data1[] = { 1, 2, 3, 4, 5, 6 };
-  Matrix<int> original(2, 3, data1);
+  Matrix<int> original(2, 3, data1, 6);
 
   Matrix<int> assigned(1, 1);
   assigned = original;
@@ -94,8 +106,8 @@ TEST(TestMatrixLib, OperatorPlus) {
   int data1[] = { 1, 2, 3, 4 };
   int data2[] = { 5, 6, 7, 8 };
 
-  Matrix<int> matrix1(2, 2, data1);
-  Matrix<int> matrix2(2, 2, data2);
+  Matrix<int> matrix1(2, 2, data1, 4);
+  Matrix<int> matrix2(2, 2, data2, 4);
 
   Matrix<int> result = matrix1 + matrix2;
 
@@ -114,8 +126,8 @@ TEST(TestMatrixLib, OperatorMinusEqual) {
   int data1[] = { 10, 20, 30, 40 };
   int data2[] = { 1, 2, 3, 4 };
 
-  Matrix<int> matrix1(2, 2, data1);
-  Matrix<int> matrix2(2, 2, data2);
+  Matrix<int> matrix1(2, 2, data1, 4);
+  Matrix<int> matrix2(2, 2, data2, 4);
 
   matrix1 -= matrix2;
 
@@ -136,8 +148,8 @@ TEST(TestMatrixLib, OperatorMinus) {
   int data1[] = { 10, 20, 30, 40 };
   int data2[] = { 1, 2, 3, 4 };
 
-  Matrix<int> matrix1(2, 2, data1);
-  Matrix<int> matrix2(2, 2, data2);
+  Matrix<int> matrix1(2, 2, data1, 4);
+  Matrix<int> matrix2(2, 2, data2, 4);
 
   Matrix<int> result = matrix1 - matrix2;
 
@@ -154,7 +166,7 @@ TEST(TestMatrixLib, OperatorMinus) {
 
 TEST(TestMatrixLib, OperatorMultiplyEqualScalar) {
   int data[] = { 1, 2, 3, 4 };
-  Matrix<int> matrix(2, 2, data);
+  Matrix<int> matrix(2, 2, data, 4);
 
   matrix *= 3;
 
@@ -166,7 +178,7 @@ TEST(TestMatrixLib, OperatorMultiplyEqualScalar) {
 
 TEST(TestMatrixLib, OperatorMultiplyScalar) {
   int data[] = { 1, 2, 3, 4 };
-  Matrix<int> matrix(2, 2, data);
+  Matrix<int> matrix(2, 2, data, 4);
 
   Matrix<int> result = matrix * 3;
 
@@ -186,9 +198,9 @@ TEST(TestMatrixLib, OperatorStrictlyEqual) {
   int data2[] = { 1, 2, 3, 4 };
   int data3[] = { 1, 2, 3, 5 };
 
-  Matrix<int> matrix1(2, 2, data1);
-  Matrix<int> matrix2(2, 2, data2);
-  Matrix<int> matrix3(2, 2, data3);
+  Matrix<int> matrix1(2, 2, data1, 4);
+  Matrix<int> matrix2(2, 2, data2, 4);
+  Matrix<int> matrix3(2, 2, data3, 4);
 
   EXPECT_TRUE(matrix1 == matrix2);
   EXPECT_FALSE(matrix1 == matrix3);
@@ -198,8 +210,8 @@ TEST(TestMatrixLib, OperatorStrictlyNotEqual) {
   int data1[] = { 1, 2, 3, 4 };
   int data2[] = { 1, 2, 3, 5 };
 
-  Matrix<int> matrix1(2, 2, data1);
-  Matrix<int> matrix2(2, 2, data2);
+  Matrix<int> matrix1(2, 2, data1, 4);
+  Matrix<int> matrix2(2, 2, data2, 4);
 
   EXPECT_TRUE(matrix1 != matrix2);
   EXPECT_FALSE(matrix1 != matrix1);
@@ -208,7 +220,7 @@ TEST(TestMatrixLib, OperatorStrictlyNotEqual) {
 TEST(TestMatrixLib, MatrixAndVectorMultiplication) {
   int matrixData[] = { 1, 2, 3, 4, 5, 6 };
 
-  Matrix<int> matrix(3, 2, matrixData);
+  Matrix<int> matrix(3, 2, matrixData, 6);
   MVector<int> vector({ 2, 1 });
 
   MVector<int> result = matrix * vector;
@@ -221,7 +233,7 @@ TEST(TestMatrixLib, MatrixAndVectorMultiplication) {
 TEST(TestMatrixLib, MatrixAndVectorMultiplicationThrowWhenIncorrectSize) {
   int matrixData[] = { 1, 2, 3, 4, 5, 6 };
 
-  Matrix<int> matrix(3, 2, matrixData);
+  Matrix<int> matrix(3, 2, matrixData, 6);
   MVector<int> vector({ 1, 2, 3 });
 
   EXPECT_ANY_THROW(MVector<int> result = matrix * vector);
@@ -231,8 +243,8 @@ TEST(TestMatrixLib, MatrixMultiplication) {
   int data1[] = { 1, 2, 3, 4 };
   int data2[] = { 5, 6, 7, 8 };
 
-  Matrix<int> matrix1(2, 2, data1);
-  Matrix<int> matrix2(2, 2, data2);
+  Matrix<int> matrix1(2, 2, data1, 4);
+  Matrix<int> matrix2(2, 2, data2, 4);
 
   Matrix<int> result = matrix1 * matrix2;
 
@@ -249,8 +261,8 @@ TEST(TestMatrixLib, MatrixMultiplicationIncompatibleSizes) {
   int data1[] = { 1, 2, 3, 4 };
   int data2[] = { 1, 2, 3, 4, 5, 6 };
 
-  Matrix<int> matrix1(2, 2, data1);
-  Matrix<int> matrix2(3, 2, data2);
+  Matrix<int> matrix1(2, 2, data1, 4);
+  Matrix<int> matrix2(3, 2, data2, 6);
 
   EXPECT_ANY_THROW(Matrix<int> result = matrix1 * matrix2);
 }

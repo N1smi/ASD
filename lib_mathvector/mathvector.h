@@ -103,7 +103,13 @@ MVector<T>& MVector<T>::operator+=(const MVector<T>& vec) {
     throw std::logic_error
     ("Size error: vectors have different sizes in the addition operation!");
   }
-  for (size_t i = 0; i < vec.size(); i++) {
+
+  if (_start_index != vec._start_index) {
+    throw std::logic_error("Vectors have different start indices "
+      "in the addition operation!");
+  }
+
+  for (size_t i = _start_index; i < _start_index + vec.size(); i++) {
     (*this)[i] += vec[i];
   }
 
@@ -117,7 +123,12 @@ MVector<T>& MVector<T>::operator-=(const MVector<T>& vec) {
     ("Size error: vectors have different sizes in the subtraction operation!");
   }
 
-  for (size_t i = 0; i < vec.size(); i++) {
+  if (_start_index != vec._start_index) {
+    throw std::logic_error("Vectors have different start indices "
+      "in the subtraction operation!");
+  }
+
+  for (size_t i = _start_index; i < _start_index + vec.size(); i++) {
     (*this)[i] -= vec[i];
   }
 

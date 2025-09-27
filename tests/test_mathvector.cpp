@@ -27,6 +27,31 @@ TEST(TestMathVectorLib, OperatorPlusEqual) {
   EXPECT_EQ(vec2[2], 6);
 }
 
+TEST(TestMathVectorLib, PlusEqualWithStartIndex) {
+  MVector<int> vec1(3, 1);
+  MVector<int> vec2(3, 1);
+
+  vec1[1] = 10; vec1[2] = 20; vec1[3] = 30;
+  vec2[1] = 5; vec2[2] = 6; vec2[3] = 7;
+
+  vec1 += vec2;
+
+  EXPECT_EQ(vec1[0], 0);
+  EXPECT_EQ(vec1[1], 15);
+  EXPECT_EQ(vec1[2], 26);
+  EXPECT_EQ(vec1[3], 37);
+}
+
+TEST(TestMathVectorLib, PlusEqualWithStartIndexThrowWhenDifferent) {
+  MVector<int> vec1(3, 1);
+  MVector<int> vec2(3, 2);
+
+  vec1[1] = 10; vec1[2] = 20; vec1[3] = 30;
+  vec2[2] = 5; vec2[3] = 6; vec2[4] = 7;
+
+  EXPECT_ANY_THROW(vec1 += vec2);
+}
+
 TEST(TestMathVectorLib, OperatorPlusEqualThrowWhenDifferentSizes) {
   MVector<int> vec1 = { 1, 2, 3 };
   MVector<int> vec2 = { 1, 2 };
@@ -67,6 +92,31 @@ TEST(TestMathVectorLib, OperatorMinusEqual) {
   EXPECT_EQ(vec2[0], 4);
   EXPECT_EQ(vec2[1], 5);
   EXPECT_EQ(vec2[2], 6);
+}
+
+TEST(TestMathVectorLib, MinusEqualWithStartIndex) {
+  MVector<int> vec1(3, 1);
+  MVector<int> vec2(3, 1);
+
+  vec1[1] = 10; vec1[2] = 20; vec1[3] = 30;
+  vec2[1] = 5; vec2[2] = 6; vec2[3] = 7;
+
+  vec1 -= vec2;
+
+  EXPECT_EQ(vec1[0], 0);
+  EXPECT_EQ(vec1[1], 5);
+  EXPECT_EQ(vec1[2], 14);
+  EXPECT_EQ(vec1[3], 23);
+}
+
+TEST(TestMathVectorLib, MinusEqualWithStartIndexThrowWhenDifferent) {
+  MVector<int> vec1(3, 1);
+  MVector<int> vec2(3, 2);
+
+  vec1[1] = 10; vec1[2] = 20; vec1[3] = 30;
+  vec2[2] = 5; vec2[3] = 6; vec2[4] = 7;
+
+  EXPECT_ANY_THROW(vec1 -= vec2);
 }
 
 TEST(TestMathVectorLib, OperatorMinusEqualThrowWhenDifferentSizes) {
