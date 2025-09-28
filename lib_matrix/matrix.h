@@ -64,8 +64,8 @@ class Matrix : public MVector<MVector<T>> {
   }
 
   friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix) {
-    for (size_t i = 0; i < matrix._lines; ++i) {
-      for (size_t j = 0; j < matrix._columns; ++j) {
+    for (size_t i = 0; i < matrix._lines; i++) {
+      for (size_t j = 0; j < matrix._columns; j++) {
         os << matrix[i][j];
         if (j < matrix._columns - 1) {
           os << " ";
@@ -198,7 +198,7 @@ MVector<T> Matrix<T>::operator*(const MVector<T>& vec) const {
 template <class T>
 Matrix<T> Matrix<T>::operator*(const Matrix<T>& other) const {
   if (_columns != other._lines) {
-    throw std::logic_error("Matrix dimensions "
+    throw std::logic_error("Right Matrix columns and Left Matrix lines "
       "must be compatible for multiplication");
   }
 

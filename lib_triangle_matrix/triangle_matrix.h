@@ -27,23 +27,51 @@ class TriangleMatrix : public Matrix<T> {
 
   TriangleMatrix<T>& operator-=(const TriangleMatrix<T>& other);
 
+  TriangleMatrix<T>& operator*=(T val);
+
   TriangleMatrix<T> operator+(const TriangleMatrix<T>& other) const;
 
   TriangleMatrix<T> operator-(const TriangleMatrix<T>& other) const;
+
+  TriangleMatrix<T> operator*(T val) const;
 
   TriangleMatrix<T> operator*(const TriangleMatrix<T>& other) const;
 
   TriangleMatrix<T>& operator=(const TriangleMatrix<T>& other);
 
+  bool operator==(const TriangleMatrix<T>& other) const;
+
+  bool operator!=(const TriangleMatrix<T>& other) const;
+
   friend std::istream& operator>>(std::istream& is,
     TriangleMatrix<T>& tmatrix) {
-    std::cout << "\n[Work istream function TM]\n\n";
+    T* data = new T[tmatrix._dimension * tmatrix._dimension];
+    for (size_t i = 0; i < tmatrix._dimension * tmatrix._dimension; i++) {
+      is >> data[i];
+    }
+
+    for (size_t i = 0; i < tmatrix._dimension; i++) {
+      for (size_t j = i; j < tmatrix._dimension; j++) {
+        tmatrix[i][j] = data[i * tmatrix._dimension + j];
+      }
+    }
 
     return is;
   }
 
   friend std::ostream& operator<<(std::ostream& os,
     const TriangleMatrix<T>& tmatrix) {
+    for (size_t i = 0; i < tmatrix._dimension; i++) {
+      for (size_t j = 0; j < tmatrix._dimension; j++) {
+        os << tmatrix[i][j];
+        if (j < tmatrix._dimension - 1) {
+          os << " ";
+        }
+      }
+      if (i < tmatrix._dimension - 1) {
+        os << "\n";
+      }
+    }
     return os;
   }
 };
@@ -102,6 +130,12 @@ TriangleMatrix<T>& TriangleMatrix<T>::operator-=(const TriangleMatrix<T>& other)
 }
 
 template <class T>
+TriangleMatrix<T>& TriangleMatrix<T>::operator*=(T val) {
+  Matrix<T>::operator*=(val);
+  return *this;
+}
+
+template <class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator+
 (const TriangleMatrix<T>& other) const {
   TriangleMatrix<T> result = *this;
@@ -119,7 +153,31 @@ TriangleMatrix<T> TriangleMatrix<T>::operator-
 
 template <class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator*(const TriangleMatrix<T>& other) const {
-  return *this;
+  if (_dimension != other._dimension) {
+    throw std::logic_error("Triangle matrices must have same "
+      "dimension for multiplication");
+  }
+
+  TriangleMatrix<T> result(_dimension);
+
+  for (size_t i = 0; i < _dimension; i++) {
+    for (size_t j = i; j < _dimension; j++) {
+      T sum = T();
+      for (size_t k = i; k <= j; k++) {
+        sum += (*this)[i][k] * other[k][j];
+      }
+      result[i][j] = sum;
+    }
+  }
+
+  return result;
+}
+
+template <class T>
+TriangleMatrix<T> TriangleMatrix<T>::operator*(T val) const {
+  TriangleMatrix<T> result = *this;
+  result *= val;
+  return result;
 }
 
 template <class T>
@@ -130,6 +188,20 @@ TriangleMatrix<T>& TriangleMatrix<T>::operator=
     _dimension = other._dimension;
   }
   return *this;
+}
+
+template <class T>
+bool TriangleMatrix<T>::operator==(const TriangleMatrix<T>& other) const {
+  if (_dimension != other._dimension) {
+    return false;
+  }
+
+  return Matrix<T>::operator==(other);
+}
+
+template <class T>
+bool TriangleMatrix<T>::operator!=(const TriangleMatrix<T>& other) const {
+  return !(*this == other);
 }
 
 #endif  // LIB_TRIANGLE_MATRIX_TRIANGLE_MATRIX_H_

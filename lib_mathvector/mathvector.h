@@ -77,21 +77,13 @@ const T& MVector<T>::operator[](size_t index) const {
 
 template <class T>
 T& MVector<T>::operator[](size_t index) {
-  if (index < _start_index) {
-    static T zero = T();
-    return zero;
-  }
   return TVector<T>::operator[](index - _start_index);
 }
 
 template <class T>
 inline T& MVector<T>::at(size_t index) {
-  if (index >= _start_index + this->size()) {
+  if (index < _start_index || index >= _start_index + this->size()) {
     throw std::out_of_range("Index out of range in at()");
-  }
-  if (index < _start_index) {
-    static T zero = T();
-    return zero;
   }
 
   return TVector<T>::at(index - _start_index);
@@ -137,7 +129,7 @@ MVector<T>& MVector<T>::operator-=(const MVector<T>& vec) {
 
 template <class T>
 MVector<T>& MVector<T>::operator*=(T val) {
-  for (size_t i = 0; i < (*this).size(); i++) {
+  for (size_t i = _start_index; i < _start_index + (*this).size(); i++) {
     (*this)[i] *= val;
   }
   return *this;

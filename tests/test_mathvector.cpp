@@ -36,10 +36,12 @@ TEST(TestMathVectorLib, PlusEqualWithStartIndex) {
 
   vec1 += vec2;
 
-  EXPECT_EQ(vec1[0], 0);
-  EXPECT_EQ(vec1[1], 15);
-  EXPECT_EQ(vec1[2], 26);
-  EXPECT_EQ(vec1[3], 37);
+  const MVector<int> Cvec = vec1;
+
+  EXPECT_EQ(Cvec[0], 0);
+  EXPECT_EQ(Cvec[1], 15);
+  EXPECT_EQ(Cvec[2], 26);
+  EXPECT_EQ(Cvec[3], 37);
 }
 
 TEST(TestMathVectorLib, PlusEqualWithStartIndexThrowWhenDifferent) {
@@ -103,10 +105,12 @@ TEST(TestMathVectorLib, MinusEqualWithStartIndex) {
 
   vec1 -= vec2;
 
-  EXPECT_EQ(vec1[0], 0);
-  EXPECT_EQ(vec1[1], 5);
-  EXPECT_EQ(vec1[2], 14);
-  EXPECT_EQ(vec1[3], 23);
+  const MVector<int> Cvec = vec1;
+
+  EXPECT_EQ(Cvec[0], 0);
+  EXPECT_EQ(Cvec[1], 5);
+  EXPECT_EQ(Cvec[2], 14);
+  EXPECT_EQ(Cvec[3], 23);
 }
 
 TEST(TestMathVectorLib, MinusEqualWithStartIndexThrowWhenDifferent) {
@@ -172,6 +176,20 @@ TEST(TestMathVectorLib, OperatorMultiplyScalar) {
   EXPECT_EQ(vec[2], 3);
 }
 
+TEST(TestMathVectorLib, OperatorMultiplyScalarWithStartIndex) {
+  MVector<int> vec(2, 1);
+  vec[1] = 5;
+  vec[2] = 10;
+
+  vec *= 3;
+
+  const MVector<int> Cvec = vec;
+
+  EXPECT_EQ(Cvec[0], 0);
+  EXPECT_EQ(Cvec[1], 15);
+  EXPECT_EQ(Cvec[2], 30);
+}
+
 TEST(TestMathVectorLib, OperatorMultiply) {
   MVector<int> vec1 = { 1, 2, 3 };
   MVector<int> vec2 = { 4, 5, 6 };
@@ -207,15 +225,17 @@ TEST(TestMathVectorLib, OperatorBracketsWithStartIndexZero) {
   vec[3] = 20;
   vec[4] = 30;
 
-  EXPECT_EQ(vec[0], 0);
-  EXPECT_EQ(vec[1], 0);
+  const MVector<int> Cvec = vec;
+
+  EXPECT_EQ(Cvec[0], 0);
+  EXPECT_EQ(Cvec[1], 0);
 }
 
 TEST(TestMathVectorLib, AtWithSrartIndexZero) {
   MVector<int> vec(3, 2);
 
-  EXPECT_EQ(vec.at(0), 0);
-  EXPECT_EQ(vec.at(1), 0);
+  EXPECT_ANY_THROW(vec.at(0));
+  EXPECT_ANY_THROW(vec.at(1));
 }
 
 TEST(TestMathVectorLib, AtWithSrartIndexThrowWhenUpperIndices) {
@@ -237,5 +257,3 @@ TEST(TestMathVectorLib, AtWithStartIndex) {
   EXPECT_EQ(vec.at(3), 20);
   EXPECT_EQ(vec.at(4), 30);
 }
-
-

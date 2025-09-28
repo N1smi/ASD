@@ -34,7 +34,7 @@ TEST(TestTriangleMatrixLib, CreateTriangleMatrixFromData) {
   size_t dimension = 3;
   int data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-  TriangleMatrix<int> matrix(dimension, data, 9);
+  const TriangleMatrix<int> matrix(dimension, data, 9);
 
   EXPECT_EQ(matrix[0][0], 1);
   EXPECT_EQ(matrix[0][1], 2);
@@ -65,7 +65,7 @@ TEST(TestTriangleMatrixLib, CreateTriangleMatrixWithCopy) {
   int data1[] = {1, 2, 0, 4};
   TriangleMatrix<int> original(2, data1, 4);
 
-  TriangleMatrix<int> copyIt(original);
+  const TriangleMatrix<int> copyIt(original);
 
   EXPECT_EQ(copyIt[0].size(), 2);
   EXPECT_EQ(copyIt[1].size(), 1);
@@ -84,9 +84,7 @@ TEST(TestTriangleMatrixLib, EqualyOperator) {
   TriangleMatrix<int> A(2);
   A[0][0] = 1; A[0][1] = 2; A[1][1] = 3;
 
-  TriangleMatrix<int> B(3);
-
-  B = A;
+  const TriangleMatrix<int> B = A;
 
   EXPECT_EQ(B.get_dimension(), 2);
   EXPECT_EQ(B[0][0], 1);
@@ -104,10 +102,12 @@ TEST(TestTriangleMatrixLib, PlusEqualOperator) {
 
   A += B;
 
-  EXPECT_EQ(A[0][0], 5);
-  EXPECT_EQ(A[0][1], 7);
-  EXPECT_EQ(A[1][0], 0);
-  EXPECT_EQ(A[1][1], 9);
+  const TriangleMatrix<int> C = A;
+
+  EXPECT_EQ(C[0][0], 5);
+  EXPECT_EQ(C[0][1], 7);
+  EXPECT_EQ(C[1][0], 0);
+  EXPECT_EQ(C[1][1], 9);
 }
 
 TEST(TestTriangleMatrixLib, PlusEqualOperatorThrowWhenDifferentDimensions) {
@@ -129,10 +129,12 @@ TEST(TestTriangleMatrixLib, MinusEqualOperator) {
 
   B -= A;
 
-  EXPECT_EQ(B[0][0], 3);
-  EXPECT_EQ(B[0][1], 3);
-  EXPECT_EQ(B[1][0], 0);
-  EXPECT_EQ(B[1][1], 3);
+  const TriangleMatrix<int> C = B;
+
+  EXPECT_EQ(C[0][0], 3);
+  EXPECT_EQ(C[0][1], 3);
+  EXPECT_EQ(C[1][0], 0);
+  EXPECT_EQ(C[1][1], 3);
 }
 
 TEST(TestTriangleMatrixLib, MinusEqualOperatorThrowWhenDifferentDimensions) {
@@ -152,7 +154,7 @@ TEST(TestTriangleMatrixLib, OperatorPlus) {
   TriangleMatrix<int> A(2, data1, 4);
   TriangleMatrix<int> B(2, data2, 4);
 
-  TriangleMatrix<int> result = A + B;
+  const TriangleMatrix<int> result = A + B;
 
   EXPECT_EQ(result.get_dimension(), 2);
   EXPECT_EQ(result[0][0], 5);
@@ -168,11 +170,93 @@ TEST(TestTriangleMatrixLib, OperatorMinus) {
   TriangleMatrix<int> A(2, data1, 4);
   TriangleMatrix<int> B(2, data2, 4);
 
-  TriangleMatrix<int> result = A - B;
+  const TriangleMatrix<int> result = A - B;
 
   EXPECT_EQ(result.get_dimension(), 2);
   EXPECT_EQ(result[0][0], 6);
   EXPECT_EQ(result[0][1], 15);
   EXPECT_EQ(result[1][0], 0);
   EXPECT_EQ(result[1][1], 24);
+}
+
+TEST(TestTriangleMatrixLib, MultiplyEqualScalar) {
+  int data[] = { 1, 2, 0, 3 };
+  TriangleMatrix<int> matrix(2, data, 4);
+
+  matrix *= 3;
+
+  const TriangleMatrix<int> Cmatrix = matrix;
+
+  EXPECT_EQ(Cmatrix[0][0], 3);
+  EXPECT_EQ(Cmatrix[0][1], 6);
+  EXPECT_EQ(Cmatrix[1][0], 0);
+  EXPECT_EQ(Cmatrix[1][1], 9);
+}
+
+TEST(TestTriangleMatrixLib, MultiplyScalarOperator) {
+  int data[] = { 1, 2, 0, 3 };
+  TriangleMatrix<int> original(2, data, 4);
+
+  const TriangleMatrix<int> result = original * 3;
+
+  EXPECT_EQ(result[0][0], 3);
+  EXPECT_EQ(result[0][1], 6);
+  EXPECT_EQ(result[1][0], 0);
+  EXPECT_EQ(result[1][1], 9);
+
+  EXPECT_EQ(original[0][0], 1);
+  EXPECT_EQ(original[0][1], 2);
+  EXPECT_EQ(original[1][1], 3);
+}
+
+TEST(TestTriangleMatrixLib, EqualityOperator) {
+  int data1[] = { 1, 2, 0, 3 };
+  int data2[] = { 1, 2, 0, 3 };
+  int data3[] = { 1, 2, 0, 4 };
+
+  TriangleMatrix<int> A(2, data1, 4);
+  TriangleMatrix<int> B(2, data2, 4);
+  TriangleMatrix<int> C(2, data3, 4);
+
+  EXPECT_TRUE(A == B);
+  EXPECT_FALSE(A == C);
+  EXPECT_TRUE(A != C);
+}
+
+TEST(TestTriangleMatrixLib, EqualityDifferentDimensions) {
+  TriangleMatrix<int> A(2);
+  TriangleMatrix<int> B(3);
+
+  EXPECT_FALSE(A == B);
+  EXPECT_TRUE(A != B);
+}
+
+TEST(TestTriangleMatrixLib, EqualityWithItself) {
+  TriangleMatrix<int> A(2);
+  A[0][0] = 5; A[0][1] = 6; A[1][1] = 7;
+
+  EXPECT_TRUE(A == A);
+  EXPECT_FALSE(A != A);
+}
+
+TEST(TestTriangleMatrixLib, MultiplicationTriangleMatrix) {
+  TriangleMatrix<int> A(2), B(2);
+  A[0][0] = 1; A[0][1] = 2;
+  A[1][1] = 3;
+  B[0][0] = 4; B[0][1] = 5;
+  B[1][1] = 6;
+
+  const TriangleMatrix<int> result = A * B;
+
+  EXPECT_EQ(result[0][0], 4);
+  EXPECT_EQ(result[0][1], 17);
+  EXPECT_EQ(result[1][0], 0);
+  EXPECT_EQ(result[1][1], 18);
+}
+
+TEST(TestTriangleMatrixLib, MultiplicationTriangleMatrixDifferentDimensions) {
+  TriangleMatrix<int> A(2);
+  TriangleMatrix<int> B(3);
+
+  EXPECT_ANY_THROW(TriangleMatrix<int> result = A * B);
 }
