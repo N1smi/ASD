@@ -85,9 +85,9 @@ TriangleMatrix<T>::TriangleMatrix(size_t dimension)
 }
 
 template <class T>
-TriangleMatrix<T>::TriangleMatrix(size_t dimension, const T* data, size_t data_size)
+TriangleMatrix<T>::TriangleMatrix(size_t dimension,
+  const T* data, size_t data_size)
 : Matrix<T>(dimension, dimension), _dimension(dimension) {
-
   if (!data) {
     throw std::invalid_argument("Data pointer cannot be null in "
       "TriangleMatrix constructor");
@@ -108,7 +108,8 @@ TriangleMatrix<T>::TriangleMatrix(size_t dimension, const T* data, size_t data_s
 }
 
 template <class T>
-TriangleMatrix<T>& TriangleMatrix<T>::operator+=(const TriangleMatrix<T>& other) {
+TriangleMatrix<T>& TriangleMatrix<T>::operator+=
+(const TriangleMatrix<T>& other) {
   if (_dimension != other._dimension) {
     throw std::logic_error("Triangle matrices must have equal "
       "dimensions for addition");
@@ -119,7 +120,8 @@ TriangleMatrix<T>& TriangleMatrix<T>::operator+=(const TriangleMatrix<T>& other)
 }
 
 template <class T>
-TriangleMatrix<T>& TriangleMatrix<T>::operator-=(const TriangleMatrix<T>& other) {
+TriangleMatrix<T>& TriangleMatrix<T>::operator-=
+(const TriangleMatrix<T>& other) {
   if (_dimension != other._dimension) {
     throw std::logic_error("Triangle matrices must have equal "
       "dimensions for subtraction");
@@ -152,7 +154,8 @@ TriangleMatrix<T> TriangleMatrix<T>::operator-
 }
 
 template <class T>
-TriangleMatrix<T> TriangleMatrix<T>::operator*(const TriangleMatrix<T>& other) const {
+TriangleMatrix<T> TriangleMatrix<T>::operator*
+(const TriangleMatrix<T>& other) const {
   if (_dimension != other._dimension) {
     throw std::logic_error("Triangle matrices must have same "
       "dimension for multiplication");

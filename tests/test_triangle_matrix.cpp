@@ -55,7 +55,8 @@ TEST(TestTriangleMatrixLib, CreateTriangleMatrixFromDataArrayThrowWhenNullptr) {
   EXPECT_ANY_THROW(TriangleMatrix<int> matrix(3, data, 9));
 }
 
-TEST(TestTriangleMatrixLib, CreateTriangleMatrixFromDataArrayThrowWhenIncorrectSize) {
+TEST(TestTriangleMatrixLib,
+  CreateTriangleMatrixFromDataArrayThrowWhenIncorrectSize) {
   int data[] = { 1, 2, 3, 4, 5, 6, 7, 8};
 
   EXPECT_ANY_THROW(TriangleMatrix<int> matrix(3, data, 8));

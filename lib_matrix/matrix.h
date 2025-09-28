@@ -24,7 +24,7 @@ class Matrix : public MVector<MVector<T>> {
     return _lines;
   }
 
- inline size_t get_columns() const {
+  inline size_t get_columns() const {
     return _columns;
   }
 
@@ -93,7 +93,6 @@ Matrix<T>::Matrix(size_t lines, size_t columns)
 template <class T>
 Matrix<T>::Matrix(size_t lines, size_t columns, const T* data, size_t data_size)
   : MVector<MVector<T>>(lines), _lines(lines), _columns(columns) {
-
   if (!data) {
     throw std::invalid_argument("Data pointer cannot be null in Matrix "
       "constructor");
