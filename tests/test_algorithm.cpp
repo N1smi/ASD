@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 #include<iostream>
+#include <set>
 #include "../lib_algorithm/algorithm.h"
 
 TEST(TestAlgorithmLib, FLMNormal) {
@@ -65,6 +66,6 @@ TEST(TestAlgorithmLib, MultipleRunsFindDifferentMins) {
     results.insert(find_local_min(matrix));
   }
 
-  EXPECT_TRUE(results.count(1) > 0);
-  EXPECT_TRUE(results.count(6) > 0);
+  EXPECT_GT(results.count(1), 0);
+  EXPECT_GT(results.count(6), 0);
 }

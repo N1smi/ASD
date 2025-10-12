@@ -4,7 +4,6 @@
 #include "../lib_algorithm/algorithm.h"
 
 int find_local_min(const Matrix<int>& matrix) {
-
   if (matrix.get_lines() != matrix.get_columns()) {
     throw std::logic_error("Matrix lines and columns don't match!");
   }
