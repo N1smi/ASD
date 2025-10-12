@@ -12,21 +12,21 @@ class Stack {
   size_t _size;
 
  public:
-   explicit Stack(size_t capacity = 0);
-   Stack(const Stack<T>& other);
+  explicit Stack(size_t capacity = 0);
+  Stack(const Stack<T>& other);
 
-   ~Stack() = default;
+  ~Stack() = default;
 
-   inline T top() const;
-   inline bool is_empty() const noexcept;
-   inline bool is_full() const noexcept;
-   inline size_t capacity() const noexcept;
-   inline size_t size() const noexcept;
+  inline T top() const;
+  inline bool is_empty() const noexcept;
+  inline bool is_full() const noexcept;
+  inline size_t capacity() const noexcept;
+  inline size_t size() const noexcept;
 
-   void push(T val);
-   void pop();
+  void push(T val);
+  void pop();
 
-   void clear() noexcept;
+  void clear() noexcept;
 };
 
 template<class T>
