@@ -27,6 +27,7 @@ class TVector {
   inline const State* states() const noexcept;  // for debugging
 
   inline bool is_empty() const noexcept;
+  inline bool is_full() const noexcept;
 
   inline T* data() noexcept;
   inline T& front();
@@ -94,10 +95,8 @@ class TVector {
   void defragment();
   size_t real_pos(size_t pos) const;
   T* real_address(size_t pos);
-  inline bool is_full() const noexcept;
   bool reallocate(size_t new_size);
   void reallocate_for_deleted();
-
   void create_new_arrays(size_t new_capacity, T*& new_data, State*& new_states);
   void copy_busy_elements(T* new_data, State* new_states, size_t limit);
   void replace_arrays(T* new_data, State* new_states, size_t new_capacity);

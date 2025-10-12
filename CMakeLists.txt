@@ -21,7 +21,8 @@ add_subdirectory(lib_triangle_matrix)
 add_subdirectory(lib_point3d)
 add_subdirectory(lib_circle)
 add_subdirectory(lib_algorithm)
-add_subdirectory(lib_sphere) 
+add_subdirectory(lib_sphere)
+add_subdirectory(lib_stack)
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
