@@ -197,7 +197,7 @@ MVector<T> Matrix<T>::operator*(const MVector<T>& vec) const {
 template <class T>
 Matrix<T> Matrix<T>::operator*(const Matrix<T>& other) const {
   if (_columns != other._lines) {
-    throw std::logic_error("Right Matrix columns and Left Matrix lines "
+    throw std::logic_error("Left Matrix columns and Right Matrix lines "
       "must be compatible for multiplication");
   }
 
