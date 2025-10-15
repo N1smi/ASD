@@ -7,58 +7,47 @@
 
 template <class T>
 class Stack {
-  TVector<T> _data;
-  size_t _capacity;
+  T* _data;
   size_t _size;
+  size_t _top;
 
  public:
-  explicit Stack(size_t capacity = 0);
+  explicit Stack(size_t size);
+
   Stack(const Stack<T>& other);
 
-  ~Stack() = default;
+  ~Stack();
 
   inline T top() const;
   inline bool is_empty() const noexcept;
   inline bool is_full() const noexcept;
-  inline size_t capacity() const noexcept;
   inline size_t size() const noexcept;
 
   void push(T val);
   void pop();
 
   void clear() noexcept;
+
+  Stack<T>& operator=(const Stack<T>& other);
 };
 
 template<class T>
-Stack<T>::Stack(size_t capacity) : _data(), _size(0), _capacity(capacity) {
-  _data.reserve(capacity);
+Stack<T>::Stack(size_t size) : _size(size), _top(0) {
+  _data = new T[size];
 }
 
 template<class T>
-Stack<T>::Stack(const Stack<T>& other) : _data(other._data),
-_size(other._size), _capacity(other._capacity) {}
+Stack<T>::Stack(const Stack<T>& other) : _size(other._size), _top(other._top) {
+  _data = new T[_size];
 
-template<class T>
-inline T Stack<T>::top() const {
-  if (is_empty()) throw std::logic_error("You can't get"
-    "a top from an empty stack");
-
-  return _data.back();
+  for (size_t i = 0; i < _top; i++) {
+    _data[i] = other._data[i];
+  }
 }
 
 template<class T>
-inline bool Stack<T>::is_empty() const noexcept {
-  return _data.is_empty();
-}
-
-template<class T>
-inline bool Stack<T>::is_full() const noexcept {
-  return _data.is_full();
-}
-
-template<class T>
-inline size_t Stack<T>::capacity() const noexcept {
-  return _capacity;
+Stack<T>::~Stack() {
+  delete[] _data;
 }
 
 template<class T>
@@ -66,26 +55,62 @@ inline size_t Stack<T>::size() const noexcept {
   return _size;
 }
 
+
+template<class T>
+inline T Stack<T>::top() const {
+  if (is_empty()) throw std::logic_error("Stack is empty!");
+
+  return _data[_top - 1];
+}
+
+template<class T>
+inline bool Stack<T>::is_empty() const noexcept {
+  return _top == 0;
+}
+
+template<class T>
+inline bool Stack<T>::is_full() const noexcept {
+  return _top == _size;
+}
+
+
 template<class T>
 void Stack<T>::push(T val) {
-  if (is_full()) throw std::logic_error("You can't push"
-    "an item to the filled stack");
-  _data.push_back(val);
-  _size++;
+  if (is_full()) throw std::logic_error("Stack is full!");
+
+  ++_top;
+
+  _data[_top - 1] = val;
 }
 
 template<class T>
 void Stack<T>::pop() {
-  if (is_empty()) throw std::logic_error("You can't pop"
-    "in empty stack");
-  _data.pop_back();
-  _size--;
+  if (is_empty()) throw std::logic_error("Stack is empty!");
+
+  --_top;
 }
 
 template<class T>
 void Stack<T>::clear() noexcept {
-  _data.clear();
-  _size = 0;
+  _top = 0;
+}
+
+template<class T>
+Stack<T>& Stack<T>::operator=(const Stack<T>& other) {
+  if (this == &other) {
+    return *this;
+  }
+
+  delete[] _data;
+  _size = other._size;
+  _top = other._top;
+  _data = new T[_size];
+
+  for (size_t i = 0; i < _top; i++) {
+    _data[i] = other._data[i];
+  }
+
+  return *this;
 }
 
 #endif  // LIB_STACK_STACK_H_
