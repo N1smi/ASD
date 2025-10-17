@@ -1,9 +1,9 @@
 // Copyright 2025 Smirnov Nikita
 
-#ifndef LIB_TDYNAMICSTACK_TDYNAMICSTACK_H_
-#define LIB_TDYNAMICSTACK_TDYNAMICSTACK_H_
+#ifndef LIB_TDYNAMIC_STACK_TDYNAMIC_STACK_H_
+#define LIB_TDYNAMIC_STACK_TDYNAMIC_STACK_H_
 
-#include <stdexcept> 
+#include <stdexcept>
 
 template <class T>
 class TDynamicStack {
@@ -92,4 +92,4 @@ void TDynamicStack<T>::clear() noexcept {
   _top = 0;
 }
 
-#endif  // LIB_TDYNAMICSTACK_TDYNAMICSTACK_H_
+#endif  // LIB_TDYNAMIC_STACK_TDYNAMIC_STACK_H_
