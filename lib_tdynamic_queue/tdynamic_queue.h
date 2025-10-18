@@ -14,21 +14,21 @@ class TDynamicQueue {
   size_t _tail;
 
  public:
-   explicit TDynamicQueue(size_t size);
-   TDynamicQueue(const TDynamicQueue<T>& other);
+  explicit TDynamicQueue(size_t size);
+  TDynamicQueue(const TDynamicQueue<T>& other);
 
-   ~TDynamicQueue();
+  ~TDynamicQueue();
 
-   inline T head() const;
-   inline T tail() const;
-   inline bool is_empty() const noexcept;
-   inline bool is_full() const noexcept;
-   inline size_t size() const noexcept;
+  inline T head() const;
+  inline T tail() const;
+  inline bool is_empty() const noexcept;
+  inline bool is_full() const noexcept;
+  inline size_t size() const noexcept;
 
-   void push(const T& val);
-   void pop();
+  void push(const T& val);
+  void pop();
 
-   void clear() noexcept;
+  void clear() noexcept;
 };
 
 template <class T>
