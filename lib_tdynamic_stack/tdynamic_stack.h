@@ -31,7 +31,7 @@ class TDynamicStack {
 
 template<class T>
 TDynamicStack<T>::TDynamicStack(size_t size) : _size(size), _top(0) {
-  _data = new T[size];
+  _data = new T[_size];
 }
 
 template<class T>
