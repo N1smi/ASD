@@ -1,6 +1,7 @@
 // Copyright 2025 Smirnov Nikita
 
 #include <gtest/gtest.h>
+#include<stdexcept>
 #include<iostream>
 #include <set>
 #include "../lib_algorithm/algorithm.h"
@@ -68,4 +69,64 @@ TEST(TestAlgorithmLib, MultipleRunsFindDifferentMins) {
 
   EXPECT_GT(results.count(1), 0);
   EXPECT_GT(results.count(6), 0);
+}
+
+TEST(TestAlgorithmLib, CheckBracketsOddNumberFalse) {
+  std::string str = "(()()";
+
+  EXPECT_FALSE(check_breckets(str));
+}
+
+TEST(TestAlgorithmLib, CheckBracketsEasyExampleTrue) {
+  std::string str = "()()";
+
+  EXPECT_TRUE(check_breckets(str));
+}
+
+TEST(TestAlgorithmLib, CheckBracketsHardExampleTrue) {
+  std::string str = "[(()())({})]";
+
+  EXPECT_TRUE(check_breckets(str));
+}
+
+TEST(TestAlgorithmLib, CheckBracketsHardExampleFalse) {
+  std::string str = "((()()(()))(";
+
+  EXPECT_FALSE(check_breckets(str));
+}
+
+TEST(TestAlgorithmLib, CheckBracketsWithoutStart) {
+  std::string str = "(()))))";
+
+  EXPECT_FALSE(check_breckets(str));
+}
+
+TEST(TestAlgorithmLib, CheckBracketsWithoutEnd) {
+  std::string str = "(((((())";
+
+  EXPECT_FALSE(check_breckets(str));
+}
+
+TEST(TestAlgorithmLib, CheckBracketsEmptryStr) {
+  std::string str = "";
+
+  EXPECT_TRUE(check_breckets(str));
+}
+
+TEST(TestAlgorithmLib, CheckBracketsAlpha) {
+  std::string str = "a b c d";
+
+  EXPECT_TRUE(check_breckets(str));
+}
+
+TEST(TestAlgorithmLib, CheckBracketsAlphaAndBracketsTrue) {
+  std::string str = "(a b c d)";
+
+  EXPECT_TRUE(check_breckets(str));
+}
+
+TEST(TestAlgorithmLib, CheckBracketsAlphaAndBracketsFalse) {
+  std::string str = "(a b c d))";
+
+  EXPECT_FALSE(check_breckets(str));
 }

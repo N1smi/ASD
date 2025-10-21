@@ -58,3 +58,41 @@ void find_best_neighbor(const Matrix<int>& matrix, size_t i, size_t j,
     new_j = j + 1;
   }
 }
+
+bool check_breckets(const std::string& str) {
+  TDynamicStack<char> checker(str.length());
+
+  for (char c : str) {
+    if ((c != '(') && (c != ')')
+      && (c != '{') && (c != '}')
+      && (c != '[') && (c != ']')) {
+      continue;
+    }
+    if (c == '(' || c == '[' || c == '{') {
+      checker.push(c);
+    } else {
+      if (checker.is_empty()) {
+        return false;
+      }
+
+      char top = checker.top();
+
+      if ((c == ')' && top != '(') ||
+        (c == ']' && top != '[') ||
+        (c == '}' && top != '{')) {
+        return false;
+      }
+
+      checker.pop();
+    }
+  }
+
+  return checker.is_empty();
+}
+
+void read_expression(const std::string& expression) {
+
+  for (char c : expression) {
+
+  }
+}
