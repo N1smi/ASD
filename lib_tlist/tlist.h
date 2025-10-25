@@ -9,7 +9,8 @@ template <class T>
 struct Node {
   T value;
   Node<T>* next;
-  Node(T value_, Node<T>* next_ = nullptr) : value(value_), next(next_) {}
+  explicit Node(T value_, Node<T>* next_ = nullptr) : value(value_),
+    next(next_) {}
 };
 
 template <class T>
@@ -18,16 +19,16 @@ class TList {
   Node<T>* _tail;
 
  public:
-   TList();
+  TList();
 
-   ~TList();
+  ~TList();
 
-   inline Node<T>* head() noexcept { return _head; }
-   inline Node<T>* tail() noexcept { return _tail; }
-   inline const Node<T>* head() const noexcept { return _head; }
-   inline const Node<T>* tail() const noexcept { return _tail; }
+  inline Node<T>* head() noexcept { return _head; }
+  inline Node<T>* tail() noexcept { return _tail; }
+  inline const Node<T>* head() const noexcept { return _head; }
+  inline const Node<T>* tail() const noexcept { return _tail; }
 
-   inline bool is_empty() const noexcept { return _head == nullptr; }
+  inline bool is_empty() const noexcept { return _head == nullptr; }
 };
 
 template <class T>
