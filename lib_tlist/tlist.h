@@ -42,15 +42,17 @@ class TList {
   void pop_back();
   void erase(size_t pos);
   void erase(Node<T>* node);
+
  private:
-   Node<T>* find_previous_node(Node<T>* node) const;
+  Node<T>* find_previous_node(Node<T>* node) const;
 };
 
 template <class T>
 TList<T>::TList() : _head(nullptr), _tail(nullptr), _size(0) {}
 
 template <class T>
-TList<T>::TList(const TList<T>& other) : _head(nullptr), _tail(nullptr), _size(0) {
+TList<T>::TList(const TList<T>& other) : _head(nullptr),
+_tail(nullptr), _size(0) {
   Node<T>* current = other._head;
   while (current != nullptr) {
     push_back(current->value);

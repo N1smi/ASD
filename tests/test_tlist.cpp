@@ -122,7 +122,7 @@ TEST(TestTList, ThrowWhenInsertWithNodeInvalidNode) {
 
   Node<int>* node = new Node<int>(5);
 
-  EXPECT_THROW(list.insert(node,8), std::invalid_argument);
+  EXPECT_THROW(list.insert(node, 8), std::invalid_argument);
   EXPECT_FALSE(list.is_empty());
   EXPECT_EQ(list.size(), 1);
 }
