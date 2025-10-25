@@ -66,7 +66,7 @@ TEST(TestTList, PushBackInList) {
   EXPECT_EQ(list.size(), 3);
 }
 
-TEST(TestTList,ThrowWhenInsertWithNodeInEmptyList) {
+TEST(TestTList, ThrowWhenInsertWithNodeInEmptyList) {
   TList<int> list;
 
   Node<int>* node = new Node<int>(5);
