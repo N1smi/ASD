@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include<stdexcept>
+#include <string>
 #include "../lib_matrix/matrix.h"
 #include "../lib_tdynamic_stack/tdynamic_stack.h"
 

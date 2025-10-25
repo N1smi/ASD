@@ -1,6 +1,7 @@
 // Copyright 2025 Smirnov Nikita
 
 #include <gtest/gtest.h>
+#include <string>
 #include<stdexcept>
 #include<iostream>
 #include <set>

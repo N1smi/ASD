@@ -1,6 +1,7 @@
 // Copyright 2025 Smirnov Nikita
 
 #include<random>
+#include <string>
 #include "../lib_algorithm/algorithm.h"
 
 int find_local_min(const Matrix<int>& matrix) {
@@ -91,8 +92,6 @@ bool check_breckets(const std::string& str) {
 }
 
 void read_expression(const std::string& expression) {
-
   for (char c : expression) {
-
   }
 }
