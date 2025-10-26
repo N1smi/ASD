@@ -92,6 +92,86 @@ bool check_breckets(const std::string& str) {
 }
 
 void read_expression(const std::string& expression) {
-  for (char c : expression) {
+  TDynamicStack<char> brackets(expression.length());
+
+  bool expect_operand = true;
+
+  for (size_t i = 0; i < expression.length(); i++) {
+    char c = expression[i];
+
+    if (c == ' ') {
+      continue;
+    }
+
+    if (c == '(' || c == '[' || c == '{') {
+      brackets.push(c);
+      expect_operand = true;
+      continue;
+    }
+
+    if (c == ')' || c == ']' || c == '}') {
+      if (brackets.is_empty()) {
+        throw std::invalid_argument("Missing opened bracket");
+      }
+
+      char top = brackets.top();
+      if ((c == ')' && top != '(') ||
+        (c == ']' && top != '[') ||
+        (c == '}' && top != '{')) {
+        throw std::invalid_argument("Missing opened bracket");
+      }
+
+      brackets.pop();
+      expect_operand = false;
+      continue;
+    }
+
+    if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
+      if (expect_operand) {
+        throw std::invalid_argument("Missing first operand in operation " + std::string(1, c));
+      }
+
+      bool has_operand_after = false;
+      for (size_t j = i + 1; j < expression.length(); j++) {
+        if (expression[j] == ' ') continue;
+        if (std::isalnum(expression[j]) || expression[j] == '(' ||
+          expression[j] == '[' || expression[j] == '{') {
+          has_operand_after = true;
+          break;
+        }
+
+        if (expression[j] == '+' || expression[j] == '-' ||
+          expression[j] == '*' || expression[j] == '/' ||
+          expression[j] == '^' || expression[j] == ')' ||
+          expression[j] == ']' || expression[j] == '}') {
+          break;
+        }
+      }
+      if (!has_operand_after) {
+        throw std::invalid_argument("Missing second operand in operation " + std::string(1, c));
+      }
+
+      expect_operand = true;
+      continue;
+    }
+
+    if (std::isalnum(c)) {
+      if (!expect_operand) {
+        throw std::invalid_argument("Missing operation");
+      }
+
+      while (i < expression.length() && std::isalnum(expression[i])) {
+        ++i;
+      }
+      --i;
+      expect_operand = false;
+      continue;
+    }
+
+    throw std::invalid_argument("Invalid character in expression");
+  }
+
+  if (!brackets.is_empty()) {
+    throw std::invalid_argument("Missing closed bracket");
   }
 }
