@@ -146,8 +146,8 @@ TEST(TestAlgorithmLib, ReadExprMissOperation) {
          read_expression("3 * (15 + (x y)*(2*x - 7*y^2))");
      }
 catch (const std::invalid_argument& e) {
- EXPECT_STREQ("Missing operation", e.what());
- throw;
+  EXPECT_STREQ("Missing operation", e.what());
+  throw;
 }
     }, std::invalid_argument);
 }
@@ -158,8 +158,8 @@ TEST(TestAlgorithmLib, ReadExprMissFirstOperand) {
           read_expression("+ 5");
       }
 catch (const std::invalid_argument& e) {
- EXPECT_STREQ("Missing first operand in operation +", e.what());
- throw;
+  EXPECT_STREQ("Missing first operand in operation +", e.what());
+  throw;
 }
     }, std::invalid_argument);
 }
@@ -170,8 +170,8 @@ TEST(TestAlgorithmLib, ReadExprMissSecondOperand) {
           read_expression("3 * (15 + (x + y)*(2*x - 7*y^))");
       }
 catch (const std::invalid_argument& e) {
- EXPECT_STREQ("Missing second operand in operation ^", e.what());
- throw;
+  EXPECT_STREQ("Missing second operand in operation ^", e.what());
+  throw;
 }
     }, std::invalid_argument);
 
@@ -180,8 +180,8 @@ catch (const std::invalid_argument& e) {
         read_expression("(x * )");
     }
 catch (const std::invalid_argument& e) {
- EXPECT_STREQ("Missing second operand in operation *", e.what());
- throw;
+  EXPECT_STREQ("Missing second operand in operation *", e.what());
+  throw;
 }
     }, std::invalid_argument);
 
@@ -190,8 +190,8 @@ catch (const std::invalid_argument& e) {
          read_expression("x + y + ");
      }
 catch (const std::invalid_argument& e) {
- EXPECT_STREQ("Missing second operand in operation +", e.what());
- throw;
+  EXPECT_STREQ("Missing second operand in operation +", e.what());
+  throw;
 }
     }, std::invalid_argument);
 }
@@ -202,8 +202,8 @@ TEST(TestAlgorithmLib, ReadExprMissClosedBracket) {
         read_expression("((x + y)*(x - y)");
     }
 catch (const std::invalid_argument& e) {
- EXPECT_STREQ("Missing closed bracket", e.what());
- throw;
+  EXPECT_STREQ("Missing closed bracket", e.what());
+  throw;
 }
     }, std::invalid_argument);
 }
@@ -214,8 +214,8 @@ TEST(TestAlgorithmLib, ReadExprMissOpenedBracket) {
         read_expression("(x * x + y ^ 2))*(8 + (y - 3))");
     }
 catch (const std::invalid_argument& e) {
- EXPECT_STREQ("Missing opened bracket", e.what());
- throw;
+  EXPECT_STREQ("Missing opened bracket", e.what());
+  throw;
 }
     }, std::invalid_argument);
 
@@ -224,8 +224,8 @@ catch (const std::invalid_argument& e) {
           read_expression("(x + y]");
       }
 catch (const std::invalid_argument& e) {
- EXPECT_STREQ("Missing opened bracket", e.what());
- throw;
+  EXPECT_STREQ("Missing opened bracket", e.what());
+  throw;
 }
     }, std::invalid_argument);
 }
@@ -236,8 +236,8 @@ TEST(TestAlgorithmLib, ReadExprInvalidCharacter) {
         read_expression("x $ y");
     }
 catch (const std::invalid_argument& e) {
- EXPECT_STREQ("Invalid character in expression", e.what());
- throw;
+  EXPECT_STREQ("Invalid character in expression", e.what());
+  throw;
 }
     }, std::invalid_argument);
 }

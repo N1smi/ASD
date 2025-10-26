@@ -128,7 +128,8 @@ void read_expression(const std::string& expression) {
 
     if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
       if (expect_operand) {
-        throw std::invalid_argument("Missing first operand in operation " + std::string(1, c));
+        throw std::invalid_argument("Missing first operand in operation "
+          + std::string(1, c));
       }
 
       bool has_operand_after = false;
@@ -148,7 +149,8 @@ void read_expression(const std::string& expression) {
         }
       }
       if (!has_operand_after) {
-        throw std::invalid_argument("Missing second operand in operation " + std::string(1, c));
+        throw std::invalid_argument("Missing second operand in operation "
+          + std::string(1, c));
       }
 
       expect_operand = true;
