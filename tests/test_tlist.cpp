@@ -69,7 +69,7 @@ TEST(TestTList, PushBackInList) {
 TEST(TestTList, ThrowWhenInsertWithNodeInEmptyList) {
   TList<int> list;
 
-  Node<int>* node = new Node<int>(5);
+  TList<int>::Node* node = new TList<int>::Node(5);
 
   EXPECT_THROW(list.insert(node, 10), std::logic_error);
   EXPECT_TRUE(list.is_empty());
@@ -120,7 +120,7 @@ TEST(TestTList, ThrowWhenInsertWithNodeInvalidNode) {
 
   list.push_back(1);
 
-  Node<int>* node = new Node<int>(5);
+  TList<int>::Node* node = new TList<int>::Node(5);
 
   EXPECT_THROW(list.insert(node, 8), std::invalid_argument);
   EXPECT_FALSE(list.is_empty());
@@ -305,7 +305,7 @@ TEST(TestTList, ThrowWhenEraseWithNodeNullNode) {
 TEST(TestTList, ThrowWhenEraseWithNodeInEmptyList) {
   TList<int> list;
 
-  Node<int>* node = new Node<int>(5);
+  TList<int>::Node* node = new TList<int>::Node(5);
 
   EXPECT_THROW(list.erase(node), std::logic_error);
   EXPECT_TRUE(list.is_empty());
@@ -317,7 +317,7 @@ TEST(TestTList, ThrowWhenEraseWithNodeInvalidNode) {
 
   list.push_back(1);
 
-  Node<int>* node = new Node<int>(5);
+  TList<int>::Node* node = new TList<int>::Node(5);
 
   EXPECT_THROW(list.erase(node), std::invalid_argument);
   EXPECT_FALSE(list.is_empty());
@@ -428,4 +428,80 @@ TEST(TestTList, EraseWithPosMiddle) {
   EXPECT_EQ(list.head()->next->value, 2);
   EXPECT_EQ(list.head()->next->next->value, 4);
   EXPECT_EQ(list.tail()->value, 4);
+}
+
+TEST(TestTList, IteratorEmptyList) {
+  TList<int> list;
+
+  EXPECT_EQ(list.begin(), list.end());
+
+  bool entry = false;
+  for (TList<int>::iterator it = list.begin(); it != list.end(); it++) {
+    entry = true;
+  }
+  EXPECT_FALSE(entry);
+
+  auto it1 = list.end();
+  ++it1;
+  EXPECT_EQ(it1, list.end());
+
+  auto it2 = list.end();
+  it2++;
+  EXPECT_EQ(it2, list.end());
+
+  auto it3 = list.end();
+  it3 += 5;
+  EXPECT_EQ(it3, list.end());
+}
+
+TEST(TestTList, IteratorRead) {
+  TList<int> list;
+
+  for (size_t i = 0; i < 5; i++) {
+    list.push_back(1+i);
+  }
+
+  EXPECT_NE(list.begin(), list.end());
+
+  auto it = list.begin();
+  EXPECT_EQ(*it, 1);
+
+  ++it;
+  EXPECT_EQ(*it, 2);
+
+  auto old_it = it++;
+  EXPECT_EQ(*old_it, 2);
+  EXPECT_EQ(*it, 3);
+
+  it += 2;
+  EXPECT_EQ(*it, 5);
+}
+
+TEST(TestTList, IteratorWrite) {
+  TList<int> list;
+
+  for (size_t i = 0; i < 5; i++) {
+    list.push_back(1 + i);
+  }
+  
+  size_t value = 10;
+  for (auto it = list.begin(); it != list.end(); it++) {
+    *it = value;
+    value++;
+  }
+
+  value -= 5;
+
+  for (auto it = list.begin(); it != list.end(); it++) {
+    EXPECT_EQ(*it, value);
+    value++;
+  }
+}
+
+TEST(TestTList, ThrowWhenDerefEndInIterator) {
+  TList<int> list;
+  list.push_back(1);
+
+  auto it = list.end();
+  EXPECT_THROW(*it, std::runtime_error);
 }
