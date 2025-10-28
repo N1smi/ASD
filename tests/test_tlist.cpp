@@ -483,7 +483,7 @@ TEST(TestTList, IteratorWrite) {
   for (size_t i = 0; i < 5; i++) {
     list.push_back(1 + i);
   }
-  
+
   size_t value = 10;
   for (auto it = list.begin(); it != list.end(); it++) {
     *it = value;

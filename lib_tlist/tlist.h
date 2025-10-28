@@ -29,8 +29,10 @@ class TList {
       const Node,
       Node
     >::type;
+
    private:
     NodeType* _current;
+
    public:
     explicit IteratorBase(NodeType* node = nullptr) : _current(node) {}
 
@@ -110,7 +112,7 @@ class TList {
   void erase(Node* node);
 
  private:
-   Node* find_previous_node(Node* node) const {
+  Node* find_previous_node(Node* node) const {
      if (node == nullptr || _head == nullptr) {
        return nullptr;
      }
