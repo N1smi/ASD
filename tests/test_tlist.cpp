@@ -485,7 +485,7 @@ TEST(TestTList, IteratorWrite) {
   }
 
   size_t value = 10;
-  for (auto it = list.begin(); it != list.end(); it++) {
+  for (TList<int>::iterator it = list.begin(); it != list.end(); it++) {
     *it = value;
     value++;
   }
