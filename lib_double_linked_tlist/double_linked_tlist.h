@@ -23,35 +23,35 @@ class DoubleLinkedTList {
   size_t _size;
 
  public:
-   DoubleLinkedTList();
-   DoubleLinkedTList(const DoubleLinkedTList<T>& other);
-   ~DoubleLinkedTList();
+  DoubleLinkedTList();
+  DoubleLinkedTList(const DoubleLinkedTList<T>& other);
+  ~DoubleLinkedTList();
 
-   inline Node* head() noexcept { return _head; }
-   inline Node* tail() noexcept { return _tail; }
-   inline const Node* head() const noexcept { return _head; }
-   inline const Node* tail() const noexcept { return _tail; }
+  inline Node* head() noexcept { return _head; }
+  inline Node* tail() noexcept { return _tail; }
+  inline const Node* head() const noexcept { return _head; }
+  inline const Node* tail() const noexcept { return _tail; }
 
-   inline bool is_empty() const noexcept { return _head == nullptr; }
+  inline bool is_empty() const noexcept { return _head == nullptr; }
 
-   inline size_t size() const noexcept { return _size; }
+  inline size_t size() const noexcept { return _size; }
 
-   void push_front(const T& value) noexcept;
-   void push_back(const T& value) noexcept;
-   void insert(size_t pos, const T& value);
-   void insert(Node* node, const T& value);
+  void push_front(const T& value) noexcept;
+  void push_back(const T& value) noexcept;
+  void insert(size_t pos, const T& value);
+  void insert(Node* node, const T& value);
 
-   void pop_front();
-   void pop_back();
-   void erase(size_t pos);
-   void erase(Node* node);
+  void pop_front();
+  void pop_back();
+  void erase(size_t pos);
+  void erase(Node* node);
 
-   void clear() noexcept;
+  void clear() noexcept;
 
-   DoubleLinkedTList<T>& operator=(const DoubleLinkedTList<T>& other);
+  DoubleLinkedTList<T>& operator=(const DoubleLinkedTList<T>& other);
 
  private:
-   Node* find_node(Node* target) const {
+  Node* find_node(Node* target) const {
      if (target == nullptr) return nullptr;
 
      Node* current = _head;
@@ -66,16 +66,18 @@ class DoubleLinkedTList {
 };
 
 template <class T>
-DoubleLinkedTList<T>::DoubleLinkedTList() : _head(nullptr), _tail(nullptr), _size(0) {}
+DoubleLinkedTList<T>::DoubleLinkedTList() : _head(nullptr),
+_tail(nullptr), _size(0) {}
 
 template <class T>
-DoubleLinkedTList<T>::DoubleLinkedTList(const DoubleLinkedTList<T>& other) : _head(nullptr),
+DoubleLinkedTList<T>::DoubleLinkedTList(const DoubleLinkedTList<T>& other)
+  : _head(nullptr),
 _tail(nullptr), _size(0) {
   Node* current = other._head;
   while (current != nullptr) {
     push_back(current->value);
     current = current->next;
-  } 
+  }
 }
 
 template <class T>
@@ -274,7 +276,8 @@ void DoubleLinkedTList<T>::clear() noexcept {
 }
 
 template <class T>
-DoubleLinkedTList<T>& DoubleLinkedTList<T>::operator=(const DoubleLinkedTList<T>& other) {
+DoubleLinkedTList<T>& DoubleLinkedTList<T>::operator=
+(const DoubleLinkedTList<T>& other) {
   if (this == &other) {
     return *this;
   }
