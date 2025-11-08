@@ -166,6 +166,103 @@ void DoubleLinkedTList<T>::insert(size_t pos, const T& value) {
 }
 
 template <class T>
+void DoubleLinkedTList<T>::pop_front() {
+  if (is_empty()) throw std::logic_error("Cannot pop_front from empty list");
+
+  if (_head == _tail) {
+    delete _head;
+    _head = nullptr;
+    _tail = nullptr;
+    _size--;
+    return;
+  }
+
+  Node* cur = _head;
+  _head = _head->next;
+  _head->prev = nullptr;
+
+  delete cur;
+
+  _size--;
+}
+
+template <class T>
+void DoubleLinkedTList<T>::pop_back() {
+  if (is_empty()) throw std::logic_error("Cannot pop_back from empty list");
+
+  if (_head == _tail) {
+    delete _head;
+    _head = nullptr;
+    _tail = nullptr;
+    _size--;
+    return;
+  }
+
+  Node* new_tail = _tail->prev;
+
+  delete _tail;
+  _tail = new_tail;
+  _tail->next = nullptr;
+
+  _size--;
+}
+
+template <class T>
+void DoubleLinkedTList<T>::erase(Node* node) {
+  if (node == nullptr) {
+    throw std::invalid_argument("Node cannot be null");
+  }
+
+  if (is_empty()) {
+    throw std::logic_error("Cannot erase from empty list");
+  }
+
+  if (find_node(node) == nullptr) {
+    throw std::invalid_argument("Node not found in list");
+  }
+
+  if (node == _head) {
+    pop_front();
+    return;
+  }
+
+  if (node == _tail) {
+    pop_back();
+    return;
+  }
+
+  node->prev->next = node->next;
+  node->next->prev = node->prev;
+
+  delete node;
+  _size--;
+}
+
+template <class T>
+void DoubleLinkedTList<T>::erase(size_t pos) {
+  if (pos >= _size) {
+    throw std::out_of_range("Position out of range");
+  }
+
+  if (pos == 0) {
+    pop_front();
+    return;
+  }
+
+  if (pos == _size - 1) {
+    pop_back();
+    return;
+  }
+
+  Node* current = _head;
+  for (size_t i = 0; i < pos; ++i) {
+    current = current->next;
+  }
+
+  erase(current);
+}
+
+template <class T>
 void DoubleLinkedTList<T>::clear() noexcept {
   while (_head != nullptr) {
     Node* temp = _head;
@@ -181,6 +278,16 @@ DoubleLinkedTList<T>& DoubleLinkedTList<T>::operator=(const DoubleLinkedTList<T>
   if (this == &other) {
     return *this;
   }
+
+  clear();
+
+  Node* current = other._head;
+  while (current != nullptr) {
+    push_back(current->value);
+    current = current->next;
+  }
+
+  return *this;
 }
 
 #endif  // LIB_DOUBLE_LINKED_TLIST_DOUBLE_LINKED_TLIST_H_
