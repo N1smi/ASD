@@ -62,7 +62,7 @@ class DoubleLinkedTList {
        current = current->next;
      }
      return nullptr;
-   }
+  }
 };
 
 template <class T>
