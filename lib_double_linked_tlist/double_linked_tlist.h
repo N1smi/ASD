@@ -22,10 +22,95 @@ class DoubleLinkedTList {
   Node* _tail;
   size_t _size;
 
+  template <typename ValueType>
+  class IteratorBase {
+  public:
+    using NodeType = typename std::conditional<
+      std::is_const<ValueType>::value,
+      const Node,
+      Node
+    >::type;
+
+  private:
+    NodeType* _current;
+
+  public:
+    explicit IteratorBase(NodeType* node = nullptr) : _current(node) {}
+
+    IteratorBase& operator++() {
+      if (_current) {
+        _current = _current->next;
+      }
+      return *this;
+    }
+
+    IteratorBase operator++(int) {
+      IteratorBase temp = *this;
+      ++(*this);
+      return temp;
+    }
+
+    ValueType& operator*() const {
+      if (!_current) {
+        throw std::runtime_error("Dereferencing end iterator");
+      }
+      return _current->value;
+    }
+
+    bool operator==(const IteratorBase& other) const {
+      return _current == other._current;
+    }
+
+    bool operator!=(const IteratorBase& other) const {
+      return !(*this == other);
+    }
+
+    IteratorBase& operator=(const IteratorBase& other) {
+      if (this != &other) {
+        _current = other._current;
+      }
+      return *this;
+    }
+
+    IteratorBase& operator+=(size_t value) {
+      for (size_t i = 0; i < value && _current; i++) {
+        _current = _current->next;
+      }
+      return *this;
+    }
+
+    IteratorBase& operator--() {
+      if (_current) {
+        _current = _current->prev;
+      }
+      return *this;
+    }
+
+    IteratorBase operator--(int) {
+      IteratorBase temp = *this;
+      --(*this);
+      return temp;
+    }
+
+    IteratorBase& operator-=(size_t value) {
+      for (size_t i = 0; i < value && _current; i++) {
+        _current = _current->prev;
+      }
+      return *this;
+    }
+  };
  public:
+  using iterator = IteratorBase<T>;
+  using const_iterator = IteratorBase<const T>;
+
   DoubleLinkedTList();
   DoubleLinkedTList(const DoubleLinkedTList<T>& other);
   ~DoubleLinkedTList();
+
+  iterator begin() noexcept { return iterator(_head); }
+  iterator end() noexcept { return iterator(nullptr); }
+  const_iterator begin() const noexcept { return const_iterator(_head); }
+  const_iterator end() const noexcept { return const_iterator(nullptr); }
 
   inline Node* head() noexcept { return _head; }
   inline Node* tail() noexcept { return _tail; }
