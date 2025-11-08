@@ -111,6 +111,10 @@ class TList {
   void erase(size_t pos);
   void erase(Node* node);
 
+  void clear() noexcept;
+
+  TList<T>& operator=(const TList<T>& other);
+
  private:
   Node* find_previous_node(Node* node) const {
      if (node == nullptr || _head == nullptr) {
@@ -242,10 +246,6 @@ void TList<T>::pop_front() {
   Node* cur = _head;
   _head = _head->next;
 
-  if (_head == nullptr) {
-    _tail = nullptr;
-  }
-
   delete cur;
 
   _size--;
@@ -263,15 +263,10 @@ void TList<T>::pop_back() {
     return;
   }
 
-  Node* cur = _head;
-
-  while (cur->next != _tail) {
-    cur = cur->next;
-  }
-
+  Node* prev = find_previous_node(_tail);
   delete _tail;
-  _tail = cur;
-  cur->next = nullptr;
+  _tail = prev;
+  _tail->next = nullptr;
   _size--;
 }
 
@@ -289,18 +284,13 @@ void TList<T>::erase(Node* node) {
     return;
   }
 
+  Node* prev = find_previous_node(node);
+  if (prev == nullptr) throw std::invalid_argument("Node not found in list");
+
+  prev->next = node->next;
   if (node == _tail) {
-    pop_back();
-    return;
+    _tail = prev;
   }
-
-  Node* current = find_previous_node(node);
-
-  if (current == nullptr) {
-    throw std::invalid_argument("Node not found in list");
-  }
-
-  current->next = node->next;
   delete node;
   _size--;
 }
@@ -330,6 +320,34 @@ void TList<T>::erase(size_t pos) {
   current->next = to_delete->next;
   delete to_delete;
   _size--;
+}
+
+template <class T>
+void TList<T>::clear() noexcept {
+  while (_head != nullptr) {
+    Node* temp = _head;
+    _head = _head->next;
+    delete temp;
+  }
+  _tail = nullptr;
+  _size = 0;
+}
+
+template <class T>
+TList<T>& TList<T>::operator=(const TList<T>& other) {
+  if (this == &other) {
+    return *this;
+  }
+
+  clear();
+
+  Node* current = other._head;
+  while (current != nullptr) {
+    push_back(current->value);
+    current = current->next;
+  }
+
+  return *this;
 }
 
 #endif  // LIB_TLIST_TLIST_H_
