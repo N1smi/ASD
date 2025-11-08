@@ -267,3 +267,240 @@ TEST(TestDoubleLinkedTList, Clear) {
   EXPECT_EQ(list.head(), nullptr);
   EXPECT_EQ(list.tail(), nullptr);
 }
+
+TEST(TestDoubleLinkedTList, AssignmentOperator) {
+  DoubleLinkedTList<int> list1;
+  list1.push_back(1);
+  list1.push_back(2);
+
+  DoubleLinkedTList<int> list2;
+  list2.push_back(3);
+
+  list2 = list1;
+
+  EXPECT_EQ(list2.size(), 2);
+  EXPECT_EQ(list2.head()->value, 1);
+  EXPECT_EQ(list2.tail()->value, 2);
+}
+
+TEST(TestDoubleLinkedTList, SelfAssignment) {
+  DoubleLinkedTList<int> list;
+  list.push_back(1);
+
+  list = list;
+
+  EXPECT_EQ(list.size(), 1);
+  EXPECT_EQ(list.head()->value, 1);
+}
+
+TEST(TestDoubleLinkedTList, ThrowWhenPopFrontInEmptyList) {
+  DoubleLinkedTList<int> list;
+
+  EXPECT_THROW(list.pop_front(), std::logic_error);
+  EXPECT_TRUE(list.is_empty());
+  EXPECT_EQ(list.size(), 0);
+}
+
+TEST(TestDoubleLinkedTList, PopFrontFromSingleElement) {
+  DoubleLinkedTList<int> list;
+
+  list.push_back(5);
+  list.pop_front();
+
+  EXPECT_TRUE(list.is_empty());
+  EXPECT_EQ(list.head(), nullptr);
+  EXPECT_EQ(list.tail(), nullptr);
+  EXPECT_EQ(list.size(), 0);
+}
+
+TEST(TestDoubleLinkedTList, PopFront) {
+  DoubleLinkedTList<int> list;
+
+  list.push_back(1);
+  list.push_back(2);
+  list.push_back(3);
+
+  list.pop_front();
+
+  EXPECT_EQ(list.size(), 2);
+  EXPECT_EQ(list.head()->value, 2);
+  EXPECT_EQ(list.tail()->value, 3);
+  EXPECT_EQ(list.head()->prev, nullptr);
+}
+
+TEST(TestDoubleLinkedTList, ThrowWhenPopBackInEmptyList) {
+  DoubleLinkedTList<int> list;
+
+  EXPECT_THROW(list.pop_back(), std::logic_error);
+  EXPECT_TRUE(list.is_empty());
+  EXPECT_EQ(list.size(), 0);
+}
+
+TEST(TestDoubleLinkedTList, PopBackFromSingleElement) {
+  DoubleLinkedTList<int> list;
+
+  list.push_back(5);
+  list.pop_back();
+
+  EXPECT_TRUE(list.is_empty());
+  EXPECT_EQ(list.head(), nullptr);
+  EXPECT_EQ(list.tail(), nullptr);
+  EXPECT_EQ(list.size(), 0);
+}
+
+TEST(TestDoubleLinkedTList, PopBack) {
+  DoubleLinkedTList<int> list;
+
+  list.push_back(1);
+  list.push_back(2);
+  list.push_back(3);
+
+  list.pop_back();
+
+  EXPECT_EQ(list.size(), 2);
+  EXPECT_EQ(list.head()->value, 1);
+  EXPECT_EQ(list.tail()->value, 2);
+  EXPECT_EQ(list.tail()->next, nullptr);
+}
+
+TEST(TestDoubleLinkedTList, ThrowWhenEraseWithNodeNullNode) {
+  DoubleLinkedTList<int> list;
+
+  list.push_back(1);
+
+  EXPECT_THROW(list.erase(nullptr), std::invalid_argument);
+}
+
+TEST(TestDoubleLinkedTList, ThrowWhenEraseWithNodeInEmptyList) {
+  DoubleLinkedTList<int> list;
+
+  DoubleLinkedTList<int>::Node* node = new DoubleLinkedTList<int>::Node(5);
+
+  EXPECT_THROW(list.erase(node), std::logic_error);
+  EXPECT_TRUE(list.is_empty());
+  EXPECT_EQ(list.size(), 0);
+}
+
+TEST(TestDoubleLinkedTList, ThrowWhenEraseWithNodeInvalidNode) {
+  DoubleLinkedTList<int> list;
+
+  list.push_back(1);
+
+  DoubleLinkedTList<int>::Node* node = new DoubleLinkedTList<int>::Node(5);
+
+  EXPECT_THROW(list.erase(node), std::invalid_argument);
+  EXPECT_FALSE(list.is_empty());
+  EXPECT_EQ(list.size(), 1);
+}
+
+TEST(TestDoubleLinkedTList, EraseWithNodeHead) {
+  DoubleLinkedTList<int> list;
+  list.push_back(1);
+  list.push_back(2);
+
+  list.erase(list.head());
+
+  EXPECT_EQ(list.size(), 1);
+  EXPECT_EQ(list.head()->value, 2);
+  EXPECT_EQ(list.head()->prev, nullptr);
+  EXPECT_EQ(list.tail()->value, 2);
+}
+
+TEST(TestDoubleLinkedTList, EraseWithNodeTail) {
+  DoubleLinkedTList<int> list;
+  list.push_back(1);
+  list.push_back(2);
+
+  list.erase(list.tail());
+
+  EXPECT_EQ(list.size(), 1);
+  EXPECT_EQ(list.head()->value, 1);
+  EXPECT_EQ(list.tail()->value, 1);
+  EXPECT_EQ(list.tail()->next, nullptr);
+}
+
+TEST(TestDoubleLinkedTList, EraseWithNodeMiddle) {
+  DoubleLinkedTList<int> list;
+  list.push_back(1);
+  list.push_back(2);
+  list.push_back(3);
+
+  list.erase(list.head()->next);
+
+  EXPECT_EQ(list.size(), 2);
+  EXPECT_EQ(list.head()->value, 1);
+  EXPECT_EQ(list.head()->next->value, 3);
+  EXPECT_EQ(list.tail()->value, 3);
+  EXPECT_EQ(list.tail()->prev->value, 1);
+}
+
+TEST(TestDoubleLinkedTList, EraseThrowsOnInvalidPosition) {
+  DoubleLinkedTList<int> list;
+  list.push_back(1);
+
+  EXPECT_THROW(list.erase(1), std::out_of_range);
+
+  EXPECT_THROW(list.erase(5), std::out_of_range);
+
+  EXPECT_EQ(list.size(), 1);
+  EXPECT_EQ(list.head()->value, 1);
+}
+
+TEST(TestDoubleLinkedTList, EraseWithPosThrowsOnEmptyList) {
+  DoubleLinkedTList<int> list;
+  size_t pos = 0;
+
+  EXPECT_THROW(list.erase(pos), std::out_of_range);
+  EXPECT_TRUE(list.is_empty());
+}
+
+TEST(TestDoubleLinkedTList, EraseWithPosFront) {
+  DoubleLinkedTList<int> list;
+  list.push_back(1);
+  list.push_back(2);
+  list.push_back(3);
+
+  size_t pos = 0;
+
+  list.erase(pos);
+
+  EXPECT_EQ(list.size(), 2);
+  EXPECT_EQ(list.head()->value, 2);
+  EXPECT_EQ(list.head()->prev, nullptr);
+  EXPECT_EQ(list.tail()->value, 3);
+  EXPECT_EQ(list.head()->next->value, 3);
+}
+
+TEST(TestDoubleLinkedTList, EraseWithPosBack) {
+  DoubleLinkedTList<int> list;
+
+  list.push_back(1);
+  list.push_back(2);
+  list.push_back(3);
+
+  list.erase(2);
+
+  EXPECT_EQ(list.size(), 2);
+  EXPECT_EQ(list.head()->value, 1);
+  EXPECT_EQ(list.tail()->value, 2);
+  EXPECT_EQ(list.tail()->next, nullptr);
+}
+
+TEST(TestDoubleLinkedTList, EraseWithPosMiddle) {
+  DoubleLinkedTList<int> list;
+
+  list.push_back(1);
+  list.push_back(2);
+  list.push_back(3);
+  list.push_back(4);
+
+  list.erase(2);
+
+  EXPECT_EQ(list.size(), 3);
+  EXPECT_EQ(list.head()->value, 1);
+  EXPECT_EQ(list.head()->next->value, 2);
+  EXPECT_EQ(list.head()->next->next->value, 4);
+  EXPECT_EQ(list.tail()->value, 4);
+  EXPECT_EQ(list.tail()->prev->value, 2);
+  EXPECT_EQ(list.tail()->prev->prev->value, 1);
+}
