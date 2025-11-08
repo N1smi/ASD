@@ -24,17 +24,17 @@ class DoubleLinkedTList {
 
   template <typename ValueType>
   class IteratorBase {
- public:
+   public:
     using NodeType = typename std::conditional<
       std::is_const<ValueType>::value,
       const Node,
       Node
     >::type;
 
- private:
+   private:
     NodeType* _current;
 
- public:
+   public:
     explicit IteratorBase(NodeType* node = nullptr) : _current(node) {}
 
     IteratorBase& operator++() {
