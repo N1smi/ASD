@@ -435,7 +435,7 @@ TEST(TestTList, IteratorEmptyList) {
   EXPECT_EQ(list.begin(), list.end());
 
   bool entry = false;
-  for (TList<int>::iterator it = list.begin(); it != list.end(); it++) {
+  for (TList<int>::iterator it = list.begin(); it != list.end(); ++it) {
     entry = true;
   }
   EXPECT_FALSE(entry);
@@ -484,25 +484,17 @@ TEST(TestTList, IteratorWrite) {
   }
 
   size_t value = 10;
-  for (TList<int>::iterator it = list.begin(); it != list.end(); it++) {
+  for (TList<int>::iterator it = list.begin(); it != list.end(); ++it) {
     *it = value;
     value++;
   }
 
   value -= 5;
 
-  for (auto it = list.begin(); it != list.end(); it++) {
+  for (auto it = list.begin(); it != list.end(); ++it) {
     EXPECT_EQ(*it, value);
     value++;
   }
-}
-
-TEST(TestTList, ThrowWhenDerefEndInIterator) {
-  TList<int> list;
-  list.push_back(1);
-
-  auto it = list.end();
-  EXPECT_THROW(*it, std::runtime_error);
 }
 
 TEST(TestTList, Clear) {

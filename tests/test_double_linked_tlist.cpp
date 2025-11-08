@@ -504,3 +504,91 @@ TEST(TestDoubleLinkedTList, EraseWithPosMiddle) {
   EXPECT_EQ(list.tail()->prev->value, 2);
   EXPECT_EQ(list.tail()->prev->prev->value, 1);
 }
+
+TEST(TestDoubleLinkedTList, IteratorEmptyList) {
+  DoubleLinkedTList<int> list;
+
+  EXPECT_EQ(list.begin(), list.end());
+
+  bool entry = false;
+  for (DoubleLinkedTList<int>::iterator it = list.begin();
+    it != list.end(); ++it) {
+    entry = true;
+  }
+  EXPECT_FALSE(entry);
+
+  auto it1 = list.end();
+
+  ++it1;
+  EXPECT_EQ(it1, list.end());
+
+  it1++;
+  EXPECT_EQ(it1, list.end());
+
+  it1 += 5;
+  EXPECT_EQ(it1, list.end());
+
+  it1--;
+  EXPECT_EQ(it1, list.end());
+
+  --it1;
+  EXPECT_EQ(it1, list.end());
+
+  it1 -= 2;
+  EXPECT_EQ(it1, list.end());
+}
+
+TEST(TestDoubleLinkedTList, IteratorRead) {
+  DoubleLinkedTList<int> list;
+
+  for (size_t i = 0; i < 5; i++) {
+    list.push_back(1 + i);
+  }
+
+  EXPECT_NE(list.begin(), list.end());
+
+  auto it = list.begin();
+  EXPECT_EQ(*it, 1);
+
+  ++it;
+  EXPECT_EQ(*it, 2);
+
+  auto old_it1 = it++;
+  EXPECT_EQ(*old_it1, 2);
+  EXPECT_EQ(*it, 3);
+
+  it += 2;
+  EXPECT_EQ(*it, 5);
+
+  --it;
+  EXPECT_EQ(*it, 4);
+
+  auto old_it2 = it--;
+  EXPECT_EQ(*old_it2, 4);
+  EXPECT_EQ(*it, 3);
+
+  it -= 2;
+  EXPECT_EQ(*it, 1);
+}
+
+TEST(TestDoubleLinkedTList, IteratorWrite) {
+  DoubleLinkedTList<int> list;
+
+  for (size_t i = 0; i < 5; i++) {
+    list.push_back(1 + i);
+  }
+
+  size_t value = 10;
+  for (DoubleLinkedTList<int>::iterator it = list.begin();
+    it != list.end(); ++it) {
+    *it = value;
+    value++;
+  }
+
+  value -= 5;
+
+  for (auto it = list.begin(); it != list.end(); ++it) {
+    EXPECT_EQ(*it, value);
+    value++;
+  }
+}
