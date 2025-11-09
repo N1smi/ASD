@@ -535,3 +535,24 @@ TEST(TestTList, SelfAssignment) {
   EXPECT_EQ(list.size(), 1);
   EXPECT_EQ(list.head()->value, 1);
 }
+
+
+TEST(TestTList, ConstIterator) {
+  TList<int> list;
+  list.push_back(10);
+  list.push_back(20);
+  list.push_back(30);
+
+  const TList<int>& const_list = list;
+
+  auto it = const_list.begin();
+  EXPECT_EQ(*it, 10);
+
+  ++it;
+  EXPECT_EQ(*it, 20);
+
+  ++it;
+  EXPECT_EQ(*it, 30);
+
+  // *it = 100;
+}
