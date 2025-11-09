@@ -118,7 +118,8 @@ class TVector {
   TVector(const TVector<T>& other);
   ~TVector();
 
-  // inline const State* states() const noexcept { return _states; } // for debugging
+  // inline const State* states() const noexcept
+  // { return _states; } // for debugging
 
   iterator begin_iter() noexcept {
     if (_size == 0) return end_iter();

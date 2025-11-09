@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 #include<string>
+#include <vector>
 #include "../lib_tvector/tvector.h"
 
 TEST(TestTVectorLib, CreateDefaultVector) {
@@ -1055,7 +1056,8 @@ TEST(TestTVectorLib, IteratorInEmptyTVector) {
   EXPECT_EQ(vec.begin_iter(), vec.end_iter());
 
   bool entry = false;
-  for (TVector<int>::iterator it = vec.begin_iter(); it != vec.end_iter(); ++it) {
+  for (TVector<int>::iterator it = vec.begin_iter();
+    it != vec.end_iter(); ++it) {
     entry = true;
   }
   EXPECT_FALSE(entry);
@@ -1063,7 +1065,7 @@ TEST(TestTVectorLib, IteratorInEmptyTVector) {
   auto it1 = vec.end_iter();
   ++it1;
   EXPECT_EQ(it1, vec.end_iter());
-  
+
   auto it2 = vec.end_iter();
   it2++;
   EXPECT_EQ(it2, vec.end_iter());
@@ -1102,7 +1104,6 @@ TEST(TestTVectorLib, IteratorRead) {
 }
 
 TEST(TestTVectorLib, IteratorReadWithDeletedElements) {
-
   TVector<int> vec;
   for (int i = 1; i <= 20; i++) {
     vec.push_back(i);
