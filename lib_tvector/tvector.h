@@ -18,13 +18,127 @@ class TVector {
   size_t _deleted;
   State* _states;
 
+  template <typename ValueType>
+  class IteratorBase {
+   public:
+    using value_type = ValueType;
+    using pointer = ValueType*;
+    using reference = ValueType&;
+
+   private:
+    pointer _current;
+    pointer _base;
+    pointer _end;
+    State* _state_ptr;
+
+    void find_next_busy() {
+      if (!_current || !_state_ptr || _current >= _end) return;
+
+      while (_current < _end && _state_ptr[_current - _base] != busy) {
+        ++_current;
+      }
+
+      if (_current >= _end) {
+        _current = _end;
+      }
+    }
+
+    void find_prev_busy() {
+      if (!_current || !_state_ptr || _current <= _base) return;
+
+      while (_current > _base && _state_ptr[_current - _base] != busy) {
+        --_current;
+      }
+
+      if (_state_ptr[_current - _base] != busy) {
+        _current = _base;
+      }
+    }
+
+   public:
+     IteratorBase(pointer ptr = nullptr, pointer base = nullptr,
+       pointer end = nullptr, State* state_ptr = nullptr)
+       : _current(ptr), _base(base), _end(end), _state_ptr(state_ptr) {
+       if (_current && _state_ptr && _state_ptr[_current - _base] != busy) {
+         find_next_busy();
+       }
+     }
+
+     reference operator*() const {
+       return *_current;
+     }
+
+     pointer operator->() const {
+       return _current;
+     }
+
+     IteratorBase& operator++() {
+       if (_current < _end) {
+         ++_current;
+         find_next_busy();
+       }
+       return *this;
+     }
+
+     IteratorBase operator++(int) {
+       IteratorBase tmp = *this;
+       ++(*this);
+       return tmp;
+     }
+
+     IteratorBase& operator--() {
+       if (_current > _base) {
+         --_current;
+         find_prev_busy();
+       }
+       return *this;
+     }
+
+     IteratorBase operator--(int) {
+       IteratorBase tmp = *this;
+       --(*this);
+       return tmp;
+     }
+
+     bool operator==(const IteratorBase& other) const {
+       return _current == other._current;
+     }
+
+     bool operator!=(const IteratorBase& other) const {
+       return !(*this == other);
+     }
+  };
+
  public:
+  using iterator = IteratorBase<T>;
+  using const_iterator = IteratorBase<const T>;
+
   explicit TVector(size_t size = 0);
   TVector(std::initializer_list<T>);
   TVector(const TVector<T>& other);
   ~TVector();
 
-  inline const State* states() const noexcept;  // for debugging
+  // inline const State* states() const noexcept { return _states; } // for debugging
+
+  iterator begin_iter() noexcept {
+    if (_size == 0) return end_iter();
+    return iterator(_data, _data, _data + _capacity, _states);
+  }
+
+  iterator end_iter() noexcept {
+    if (_size == 0) return iterator(nullptr, nullptr, nullptr, nullptr);
+    return iterator(_data + _capacity, _data, _data + _capacity, _states);
+  }
+
+  const_iterator begin_iter() const noexcept {
+    if (_size == 0) return end_iter();
+    return const_iterator(_data, _data, _data + _capacity, _states);
+  }
+
+  const_iterator end_iter() const noexcept {
+    if (_size == 0) return const_iterator(nullptr, nullptr, nullptr, nullptr);
+    return const_iterator(_data + _capacity, _data, _data + _capacity, _states);
+  }
 
   inline bool is_empty() const noexcept;
   inline bool is_full() const noexcept;
@@ -154,11 +268,6 @@ template <class T>
 TVector<T>::~TVector() {
   delete[] _data;
   delete[] _states;
-}
-
-template <class T>
-inline const State* TVector<T>::states() const noexcept {
-  return _states;
 }
 
 template <class T>
