@@ -1045,3 +1045,125 @@ TEST(TestTVectorLib, HighDimensionalAndReallocateForDeleted) {
   vec.erase(0, 13500);
   EXPECT_EQ(static_cast<size_t>(76515), vec.capacity());
 }
+
+TEST(TestTVectorLib, IteratorInEmptyTVector) {
+  TVector<int> vec;
+
+  vec.push_back(1);
+  vec.pop_back();
+
+  EXPECT_EQ(vec.begin_iter(), vec.end_iter());
+
+  bool entry = false;
+  for (TVector<int>::iterator it = vec.begin_iter(); it != vec.end_iter(); ++it) {
+    entry = true;
+  }
+  EXPECT_FALSE(entry);
+
+  auto it1 = vec.end_iter();
+  ++it1;
+  EXPECT_EQ(it1, vec.end_iter());
+  
+  auto it2 = vec.end_iter();
+  it2++;
+  EXPECT_EQ(it2, vec.end_iter());
+
+  auto it3 = vec.end_iter();
+  it3--;
+  EXPECT_EQ(it3, vec.end_iter());
+
+  auto it4 = vec.end_iter();
+  --it4;
+  EXPECT_EQ(it4, vec.end_iter());
+}
+
+TEST(TestTVectorLib, IteratorRead) {
+  TVector<int> vec = { 1, 2, 3, 4, 5 };
+
+  std::vector<int> result;
+  for (auto it = vec.begin_iter(); it != vec.end_iter(); ++it) {
+    result.push_back(*it);
+  }
+  EXPECT_EQ(result, std::vector<int>({ 1, 2, 3, 4, 5 }));
+
+  std::vector<int> reversed;
+  for (auto it = vec.end_iter(); it != vec.begin_iter(); ) {
+    --it;
+    reversed.push_back(*it);
+  }
+  EXPECT_EQ(reversed, std::vector<int>({ 5, 4, 3, 2, 1 }));
+
+  auto it1 = vec.begin_iter();
+  EXPECT_EQ(*(it1++), 1);
+  EXPECT_EQ(*it1, 2);
+
+  EXPECT_EQ(*(it1--), 2);
+  EXPECT_EQ(*it1, 1);
+}
+
+TEST(TestTVectorLib, IteratorReadWithDeletedElements) {
+
+  TVector<int> vec;
+  for (int i = 1; i <= 20; i++) {
+    vec.push_back(i);
+  }
+
+  vec.erase(1);
+
+  std::vector<int> result;
+  for (auto it = vec.begin_iter(); it != vec.end_iter(); ++it) {
+    result.push_back(*it);
+  }
+  EXPECT_EQ(result, std::vector<int>({ 1, 3, 4, 5, 6, 7, 8, 9, 10,
+    11, 12, 13, 14, 15, 16, 17, 18, 19, 20 }));
+
+  std::vector<int> reversed;
+  for (auto it = vec.end_iter(); it != vec.begin_iter(); ) {
+    --it;
+    reversed.push_back(*it);
+  }
+  EXPECT_EQ(reversed, std::vector<int>({ 20, 19, 18, 17, 16, 15, 14,
+    13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 1 }));
+}
+
+TEST(TestTVectorLib, ConstIterator) {
+  const TVector<int> vec = { 10, 20, 30 };
+
+  std::vector<int> result;
+  for (auto it = vec.begin_iter(); it != vec.end_iter(); ++it) {
+    result.push_back(*it);
+  }
+  EXPECT_EQ(result, std::vector<int>({ 10, 20, 30 }));
+
+  auto const_it = vec.begin_iter();
+  // *const_it = 100;
+  EXPECT_EQ(*const_it, 10);
+
+  std::vector<int> reversed;
+  for (auto it = vec.end_iter(); it != vec.begin_iter(); ) {
+    --it;
+    reversed.push_back(*it);
+  }
+  EXPECT_EQ(reversed, std::vector<int>({ 30, 20, 10 }));
+}
+
+TEST(TestTVectorLib, IteratorWrite) {
+  TVector<int> vec = { 10, 20, 30, 40, 50 };
+
+  auto it = vec.begin_iter();
+  *it = 100;
+  EXPECT_EQ(vec[0], 100);
+  EXPECT_EQ(*it, 100);
+
+  int multiplier = 2;
+  for (auto it = vec.begin_iter(); it != vec.end_iter(); ++it) {
+    *it *= multiplier;
+    multiplier++;
+  }
+
+  EXPECT_EQ(vec[0], 200);
+  EXPECT_EQ(vec[1], 60);
+  EXPECT_EQ(vec[2], 120);
+  EXPECT_EQ(vec[3], 200);
+  EXPECT_EQ(vec[4], 300);
+}
