@@ -1,3 +1,4 @@
 create_project_lib(Algorithm)
 add_depend(Algorithm Matrix lib_matrix)
 add_depend(Algorithm TDynamicStack lib_tdynamic_stack)
+add_depend(Algorithm TList lib_tlist)
