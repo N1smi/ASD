@@ -241,3 +241,178 @@ catch (const std::invalid_argument& e) {
 }
     }, std::invalid_argument);
 }
+
+TEST(TestAlgorithmLib, IsLoopedTListHareAndTurtleTrue) {
+  TList<int> list;
+
+  for (size_t i = 0; i < 5; i++) {
+    list.push_back(1 + i);
+  }
+
+  list.tail()->next = list.head()->next;
+
+  EXPECT_TRUE(is_looped_hare(list));
+
+  list.tail()->next = nullptr;
+}
+
+TEST(TestAlgorithmLib, IsLoopedTListHareAndTurtleFalse) {
+  TList<int> list;
+
+  for (size_t i = 0; i < 5; i++) {
+    list.push_back(1 + i);
+  }
+
+  EXPECT_FALSE(is_looped_hare(list));
+}
+
+TEST(TestAlgorithmLib, IsLoopedTListHareAndTurtleEmptyList) {
+  TList<int> list;
+
+  EXPECT_FALSE(is_looped_hare(list));
+}
+
+TEST(TestAlgorithmLib, IsLoopedTListHareAndTurtleSingleElementFalse) {
+  TList<int> list;
+
+  list.push_back(1);
+
+  EXPECT_FALSE(is_looped_hare(list));
+}
+
+TEST(TestAlgorithmLib, IsLoopedTListHareAndTurtleSingleElementTrue) {
+  TList<int> list;
+
+  list.push_back(1);
+
+  list.tail()->next = list.head();
+
+  EXPECT_TRUE(is_looped_hare(list));
+
+  list.tail()->next = nullptr;
+}
+
+TEST(TestAlgorithmLib, IsLoopedReversedAlgorithmTrue) {
+  TList<int> list;
+
+  for (size_t i = 0; i < 5; i++) {
+    list.push_back(1 + i);
+  }
+
+  list.tail()->next = list.head()->next;
+
+  EXPECT_TRUE(is_looped_reverse(list));
+
+  auto* current = list.head();
+  EXPECT_EQ(current->value, 1);
+  current = current->next;
+  EXPECT_EQ(current->value, 2);
+  current = current->next;
+  EXPECT_EQ(current->value, 3);
+  current = current->next;
+  EXPECT_EQ(current->value, 4);
+  current = current->next;
+  EXPECT_EQ(current->value, 5);
+  EXPECT_EQ(current->next, list.head()->next);
+
+  list.tail()->next = nullptr;
+}
+
+TEST(TestAlgorithmLib, IsLoopedReversedAlgorithmFalse) {
+  TList<int> list;
+
+  for (size_t i = 0; i < 5; i++) {
+    list.push_back(1 + i);
+  }
+
+  EXPECT_FALSE(is_looped_reverse(list));
+
+  auto* current = list.head();
+  EXPECT_EQ(current->value, 1);
+  current = current->next;
+  EXPECT_EQ(current->value, 2);
+  current = current->next;
+  EXPECT_EQ(current->value, 3);
+  current = current->next;
+  EXPECT_EQ(current->value, 4);
+  current = current->next;
+  EXPECT_EQ(current->value, 5);
+  EXPECT_EQ(current->next, nullptr);
+}
+
+
+TEST(TestAlgorithmLib, IsLoopedReversedAlgorithmEmptyList) {
+  TList<int> list;
+
+  EXPECT_FALSE(is_looped_reverse(list));
+}
+
+TEST(TestAlgorithmLib, IsLoopedReversedAlgorithmSingleElementFalse) {
+  TList<int> list;
+
+  list.push_back(1);
+
+  EXPECT_FALSE(is_looped_reverse(list));
+}
+
+TEST(TestAlgorithmLib, IsLoopedReversedAlgorithmSingleElementTrue) {
+  TList<int> list;
+
+  list.push_back(1);
+
+  list.tail()->next = list.head();
+
+  EXPECT_TRUE(is_looped_reverse(list));
+
+  list.tail()->next = nullptr;
+}
+
+TEST(TestAlgorithmLib, FindLoopStart) {
+  TList<int> list;
+
+  for (size_t i = 0; i < 5; i++) {
+    list.push_back(1 + i);
+  }
+
+  list.tail()->next = list.head()->next;
+
+  EXPECT_EQ(list.head()->next, find_loop(list));
+
+  list.tail()->next = nullptr;
+}
+
+TEST(TestAlgorithmLib, FindLoopStartNoCycleBase) {
+  TList<int> list;
+  for (int i = 1; i <= 5; i++) {
+    list.push_back(i);
+  }
+
+  auto* loop_start = find_loop(list);
+  EXPECT_EQ(loop_start, nullptr);
+}
+
+TEST(TestAlgorithmLib, FindLoopStartAlgorithmEmptyList) {
+  TList<int> list;
+
+  EXPECT_EQ(find_loop(list), nullptr);
+}
+
+TEST(TestAlgorithmLib, FindLoopStartSingleElementFalse) {
+  TList<int> list;
+
+  list.push_back(1);
+
+  EXPECT_EQ(find_loop(list), nullptr);
+}
+
+TEST(TestAlgorithmLib, FindLoopStartSingleElementTrue) {
+  TList<int> list;
+
+  list.push_back(1);
+
+  list.tail()->next = list.head();
+
+  EXPECT_EQ(find_loop(list), list.head());
+
+  list.tail()->next = nullptr;
+}
