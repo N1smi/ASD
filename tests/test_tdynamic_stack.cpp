@@ -138,7 +138,7 @@ TEST(TestTDynamicStackLib, PopAndPush) {
   stack.push(4);
   stack.push(79);
 
-  EXPECT_EQ(stack.size(),5);
+  EXPECT_EQ(stack.size(), 5);
   EXPECT_EQ(stack.top(), 79);
   EXPECT_TRUE(stack.is_full());
 }

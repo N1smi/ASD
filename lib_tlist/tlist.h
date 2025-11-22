@@ -89,7 +89,7 @@ class TList {
 
   iterator begin() noexcept { return iterator(_head); }
   iterator end() noexcept { return iterator(nullptr); }
-  const_iterator begin() const noexcept { 
+  const_iterator begin() const noexcept {
     return const_iterator(_head);
   }
   const_iterator end() const noexcept { return const_iterator(nullptr); }
