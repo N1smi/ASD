@@ -1,0 +1,2 @@
+create_project_lib(TListQueue)
+add_depend(TListQueue TList lib_tlist)
