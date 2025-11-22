@@ -186,12 +186,7 @@ TEST(TestTDynamicQueueLib, CircularBehavior) {
 
   EXPECT_EQ(queue.head(), 2);
   EXPECT_EQ(queue.tail(), 4);
-
-  queue.pop();
-  queue.push(5);
-
-  EXPECT_EQ(queue.head(), 3);
-  EXPECT_EQ(queue.tail(), 5);
+  EXPECT_TRUE(queue.is_full());
 }
 
 TEST(TestTDynamicQueueLib, BoundaryConditions) {

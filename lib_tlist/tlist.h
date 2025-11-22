@@ -89,7 +89,9 @@ class TList {
 
   iterator begin() noexcept { return iterator(_head); }
   iterator end() noexcept { return iterator(nullptr); }
-  const_iterator begin() const noexcept { return const_iterator(_head); }
+  const_iterator begin() const noexcept { 
+    return const_iterator(_head);
+  }
   const_iterator end() const noexcept { return const_iterator(nullptr); }
 
   inline Node* head() noexcept { return _head; }
@@ -193,13 +195,6 @@ void TList<T>::insert(Node* node, const T& value) {
     throw std::logic_error("Cannot insert into empty list");
   }
 
-  if (node != _head) {
-    Node* prev = find_previous_node(node);
-    if (prev == nullptr) {
-      throw std::invalid_argument("Node not found in list");
-    }
-  }
-
   Node* new_node = new Node(value);
   new_node->next = node->next;
   node->next = new_node;
@@ -285,7 +280,6 @@ void TList<T>::erase(Node* node) {
   }
 
   Node* prev = find_previous_node(node);
-  if (prev == nullptr) throw std::invalid_argument("Node not found in list");
 
   prev->next = node->next;
   if (node == _tail) {

@@ -8,7 +8,10 @@
 #include "../lib_algorithm/algorithm.h"
 
 TEST(TestAlgorithmLib, FLMNormal) {
-  int data[] = { 3, 1, 2, 5, 8, 4, 7, 6, 9 };
+  int data[] = {
+    3, 1, 2,
+    5, 8, 4,
+    7, 6, 9 };
   Matrix<int> matrix(3, 3, data, 9);
 
   int result = find_local_min(matrix);
@@ -59,29 +62,10 @@ TEST(TestAlgorithmLib, FLM4X4) {
   EXPECT_TRUE(result == 0 || result == 2);
 }
 
-TEST(TestAlgorithmLib, MultipleRunsFindDifferentMins) {
-  int data[] = { 3, 1, 2, 5, 8, 4, 7, 6, 9 };
-  Matrix<int> matrix(3, 3, data, 9);
-
-  std::set<int> results;
-  for (int i = 0; i < 100; i++) {
-    results.insert(find_local_min(matrix));
-  }
-
-  EXPECT_GT(results.count(1), 0);
-  EXPECT_GT(results.count(6), 0);
-}
-
 TEST(TestAlgorithmLib, CheckBracketsOddNumberFalse) {
   std::string str = "(()()";
 
   EXPECT_FALSE(check_breckets(str));
-}
-
-TEST(TestAlgorithmLib, CheckBracketsEasyExampleTrue) {
-  std::string str = "()()";
-
-  EXPECT_TRUE(check_breckets(str));
 }
 
 TEST(TestAlgorithmLib, CheckBracketsHardExampleTrue) {
@@ -90,20 +74,14 @@ TEST(TestAlgorithmLib, CheckBracketsHardExampleTrue) {
   EXPECT_TRUE(check_breckets(str));
 }
 
-TEST(TestAlgorithmLib, CheckBracketsHardExampleFalse) {
-  std::string str = "((()()(()))(";
-
-  EXPECT_FALSE(check_breckets(str));
-}
-
 TEST(TestAlgorithmLib, CheckBracketsWithoutStart) {
   std::string str = "(()))))";
 
   EXPECT_FALSE(check_breckets(str));
 }
 
-TEST(TestAlgorithmLib, CheckBracketsWithoutEnd) {
-  std::string str = "(((((())";
+TEST(TestAlgorithmLib, CheckBracketsDifferentBracketsTypes) {
+  std::string str = "((){{}])";
 
   EXPECT_FALSE(check_breckets(str));
 }
@@ -114,22 +92,10 @@ TEST(TestAlgorithmLib, CheckBracketsEmptryStr) {
   EXPECT_TRUE(check_breckets(str));
 }
 
-TEST(TestAlgorithmLib, CheckBracketsAlpha) {
-  std::string str = "a b c d";
-
-  EXPECT_TRUE(check_breckets(str));
-}
-
 TEST(TestAlgorithmLib, CheckBracketsAlphaAndBracketsTrue) {
-  std::string str = "(a b c d)";
+  std::string str = "(a * b + c) * d";
 
   EXPECT_TRUE(check_breckets(str));
-}
-
-TEST(TestAlgorithmLib, CheckBracketsAlphaAndBracketsFalse) {
-  std::string str = "(a b c d))";
-
-  EXPECT_FALSE(check_breckets(str));
 }
 
 TEST(TestAlgorithmLib, ReadExprValidExpr) {

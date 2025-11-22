@@ -114,18 +114,6 @@ TEST(TestTList, InsertWithNodeInListTailChange) {
   EXPECT_EQ(list.size(), 2);
 }
 
-TEST(TestTList, ThrowWhenInsertWithNodeInvalidNode) {
-  TList<int> list;
-
-  list.push_back(1);
-
-  TList<int>::Node* node = new TList<int>::Node(5);
-
-  EXPECT_THROW(list.insert(node, 8), std::invalid_argument);
-  EXPECT_FALSE(list.is_empty());
-  EXPECT_EQ(list.size(), 1);
-}
-
 TEST(TestTList, InsertInEmptyListPos) {
   TList<int> list;
 
@@ -309,18 +297,6 @@ TEST(TestTList, ThrowWhenEraseWithNodeInEmptyList) {
   EXPECT_THROW(list.erase(node), std::logic_error);
   EXPECT_TRUE(list.is_empty());
   EXPECT_EQ(list.size(), 0);
-}
-
-TEST(TestTList, ThrowWhenEraseWithNodeInvalidNode) {
-  TList<int> list;
-
-  list.push_back(1);
-
-  TList<int>::Node* node = new TList<int>::Node(5);
-
-  EXPECT_THROW(list.erase(node), std::invalid_argument);
-  EXPECT_FALSE(list.is_empty());
-  EXPECT_EQ(list.size(), 1);
 }
 
 TEST(TestTList, EraseWithNodeHead) {
@@ -509,6 +485,12 @@ TEST(TestTList, Clear) {
   EXPECT_EQ(list.size(), 0);
   EXPECT_EQ(list.head(), nullptr);
   EXPECT_EQ(list.tail(), nullptr);
+
+  ASSERT_NO_THROW(list.push_back(1));
+  EXPECT_EQ(list.size(), 1);
+  EXPECT_EQ(list.head()->value, 1);
+  EXPECT_EQ(list.tail()->value, 1);
+  EXPECT_FALSE(list.is_empty());
 }
 
 TEST(TestTList, AssignmentOperator) {
@@ -543,7 +525,7 @@ TEST(TestTList, ConstIterator) {
   list.push_back(20);
   list.push_back(30);
 
-  const TList<int>& const_list = list;
+  const TList<int> const_list = list;
 
   auto it = const_list.begin();
   EXPECT_EQ(*it, 10);

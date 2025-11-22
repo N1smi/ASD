@@ -124,3 +124,21 @@ TEST(TestTDynamicStackLib, Clear) {
   EXPECT_TRUE(stack.is_empty());
   EXPECT_EQ(stack.size(), 5);
 }
+
+TEST(TestTDynamicStackLib, PopAndPush) {
+  TDynamicStack<int> stack(5);
+
+  for (size_t i = 0; i < stack.size(); i++) {
+    stack.push(5);
+  }
+
+  stack.pop();
+  stack.pop();
+
+  stack.push(4);
+  stack.push(79);
+
+  EXPECT_EQ(stack.size(),5);
+  EXPECT_EQ(stack.top(), 79);
+  EXPECT_TRUE(stack.is_full());
+}

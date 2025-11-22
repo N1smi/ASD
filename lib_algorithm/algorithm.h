@@ -19,7 +19,6 @@ bool check_breckets(const std::string& str);
 
 void read_expression(const std::string& expression);
 
-// O(n)
 template <class T>
 bool is_looped_hare(const TList<T>& list) {
   if (list.is_empty()) return false;
@@ -41,7 +40,6 @@ bool is_looped_hare(const TList<T>& list) {
   return false;
 }
 
-// O(3n) = O(n)
 template <class T>
 bool is_looped_reverse(TList<T>& list) {
   if (list.is_empty()) return false;
@@ -85,7 +83,6 @@ bool is_looped_reverse(TList<T>& list) {
   return has_cycle;
 }
 
-// O(2n) = O(n)
 template <class T>
 typename TList<T>::Node* find_loop(TList<T>& list) {
   if (list.is_empty()) return nullptr;
