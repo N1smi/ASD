@@ -1,0 +1,2 @@
+create_project_lib(TListStack)
+add_depend(TListStack TList lib_tlist)
