@@ -10,6 +10,17 @@ TEST(TestTListQueueLib, CreateDefaultQueue) {
   EXPECT_TRUE(queue.is_empty());
 }
 
+TEST(TestTListQueueLib, CreateQueueWithSize) {
+  TListQueue<int> queue(5);
+
+  for (size_t i = 0; i < 5; i++) {
+    queue.push(1);
+  }
+
+  EXPECT_TRUE(queue.is_full());
+  ASSERT_ANY_THROW(queue.push(0));
+}
+
 TEST(TestTListQueueLib, CreateQueueWithCopy) {
   TListQueue<int> queue1;
 
