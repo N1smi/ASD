@@ -10,6 +10,17 @@ TEST(TestTListStackLib, CreateDefaultStack) {
   EXPECT_EQ(stack.size(), 0);
 }
 
+TEST(TestTListStackLib, CreateStackWithSize) {
+  TListStack<int> stack(5);
+
+  for (size_t i = 0; i < 5; i++) {
+    stack.push(1);
+  }
+
+  EXPECT_TRUE(stack.is_full());
+  ASSERT_ANY_THROW(stack.push(0));
+}
+
 TEST(TestTListStackLib, CreateStackWithCopy) {
   TListStack<int> stack1;
 
