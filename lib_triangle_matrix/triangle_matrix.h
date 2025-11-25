@@ -115,7 +115,7 @@ TriangleMatrix<T>& TriangleMatrix<T>::operator+=
       "dimensions for addition");
   }
 
-  Matrix<T>::operator+=(other);
+  this->Matrix<T>::operator+=(other);
   return *this;
 }
 
@@ -127,13 +127,13 @@ TriangleMatrix<T>& TriangleMatrix<T>::operator-=
       "dimensions for subtraction");
   }
 
-  Matrix<T>::operator-=(other);
+  this->Matrix<T>::operator-=(other);
   return *this;
 }
 
 template <class T>
 TriangleMatrix<T>& TriangleMatrix<T>::operator*=(T val) {
-  Matrix<T>::operator*=(val);
+  this->Matrix<T>::operator*=(val);
   return *this;
 }
 
@@ -187,7 +187,7 @@ template <class T>
 TriangleMatrix<T>& TriangleMatrix<T>::operator=
 (const TriangleMatrix<T>& other) {
   if (this != &other) {
-    Matrix<T>::operator=(other);
+    this->Matrix<T>::operator=(other);
     _dimension = other._dimension;
   }
   return *this;
@@ -199,7 +199,7 @@ bool TriangleMatrix<T>::operator==(const TriangleMatrix<T>& other) const {
     return false;
   }
 
-  return Matrix<T>::operator==(other);
+  return this->Matrix<T>::operator==(other);
 }
 
 template <class T>

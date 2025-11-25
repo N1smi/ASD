@@ -131,9 +131,7 @@ Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& other) {
     throw std::logic_error("Size error: the matrices must have equal sizes "
       "in the addition operation!");
   }
-  for (size_t i = 0; i < _lines; i++) {
-    (*this)[i] += other[i];
-  }
+  this->MVector<MVector<T>>::operator+=(other);
   return *this;
 }
 
@@ -143,9 +141,7 @@ Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& other) {
     throw std::logic_error("Size error: the matrices must have equal sizes "
       "in the subtraction operation!");
   }
-  for (size_t i = 0; i < _lines; i++) {
-    (*this)[i] -= other[i];
-  }
+  this->MVector<MVector<T>>::operator-=(other);
   return *this;
 }
 
@@ -217,7 +213,7 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& other) {
     _lines = other._lines;
     _columns = other._columns;
 
-    MVector<MVector<T>>::operator=(other);
+    this->MVector<MVector<T>>::operator=(other);
   }
   return *this;
 }
@@ -256,12 +252,7 @@ bool Matrix<T>::operator==(const Matrix<T>& other) const {
     return false;
   }
 
-  for (size_t i = 0; i < _lines; i++) {
-    if ((*this)[i] != other[i]) {
-      return false;
-    }
-  }
-  return true;
+  return this->MVector<MVector<T>>::operator==(other);;
 }
 
 template <class T>
