@@ -382,3 +382,69 @@ TEST(TestAlgorithmLib, FindLoopStartSingleElementTrue) {
 
   list.tail()->next = nullptr;
 }
+
+TEST(TestAlgorithmLib, CountIslandsBasic) {
+  int data[] = {
+  0, 1, 0, 0, 1,
+  0, 1, 1, 0, 1,
+  1, 1, 0, 1, 1,
+  0, 0, 0, 0, 1,
+  1, 0, 1, 1, 1, };
+  Matrix<int> matrix(5, 5, data, 25);
+
+  EXPECT_EQ(countIslands(matrix), 3);
+}
+
+TEST(TestAlgorithmLib, CountIslandsEmptyMatrix) {
+  Matrix<int> matrix(0, 0);
+  EXPECT_EQ(countIslands(matrix), 0);
+}
+
+TEST(TestAlgorithmLib, CountIslandsAllWater) {
+  int data[] = {
+    0, 0, 0,
+    0, 0, 0,
+    0, 0, 0
+  };
+  Matrix<int> matrix(3, 3, data, 9);
+  EXPECT_EQ(countIslands(matrix), 0);
+}
+
+TEST(TestAlgorithmLib, CountIslandsAllLand) {
+  int data[] = {
+    1, 1, 1,
+    1, 1, 1,
+    1, 1, 1
+  };
+  Matrix<int> matrix(3, 3, data, 9);
+  EXPECT_EQ(countIslands(matrix), 1);
+}
+
+TEST(TestAlgorithmLib, CountIslandsSingleCellIsland) {
+  int data[] = {
+    0, 0, 0,
+    0, 1, 0,
+    0, 0, 0
+  };
+  Matrix<int> matrix(3, 3, data, 9);
+  EXPECT_EQ(countIslands(matrix), 1);
+}
+
+TEST(TestAlgorithmLib, CountIslandsDiagonalNotConnected) {
+  int data[] = {
+    1, 0,
+    0, 1
+  };
+  Matrix<int> matrix(2, 2, data, 4);
+  EXPECT_EQ(countIslands(matrix), 2);
+}
+
+TEST(TestAlgorithmLib, CountIslands1X1) {
+  int data1[] = { 1 };
+  Matrix<int> matrix1(1, 1, data1, 1);
+  EXPECT_EQ(countIslands(matrix1), 1);
+
+  int data0[] = { 0 };
+  Matrix<int> matrix0(1, 1, data0, 1);
+  EXPECT_EQ(countIslands(matrix0), 0);
+}
