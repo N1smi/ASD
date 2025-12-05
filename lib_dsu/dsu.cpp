@@ -50,11 +50,9 @@ void DSU::union_op(int x, int y) {
 
   if (_rank[parent_x] > _rank[parent_y]) {
     _parent[parent_y] = parent_x;
-  }
-  else if (_rank[parent_x] < _rank[parent_y]) {
+  } else if (_rank[parent_x] < _rank[parent_y]) {
     _parent[parent_x] = parent_y;
-  }
-  else {
+  } else {
     _parent[parent_y] = parent_x;
     _rank[parent_x]++;
   }

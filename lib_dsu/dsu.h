@@ -8,7 +8,7 @@ class DSU {
   size_t _size;
 
  public:
-  DSU(size_t size);
+  explicit DSU(size_t size);
   ~DSU();
 
   size_t size() const noexcept { return _size; }
