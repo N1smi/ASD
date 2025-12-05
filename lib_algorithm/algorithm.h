@@ -9,6 +9,7 @@
 #include "../lib_matrix/matrix.h"
 #include "../lib_tdynamic_stack/tdynamic_stack.h"
 #include "../lib_tlist/tlist.h"
+#include "../lib_dsu/dsu.h"
 
 int find_local_min(const Matrix<int>& matrix);
 
@@ -111,5 +112,7 @@ typename TList<T>::Node* find_loop(TList<T>& list) {
 
   return turtle;
 }
+
+int countIslands(const Matrix<int>& matrix);
 
 #endif  // LIB_ALGORITHM_ALGORITHM_H_

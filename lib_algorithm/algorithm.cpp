@@ -177,3 +177,46 @@ void read_expression(const std::string& expression) {
     throw std::invalid_argument("Missing closed bracket");
   }
 }
+
+int countIslands(const Matrix<int>& matrix) {
+  size_t lines = matrix.get_lines();
+  size_t columns = matrix.get_columns();
+
+  if (lines == 0 || columns == 0) return 0;
+
+  DSU dsu(lines * columns);
+
+  for (size_t i = 0; i < lines; i++) {
+    for (size_t j = 0; j < columns; j++) {
+      if (matrix[i][j] == 0) continue;
+
+      int current = i * columns + j;
+
+      if (i > 0 && matrix[i - 1][j] == 1) {
+        int up = (i - 1) * columns + j;
+        dsu.union_op(current, up);
+      }
+
+      if (j > 0 && matrix[i][j - 1] == 1) {
+        int left = i * columns + (j - 1);
+        dsu.union_op(current, left);
+      }
+    }
+  }
+
+  int IslandCount = 0;
+  for (size_t i = 0; i < lines; i++) {
+    for (size_t j = 0; j < columns; j++) {
+      if (matrix[i][j] == 0) continue;
+
+      int current = i * columns + j;
+      int root = dsu.find(current);
+
+      if (root == current) {
+        IslandCount++;
+      }
+    }
+  }
+
+  return IslandCount;
+}
