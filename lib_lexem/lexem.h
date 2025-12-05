@@ -27,7 +27,7 @@ class ConstantLexem : public Lexem {
   double _value;
 
  public:
-   explicit ConstantLexem(double value)
+  explicit ConstantLexem(double value)
      : Lexem(doubleToString(value), Constant), _value(value) {}
 
   double getValue() const noexcept { return _value; }
@@ -42,7 +42,7 @@ class ConstantLexem : public Lexem {
 
 class VariableLexem : public Lexem {
  public:
-   explicit VariableLexem(const std::string& name) : Lexem(name, Variable) {}
+  explicit VariableLexem(const std::string& name) : Lexem(name, Variable) {}
 };
 
 class BracketLexem : public Lexem {
