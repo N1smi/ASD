@@ -33,15 +33,15 @@ using MathFunctionPtr = double(*)(double);
 bool isFunction(const std::string& name);
 
 inline MathFunctionPtr getFunction(const std::string& name) {
-    if (name == "sin") return mySin;
-    if (name == "cos") return myCos;
-    if (name == "tg") return myTan;
-    if (name == "ctg") return myCtg;
-    if (name == "exp") return myExp;
-    if (name == "abs") return myAbs;
-    if (name == "sqrt") return mySqrt;
-    return nullptr;
-  }
+  if (name == "sin") return mySin;
+  if (name == "cos") return myCos;
+  if (name == "tg") return myTan;
+  if (name == "ctg") return myCtg;
+  if (name == "exp") return myExp;
+  if (name == "abs") return myAbs;
+  if (name == "sqrt") return mySqrt;
+  return nullptr;
+}
 
 }  // namespace MathFunctions
 
