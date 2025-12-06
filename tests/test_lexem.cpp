@@ -60,13 +60,13 @@ TEST(TestLexemLib, OperatorLexemConstructorWithParams) {
   EXPECT_EQ(operator_param.getPriority(), 1);
 }
 
-double mult2(double x) { return x * 2; }
-
 TEST(TestLexemLib, FunctionLexemConstructorWithParams) {
-  FunctionLexem function("mult2", mult2);
+  const double PI = MathFunctions::PI;
 
-  EXPECT_EQ(function.getName(), "mult2");
+  FunctionLexem function("sin", &MathFunctions::mySin);
+
+  EXPECT_EQ(function.getName(), "sin");
   EXPECT_EQ(function.getType(), Function);
   EXPECT_NE(function.getFunction(), nullptr);
-  EXPECT_DOUBLE_EQ(function.getFunction()(3.0), 6.0);
+  EXPECT_NEAR(function.getFunction()(PI / 2), 1.0, 1e-10);
 }

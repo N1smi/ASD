@@ -7,6 +7,7 @@
 #include <string>
 #include <iomanip>
 #include <sstream>
+#include "../lib_math_functions/math_functions.h"
 
 enum TypeLexem { Constant, Variable, OpenBracket, ClosedBracket,
   Function, Operator };
@@ -55,16 +56,16 @@ class BracketLexem : public Lexem {
   bool isOpen() const noexcept { return _isOpen; }
 };
 
-using MathFunctionPtr = double(*)(double);
-
 class FunctionLexem : public Lexem {
-  MathFunctionPtr _function;
+  MathFunctions::MathFunctionPtr _function;
 
  public:
-  FunctionLexem(const std::string& name, MathFunctionPtr function)
+  FunctionLexem(const std::string& name,
+    MathFunctions::MathFunctionPtr function)
     : Lexem(name, Function), _function(function) {}
 
-  MathFunctionPtr getFunction() const noexcept { return _function; }
+  MathFunctions::MathFunctionPtr getFunction() const noexcept
+  { return _function; }
 };
 
 class OperatorLexem : public Lexem {

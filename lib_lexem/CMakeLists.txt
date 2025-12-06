@@ -1,1 +1,2 @@
 create_project_lib(Lexem)
+add_depend(Lexem MathFunctions lib_math_functions)
