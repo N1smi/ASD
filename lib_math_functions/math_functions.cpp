@@ -1,6 +1,7 @@
 // Copyright 2025 Smirnov Nikita
 
 #include<stdexcept>
+#include <string>
 #include "../lib_math_functions/math_functions.h"
 
 double MathFunctions::normalizeAngle(double x) {

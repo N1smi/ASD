@@ -300,12 +300,14 @@ TEST(TestMathFunctionsLib, MyExpOne) {
 
 TEST(TestMathFunctionsLib, MyExpNegative) {
   EXPECT_NEAR(MathFunctions::myExp(-1.0), 1.0 / MathFunctions::E, 1e-10);
-  EXPECT_NEAR(MathFunctions::myExp(-2.0), 1.0 / (MathFunctions::E * MathFunctions::E), 1e-10);
+  EXPECT_NEAR(MathFunctions::myExp(-2.0),
+    1.0 / (MathFunctions::E * MathFunctions::E), 1e-10);
 }
 
 TEST(TestMathFunctionsLib, MyExpSmallValues) {
   EXPECT_NEAR(MathFunctions::myExp(0.5), std::sqrt(MathFunctions::E), 1e-10);
-  EXPECT_NEAR(MathFunctions::myExp(-0.5), 1.0 / std::sqrt(MathFunctions::E), 1e-10);
+  EXPECT_NEAR(MathFunctions::myExp(-0.5),
+    1.0 / std::sqrt(MathFunctions::E), 1e-10);
 }
 
 TEST(TestMathFunctionsLib, MyExpProperties) {
@@ -412,7 +414,8 @@ TEST(TestMathFunctionsLib, MySqrtVeryLargeNumbers) {
 }
 
 TEST(TestMathFunctionsLib, MySqrtPrecision) {
-  double test_values[] = { 0.01, 0.25, 0.5, 1.0, 2.0, 5.0, 10.0, 100.0, 1000.0 };
+  double test_values[] = { 0.01, 0.25, 0.5, 1.0, 2.0, 5.0,
+    10.0, 100.0, 1000.0 };
 
   for (double x : test_values) {
     double my_result = MathFunctions::mySqrt(x);
