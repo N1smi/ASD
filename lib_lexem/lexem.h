@@ -19,9 +19,12 @@ class Lexem {
  public:
   Lexem() : _name(""), _type(Constant) {}
   Lexem(const std::string& name, TypeLexem type) : _name(name), _type(type) {}
+  virtual ~Lexem() = default;
 
   std::string getName() const noexcept { return _name; }
   TypeLexem getType() const noexcept { return _type; }
+
+  virtual Lexem* clone() const = 0;
 
   virtual double getValue() const { return 0.0; }
   virtual bool isOpen() const noexcept { return false; }
@@ -39,6 +42,10 @@ class ConstantLexem : public Lexem {
 
   double getValue() const noexcept override { return _value; }
 
+  Lexem* clone() const override {
+    return new ConstantLexem(_value);
+  }
+
  private:
   static std::string doubleToString(double value) {
     std::ostringstream oss;
@@ -50,6 +57,10 @@ class ConstantLexem : public Lexem {
 class VariableLexem : public Lexem {
  public:
   explicit VariableLexem(const std::string& name) : Lexem(name, Variable) {}
+
+  Lexem* clone() const override {
+    return new VariableLexem(getName());
+  }
 };
 
 class BracketLexem : public Lexem {
@@ -60,6 +71,10 @@ class BracketLexem : public Lexem {
     : Lexem(name, isOpen ? OpenBracket : ClosedBracket), _isOpen(isOpen) {}
 
   bool isOpen() const noexcept override { return _isOpen; }
+
+  Lexem* clone() const override {
+    return new BracketLexem(getName(), _isOpen);
+  }
 };
 
 class FunctionLexem : public Lexem {
@@ -72,6 +87,10 @@ class FunctionLexem : public Lexem {
 
   MathFunctions::MathFunctionPtr getFunction() const noexcept override
   { return _function; }
+
+  Lexem* clone() const override {
+    return new FunctionLexem(getName(), _function);
+  }
 };
 
 class OperatorLexem : public Lexem {
@@ -81,6 +100,10 @@ class OperatorLexem : public Lexem {
     : Lexem(name, Operator), _priority(priority) {}
 
   int getPriority() const noexcept override { return _priority; }
+
+  Lexem* clone() const override {
+    return new OperatorLexem(getName(), _priority);
+  }
 };
 
 #endif  // LIB_LEXEM_LEXEM_H_
