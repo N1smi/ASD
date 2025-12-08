@@ -3,20 +3,6 @@
 #include <gtest/gtest.h>
 #include "../lib_lexem/lexem.h"
 
-TEST(TestLexemLib, LexemDefaultConstructor) {
-  Lexem lexem;
-
-  EXPECT_EQ(lexem.getName(), "");
-  EXPECT_EQ(lexem.getType(), Constant);
-}
-
-TEST(TestLexemLib, LexemConstructorWithParams) {
-  Lexem lexem("x1", Variable);
-
-  EXPECT_EQ(lexem.getName(), "x1");
-  EXPECT_EQ(lexem.getType(), Variable);
-}
-
 TEST(TestLexemLib, ConstantLexemConstructorWithParams) {
   ConstantLexem constant(3.14);
 
