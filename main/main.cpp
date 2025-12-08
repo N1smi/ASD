@@ -1,4 +1,4 @@
-﻿//  Copyright 2025 Smirnov Nikita
+﻿//  Copyright 2025 Smirnov Nikita // NOLINT
 
 // #define EASY_EXAMPLE
 // #define CIRCLE_EXAMPLE
@@ -612,7 +612,6 @@ int main() {
     if (choice != 5) {
       system("pause");
     }
-
   }
   return 0;
 }

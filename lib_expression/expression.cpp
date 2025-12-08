@@ -184,8 +184,9 @@ double Expression::calculatePolish(const std::map<std::string,
       double result = 0.0;
       std::string op = lexem->getName();
 
-      if (op == "+") result = a + b;
-      else if (op == "-") {
+      if (op == "+") {
+        result = a + b;
+      } else if (op == "-") {
         result = a - b;
       } else if (op == "*") {
         result = a * b;
@@ -194,7 +195,9 @@ double Expression::calculatePolish(const std::map<std::string,
           throw std::runtime_error("Division by zero");
         }
         result = a / b;
-      } else if (op == "^") { result = pow(a, b); }
+      } else if (op == "^") {
+        result = pow(a, b);
+      }
 
       calc_stack.push(result);
       break;
