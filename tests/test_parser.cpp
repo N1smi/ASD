@@ -521,7 +521,7 @@ TEST(TestParserLib, ParseUnaryMinusWithPriority) {
 
     EXPECT_EQ((*it)->getType(), Operator);
     EXPECT_EQ((*it)->getName(), "-");
-    EXPECT_EQ((*it)->getPriority(), 2);
+    EXPECT_EQ((*it)->getPriority(), 4);
     ++it;
 
     EXPECT_EQ((*it)->getType(), Variable);

@@ -147,8 +147,9 @@ CharType Parser::getCharType(char c) {
 }
 
 int Parser::getOperatorPriority(const std::string& op) {
+  if (op == "~") return 4;
   if (op == "^") return 3;
-  if (op == "*" || op == "/" || op == "~") return 2;
+  if (op == "*" || op == "/") return 2;
   return 1;
 }
 
