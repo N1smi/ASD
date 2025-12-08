@@ -5,10 +5,10 @@
 // #define MATRIX_CALCULATOR
 #define ARITHMETIC_CALCULATOR
 #include <iostream>
+#include <iomanip>
 
 #ifdef EASY_EXAMPLE
 
-#include <iomanip>
 #include "../lib_easy_example/easy_example.h"
 
 int main() {
@@ -336,7 +336,6 @@ int main() {
 
 #ifdef ARITHMETIC_CALCULATOR
 
-#include <iomanip>
 #include <string>
 #include <map>
 #include <limits>
@@ -576,7 +575,8 @@ int main() {
   entry1.variables["y"] = 10;
   expressions.push_back(entry1);
 
-  ExpressionEntry entry2(next_id++, "x_1 * sin(y + 7) + y * (~|x_2 - 17| + 23) + 123456");
+  ExpressionEntry entry2(next_id++, "x_1 * sin(y + 7) + y * (~|x_2 - 17| + 23)"
+    "+ 123456");
   expressions.push_back(entry2);
 
   while (true) {

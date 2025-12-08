@@ -1,6 +1,7 @@
 // Copyright 2025 Smirnov Nikita
 
 #include<string>
+#include <map>
 #include "../lib_expression/expression.h"
 
 Expression::Expression(const std::string& str) : _is_valid(false) {
@@ -13,21 +14,14 @@ Expression::Expression(const std::string& str) : _is_valid(false) {
     buildPolishRecord();
   }
   catch (const std::exception& e) {
-    clearLexems(_lexems);
-    clearLexems(_polish_rec);
     throw;
   }
 }
 
-Expression::~Expression() {
-  //clearLexems(_lexems);
-  //clearLexems(_polish_rec);
-}
+Expression::~Expression() {}
 
 void Expression::buildPolishRecord() {
   TListStack<Lexem*> stack;
-
-  clearLexems(_polish_rec);
 
   for (auto it = _lexems.begin(); it != _lexems.end(); ++it) {
     Lexem* current = *it;
@@ -84,8 +78,7 @@ void Expression::buildPolishRecord() {
         if (top->getType() == OpenBracket) {
           delete top;
           break;
-        }
-        else {
+        } else {
           _polish_rec.push_back(top->clone());
           delete top;
         }
@@ -103,12 +96,6 @@ void Expression::buildPolishRecord() {
 
     _polish_rec.push_back(top->clone());
     delete top;
-  }
-}
-
-void Expression::clearLexems(TList<Lexem*>& list) {
-  for (auto it = list.begin(); it != list.end(); ++it) {
-    delete* it;
   }
 }
 
@@ -158,7 +145,8 @@ double Expression::calculate() const {
   return calculate(empty_vars);
 }
 
-double Expression::calculate(const std::map<std::string, double>& variables) const {
+double Expression::calculate(const std::map<std::string,
+  double>& variables) const {
   if (!_is_valid) {
     throw std::runtime_error("Cannot evaluate invalid expression");
   }
@@ -166,7 +154,8 @@ double Expression::calculate(const std::map<std::string, double>& variables) con
   return calculatePolish(variables);
 }
 
-double Expression::calculatePolish(const std::map<std::string, double>& vars) const {
+double Expression::calculatePolish(const std::map<std::string,
+  double>& vars) const {
   TListStack<double> calc_stack;
 
   for (auto it = _polish_rec.begin(); it != _polish_rec.end(); ++it) {

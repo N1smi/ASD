@@ -1,5 +1,7 @@
 // Copyright 2025 Smirnov Nikita
 #include <gtest/gtest.h>
+#include <map>
+#include <string>
 #include "../lib_expression/expression.h"
 
 TEST(TestExpressionLib, SimpleOps) {

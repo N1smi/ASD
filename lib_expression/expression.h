@@ -18,7 +18,7 @@ class Expression {
   bool _is_valid;
 
  public:
-  Expression(const std::string& str);
+  explicit Expression(const std::string& str);
   ~Expression();
 
   bool isValid() const { return _is_valid; }
@@ -30,7 +30,6 @@ class Expression {
 
  private:
   void buildPolishRecord();
-  void clearLexems(TList<Lexem*>& list);
   bool isLeftAssociative(const Lexem* lexem) const;
   void extractVariables();
 
