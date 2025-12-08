@@ -323,7 +323,8 @@ void Parser::validateVariable(const std::string& token, size_t start_pos) {
   }
 }
 
-void Parser::validateSecondOperand(const std::string& expression, size_t start_pos) {
+void Parser::validateSecondOperand(const std::string& expression,
+  size_t start_pos) {
   bool has_operand_after = false;
   for (size_t j = start_pos + 1; j < expression.length(); j++) {
     if (expression[j] == ' ') continue;
@@ -338,7 +339,7 @@ void Parser::validateSecondOperand(const std::string& expression, size_t start_p
       expression[j] == '*' || expression[j] == '/' ||
       expression[j] == '^' || expression[j] == ')' ||
       expression[j] == ']' || expression[j] == '}' ||
-      expression[j] == '~' || expression[j] == '|'){
+      expression[j] == '~' || expression[j] == '|') {
       break;
     }
   }

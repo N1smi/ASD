@@ -279,7 +279,8 @@ TEST(TestParserLib, ValidFunctions) {
   EXPECT_NO_THROW(Parser::isValidExpression(std::string("cos ( 30 )")));
 
   EXPECT_NO_THROW(Parser::isValidExpression(std::string("sin(cos(x))")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("tg(sin(30) + cos(45))")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("tg(sin(30) + cos(45))")));
 
   EXPECT_NO_THROW(Parser::isValidExpression(std::string("~sin(x)")));
   EXPECT_NO_THROW(Parser::isValidExpression(std::string("|sin(x)|")));
