@@ -25,7 +25,8 @@ class Lexem {
 
   virtual double getValue() const { return 0.0; }
   virtual bool isOpen() const noexcept { return false; }
-  virtual MathFunctions::MathFunctionPtr getFunction() const noexcept{ return nullptr; }
+  virtual MathFunctions::MathFunctionPtr getFunction() const noexcept
+  { return nullptr; }
   virtual int getPriority() const noexcept { return -1; }
 };
 

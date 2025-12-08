@@ -62,7 +62,8 @@ TList<Lexem*> Parser::parse(const std::string& expr) {
   return lexems;
 }
 
-void Parser::addLexem(TList<Lexem*>& lexems, const std::string& token, AState state) {
+void Parser::addLexem(TList<Lexem*>& lexems,
+  const std::string& token, AState state) {
   if (token.empty()) return;
 
   switch (state) {
@@ -87,8 +88,7 @@ void Parser::addLexem(TList<Lexem*>& lexems, const std::string& token, AState st
     if (token == "~") {
       lexems.push_back(new ConstantLexem(0.0));
       lexems.push_back(new OperatorLexem("-", priority));
-    }
-    else {
+    } else {
       lexems.push_back(new OperatorLexem(token, priority));
     }
     break;
@@ -99,11 +99,12 @@ void Parser::addLexem(TList<Lexem*>& lexems, const std::string& token, AState st
   }
 }
 
-AState Parser::getNextState(AState current, CharType type, const std::string& token) {
+AState Parser::getNextState(AState current,
+  CharType type, const std::string& token) {
   switch (current) {
   case START:
     if (type == DIGIT || type == DOT) return IN_NUMBER;
-    if(type == LETTER || type == UNDERSCORE) return IN_IDENTIFIER;
+    if (type == LETTER || type == UNDERSCORE) return IN_IDENTIFIER;
     if (type == OPERATOR || type == UNARY_MINUS) return IN_OPERATOR;
     break;
 
@@ -196,15 +197,12 @@ void Parser::isValidExpression(std::string& expression) {
             throw PositionException("Unknown function '"
               + token + "'", start_pos);
           }
-        }
-        else {
+        } else {
           validateVariable(token, start_pos);
         }
       }
       expect_operand = false;
-    }
-
-    else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
+    } else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
       if (expect_operand) {
         throw PositionException("Missing first operand in operation "
           + std::string(1, c), i + 1);
@@ -213,19 +211,13 @@ void Parser::isValidExpression(std::string& expression) {
       validateSecondOperand(expression, i);
 
       expect_operand = true;
-    }
-
-    else if (c == '~') {
+    } else if (c == '~') {
       validateSecondOperand(expression, i);
       expect_operand = true;
-    }
-
-    else if (c == '(' || c == '[' || c == '{') {
+    } else if (c == '(' || c == '[' || c == '{') {
       brackets.push({ c, i });
       expect_operand = true;
-    }
-
-    else if (c == ')' || c == ']' || c == '}') {
+    } else if (c == ')' || c == ']' || c == '}') {
       if (expect_operand) {
         throw PositionException("Empty parentheses", i);
       }
@@ -243,9 +235,7 @@ void Parser::isValidExpression(std::string& expression) {
 
       brackets.pop();
       expect_operand = false;
-    }
-
-    else if (c == '|') {
+    } else if (c == '|') {
       bool isOpening = expect_operand;
 
       modulus_info.push_back({ i, isOpening });
@@ -260,9 +250,7 @@ void Parser::isValidExpression(std::string& expression) {
         brackets.pop();
         expect_operand = false;
       }
-    }
-
-    else {
+    } else {
       throw PositionException("Invalid character '"
         + std::string(1, c) + "'", i + 1);
     }
@@ -284,8 +272,7 @@ void Parser::isValidExpression(std::string& expression) {
 
     if (bracket_char == '|') {
       throw PositionException("Missing closing '|'", bracket_pos + 1);
-    }
-    else {
+    } else {
       throw PositionException("Missing closed bracket", bracket_pos + 1);
     }
   }
@@ -295,9 +282,11 @@ void Parser::isValidExpression(std::string& expression) {
   }
 }
 
-void Parser::validateNumber(const std::string& token, size_t start_pos) {
+void Parser::validateNumber(const std::string& token,
+  size_t start_pos) {
   if (token.front() == '.') {
-    throw PositionException("Number cannot start with decimal point", start_pos + 1);
+    throw PositionException("Number cannot start with decimal point",
+      start_pos + 1);
   }
   if (token.back() == '.') {
     throw PositionException("Number cannot end with decimal point",
@@ -313,7 +302,8 @@ void Parser::validateNumber(const std::string& token, size_t start_pos) {
       }
       has_dot = true;
     } else if (!std::isdigit(token[i])) {
-      throw PositionException("Variable cannot start with digit", start_pos + i);
+      throw PositionException("Variable cannot start with digit",
+        start_pos + i);
     }
   }
 }
@@ -327,7 +317,8 @@ void Parser::validateVariable(const std::string& token, size_t start_pos) {
   }
 
   if (MathFunctions::isFunction(token)) {
-    throw PositionException("'" + token + "' is a function name, not a variable. "
+    throw PositionException("'" + token +
+      "' is a function name, not a variable. "
       "Use parentheses: " + token + "(argument)", start_pos + 1);
   }
 }
@@ -351,6 +342,7 @@ void Parser::validateSecondOperand(const std::string& expression, size_t start_p
       break;
     }
   }
+
   if (!has_operand_after) {
     if (expression[start_pos] == '~') {
       throw PositionException("Missing operand for unary operator "
@@ -364,13 +356,12 @@ void Parser::validateSecondOperand(const std::string& expression, size_t start_p
 
 std::string Parser::transformModulusInExpression(const std::string& expression,
    const std::vector<ModInfo>& modulus_info) {
-
   if (modulus_info.empty()) {
     return expression;
   }
 
   std::vector<ModInfo> sorted_info = modulus_info;
-  
+
   std::sort(sorted_info.begin(), sorted_info.end(),
     [](const ModInfo& a, const ModInfo& b) {
       return a.position < b.position;
@@ -384,8 +375,7 @@ std::string Parser::transformModulusInExpression(const std::string& expression,
 
     if (info.isOpening) {
       result += "abs(";
-    }
-    else {
+    } else {
       result += ")";
     }
 

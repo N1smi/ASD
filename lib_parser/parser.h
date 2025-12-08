@@ -11,10 +11,10 @@
 #include "../lib_lexem/lexem.h"
 
 class PositionException : public std::invalid_argument {
-private:
+ private:
   size_t _position;
   std::string _msg;
-public:
+ public:
   PositionException(const std::string& msg, size_t pos)
     : std::invalid_argument("Error in function 'Parser::parse()' at "
       + std::to_string(pos) + " symbol: " + msg),
@@ -59,8 +59,6 @@ void validateSecondOperand(const std::string& expression, size_t start_pos);
 
 std::string transformModulusInExpression(const std::string& expression,
    const std::vector<ModInfo>& modulus_info);
-
-//void isValidExpressionImpl(std::string& expression);
-} // namespace Parser
+}  // namespace Parser
 
 #endif  // LIB_PARSER_PARSER_H_

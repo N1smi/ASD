@@ -299,7 +299,8 @@ TEST(TestParserLib, InvalidFunctions) {
   catch (const PositionException& e) {
     EXPECT_EQ(e.getPosition(), 1);
     EXPECT_STREQ(e.getMsg(),
-      "'sin' is a function name, not a variable. Use parentheses: sin(argument)");
+      "'sin' is a function name, not a variable. "
+      "Use parentheses: sin(argument)");
   }
   try {
     Parser::isValidExpression(std::string("sin()"));
@@ -342,7 +343,8 @@ TEST(TestParserLib, FunctionAsVariableError) {
   }
   catch (const PositionException& e) {
     EXPECT_STREQ(e.getMsg(),
-      "'sin' is a function name, not a variable. Use parentheses: sin(argument)");
+      "'sin' is a function name, not a variable. "
+      "Use parentheses: sin(argument)");
   }
 
   try {
@@ -350,24 +352,37 @@ TEST(TestParserLib, FunctionAsVariableError) {
   }
   catch (const PositionException& e) {
     EXPECT_STREQ(e.getMsg(),
-      "'sqrt' is a function name, not a variable. Use parentheses: sqrt(argument)");
+      "'sqrt' is a function name, not a variable. "
+      "Use parentheses: sqrt(argument)");
   }
 }
 
 TEST(TestParserLib, ComplexExpressions) {
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("3.14 * x^2 + sin(30) / cos(45)")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("(a + b) * (c - d) / (e ^ f)")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("|x - y| + (~sqrt(z))")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("sin((a + b) * 3.14)")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("3.14 * x^2 + sin(30) / cos(45)")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("(a + b) * (c - d) / (e ^ f)")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("|x - y| + (~sqrt(z))")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("sin((a + b) * 3.14)")));
   EXPECT_NO_THROW(Parser::isValidExpression(std::string("~|~x + (~y)|")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("sin(|cos(x)|) + tg(|x + y|)")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("(|x| + |y|) * (|a| - |b|) / |c|")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("~(~(~x + (~y)) * (~|z|))")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("{[((a + b) * {c - [d / e]})]}^|f|")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("sin(cos(tg(exp(sqrt(x)))))")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("|sin(x)| * |cos(y)| / |tg(z)|")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("~(x + |~y - z|) * (|a| / (~b))")));
-  EXPECT_NO_THROW(Parser::isValidExpression(std::string("((a + b) * (c - d)) ^ (e / f) + |g|")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("sin(|cos(x)|) + tg(|x + y|)")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("(|x| + |y|) * (|a| - |b|) / |c|")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("~(~(~x + (~y)) * (~|z|))")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("{[((a + b) * {c - [d / e]})]}^|f|")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("sin(cos(tg(exp(sqrt(x)))))")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("|sin(x)| * |cos(y)| / |tg(z)|")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("~(x + |~y - z|) * (|a| / (~b))")));
+  EXPECT_NO_THROW(Parser::isValidExpression
+  (std::string("((a + b) * (c - d)) ^ (e / f) + |g|")));
 }
 
 TEST(TestParserLib, ModulusTransformation) {
@@ -453,7 +468,8 @@ TEST(TestParserLib, ModulusTransformation) {
 
   std::string expr21 = "||sin(x)| - |cos(y)|| + ||tg(z)| * |ctg(w)||";
   Parser::isValidExpression(expr21);
-  EXPECT_EQ(expr21, "abs(abs(sin(x)) - abs(cos(y))) + abs(abs(tg(z)) * abs(ctg(w)))");
+  EXPECT_EQ(expr21, "abs(abs(sin(x)) - abs(cos(y))) + abs(abs(tg(z)) * "
+    "abs(ctg(w)))");
 }
 
 TEST(TestParserLib, ParseNumVarOp) {
@@ -483,7 +499,6 @@ TEST(TestParserLib, ParseNumVarOp) {
     for (auto it = lexems.begin(); it != lexems.end(); ++it) {
       delete* it;
     }
-
   } catch (const std::exception& e) {
     FAIL() << "Exception: " << e.what();
   }
@@ -522,7 +537,6 @@ TEST(TestParserLib, ParseUnaryMinusWithPriority) {
     for (auto it = lexems.begin(); it != lexems.end(); ++it) {
       delete* it;
     }
-
   } catch (const std::exception& e) {
     FAIL() << "Exception: " << e.what();
   }
@@ -620,7 +634,6 @@ TEST(TestParserLib, ParseModulusInFunction) {
     for (auto it = lexems.begin(); it != lexems.end(); ++it) {
       delete* it;
     }
-
   }
   catch (const std::exception& e) {
     FAIL() << "Exception: " << e.what();
