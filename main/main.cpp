@@ -1,4 +1,4 @@
-﻿// Copyright 2025 Smirnov Nikita
+﻿//  Copyright 2025 Smirnov Nikita
 
 // #define EASY_EXAMPLE
 // #define CIRCLE_EXAMPLE
@@ -405,9 +405,9 @@ void print_table(const TVector<ExpressionEntry>& expressions) {
   std::cout << "+" << std::string(118, '-') << "+\n";
 
   if (expressions.size() == 0) {
-    std::cout << "| " << std::left << std::setw(116) << "Without Expression" << " |\n";
-  }
-  else {
+    std::cout << "| " << std::left << std::setw(116)
+      << "Without Expression" << " |\n";
+  } else {
     for (int i = 0; i < expressions.size(); i++) {
       const auto& entry = expressions[i];
 
@@ -427,8 +427,7 @@ void print_table(const TVector<ExpressionEntry>& expressions) {
         }
 
         if (vars_str.empty()) vars_str = "No variables";
-      }
-      else {
+      } else {
         for (const auto& var_pair : entry.variables) {
           if (!vars_str.empty()) vars_str += ", ";
           vars_str += var_pair.first + " = " +
@@ -461,8 +460,6 @@ void create_expression(TVector<ExpressionEntry>& expressions, int& next_id) {
   try {
     ExpressionEntry new_entry(next_id++, expr);
     expressions.push_back(new_entry);
-
-
   } catch (const PositionException& e) {
     next_id--;
     std::cout << std::string(18, ' ');
@@ -471,8 +468,7 @@ void create_expression(TVector<ExpressionEntry>& expressions, int& next_id) {
     for (size_t i = 0; i < expr.length(); i++) {
       if (i == error_pos) {
         std::cout << "^";
-      }
-      else {
+      } else {
         std::cout << " ";
       }
     }
@@ -620,6 +616,5 @@ int main() {
   }
   return 0;
 }
-
 
 #endif  // ARITHMETIC_CALCULATOR

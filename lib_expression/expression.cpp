@@ -56,7 +56,6 @@ void Expression::buildPolishRecord() {
           if (top->getPriority() > current->getPriority() ||
             (top->getPriority() == current->getPriority() &&
               isLeftAssociative(current))) {
-
             _polish_rec.push_back(top->clone());
             stack.pop();
             delete top;
@@ -186,14 +185,16 @@ double Expression::calculatePolish(const std::map<std::string,
       std::string op = lexem->getName();
 
       if (op == "+") result = a + b;
-      else if (op == "-") result = a - b;
-      else if (op == "*") result = a * b;
-      else if (op == "/") {
+      else if (op == "-") {
+        result = a - b;
+      } else if (op == "*") {
+        result = a * b;
+      } else if (op == "/") {
         if (b == 0.0) {
           throw std::runtime_error("Division by zero");
         }
         result = a / b;
-      } else if (op == "^") result = pow(a, b);
+      } else if (op == "^") { result = pow(a, b); }
 
       calc_stack.push(result);
       break;
