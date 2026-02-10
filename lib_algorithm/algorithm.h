@@ -115,7 +115,8 @@ typename TList<T>::Node* find_loop(TList<T>& list) {
 
 int countIslands(const Matrix<int>& matrix);
 
-Matrix<bool> generate_maze(size_t entry, size_t exit, size_t lines, size_t columns);
+Matrix<bool> generate_maze(size_t entry, size_t exit,
+  size_t lines, size_t columns);
 
 void print_maze(const Matrix<bool>& maze);
 

@@ -2,6 +2,7 @@
 
 #include<random>
 #include <string>
+#include <cstdio>
 #include "../lib_algorithm/algorithm.h"
 
 int find_local_min(const Matrix<int>& matrix) {
@@ -221,7 +222,8 @@ int countIslands(const Matrix<int>& matrix) {
   return IslandCount;
 }
 
-Matrix<bool> generate_maze(size_t entry, size_t exit, size_t lines, size_t columns) {
+Matrix<bool> generate_maze(size_t entry, size_t exit,
+  size_t lines, size_t columns) {
   if (entry == exit) {
     throw std::invalid_argument("The entry cannot match the exit!");
   }
@@ -304,27 +306,21 @@ Matrix<bool> generate_maze(size_t entry, size_t exit, size_t lines, size_t colum
 
   if (entry_row == 0) {
     result[0][2 * entry_col + 1] = false;
-  }
-  else if (entry_row == lines - 1) {
+  } else if (entry_row == lines - 1) {
     result[2 * lines][2 * entry_col + 1] = false;
-  }
-  else if (entry_col == 0) {
+  } else if (entry_col == 0) {
     result[2 * entry_row + 1][0] = false;
-  }
-  else if (entry_col == columns - 1) {
+  } else if (entry_col == columns - 1) {
     result[2 * entry_row + 1][2 * columns] = false;
   }
 
   if (exit_row == 0) {
     result[0][2 * exit_col + 1] = false;
-  }
-  else if (exit_row == lines - 1) {
+  } else if (exit_row == lines - 1) {
     result[2 * lines][2 * exit_col + 1] = false;
-  }
-  else if (exit_col == 0) {
+  } else if (exit_col == 0) {
     result[2 * exit_row + 1][0] = false;
-  }
-  else if (exit_col == columns - 1) {
+  } else if (exit_col == columns - 1) {
     result[2 * exit_row + 1][2 * columns] = false;
   }
 
@@ -336,11 +332,12 @@ void print_maze(const Matrix<bool>& maze) {
     for (size_t j = 0; j < maze.get_columns(); j++) {
       if (maze[i][j] == false) {
         printf(" ");
-      } else 
+      } else {
         if (i % 2 == 0) {
           printf("-");
         } else {
           printf("|");
+        }
       }
     }
     printf("\n");
@@ -360,20 +357,16 @@ void print_maze_with_color(const Matrix<bool>& maze,
   if (entry_row == 0) {
     entry_i = 0;
     entry_j = 2 * entry_col + 1;
-  }
-  else if (entry_row == lines - 1) {
+  } else if (entry_row == lines - 1) {
     entry_i = 2 * lines;
     entry_j = 2 * entry_col + 1;
-  }
-  else if (entry_col == 0) {
+  } else if (entry_col == 0) {
     entry_i = 2 * entry_row + 1;
     entry_j = 0;
-  }
-  else if (entry_col == columns - 1) {
+  } else if (entry_col == columns - 1) {
     entry_i = 2 * entry_row + 1;
     entry_j = 2 * columns;
-  }
-  else {
+  } else {
     entry_i = 2 * entry_row + 1;
     entry_j = 2 * entry_col + 1;
   }
@@ -381,20 +374,16 @@ void print_maze_with_color(const Matrix<bool>& maze,
   if (exit_row == 0) {
     exit_i = 0;
     exit_j = 2 * exit_col + 1;
-  }
-  else if (exit_row == lines - 1) {
+  } else if (exit_row == lines - 1) {
     exit_i = 2 * lines;
     exit_j = 2 * exit_col + 1;
-  }
-  else if (exit_col == 0) {
+  } else if (exit_col == 0) {
     exit_i = 2 * exit_row + 1;
     exit_j = 0;
-  }
-  else if (exit_col == columns - 1) {
+  } else if (exit_col == columns - 1) {
     exit_i = 2 * exit_row + 1;
     exit_j = 2 * columns;
-  }
-  else {
+  } else {
     exit_i = 2 * exit_row + 1;
     exit_j = 2 * exit_col + 1;
   }
@@ -407,21 +396,19 @@ void print_maze_with_color(const Matrix<bool>& maze,
   for (size_t i = 0; i < maze.get_lines(); i++) {
     for (size_t j = 0; j < maze.get_columns(); j++) {
       if (i == entry_i && j == entry_j) {
-        printf(ENTRY);
-      }
-      else if (i == exit_i && j == exit_j) {
-        printf(EXIT);
-      }
-      else if (maze[i][j]) {
-        printf(WALL);
-      }
-      else {
-        printf(PATH);
+        printf("%s", ENTRY);
+      } else if (i == exit_i && j == exit_j) {
+        printf("%s", EXIT);
+      } else if (maze[i][j]) {
+        printf("%s", WALL);
+      } else {
+        printf("%s", PATH);
       }
     }
     printf("\n");
   }
 
-  printf("\n\033[42mE\033[0m - Entry (cell %zu)  \033[41mX\033[0m - Exit (cell %zu)\n",
+  printf("\n\033[42mE\033[0m - Entry (cell %zu)"
+    "  \033[41mX\033[0m - Exit (cell %zu)\n",
     entry, exit);
 }
