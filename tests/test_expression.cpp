@@ -91,8 +91,8 @@ TEST(TestExpressionLib, VariablesCalculate) {
 }
 
 TEST(TestExpressionLib, FunctionsCalculate) {
-  Expression e("sin(0) + cos(0)");
-  EXPECT_DOUBLE_EQ(e.calculate(), 1.0);
+  Expression e("sin(4) + cos(5)");
+  EXPECT_NEAR(e.calculate(), -0.47314030984, 1e-10);
 }
 
 TEST(TestExpressionLib, DivisionByZero) {

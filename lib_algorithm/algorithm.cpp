@@ -220,3 +220,208 @@ int countIslands(const Matrix<int>& matrix) {
 
   return IslandCount;
 }
+
+Matrix<bool> generate_maze(size_t entry, size_t exit, size_t lines, size_t columns) {
+  if (entry == exit) {
+    throw std::invalid_argument("The entry cannot match the exit!");
+  }
+
+  if (lines < 5 || columns < 5) {
+    throw std::invalid_argument("The maze is too small!");
+  }
+
+  if (entry < 1 || entry > lines * columns ||
+    exit < 1 || exit > lines * columns) {
+    throw std::invalid_argument("Invalid entry or exit!");
+  }
+
+  size_t entry_row = (entry - 1) / columns;
+  size_t entry_col = (entry - 1) % columns;
+  size_t exit_row = (exit - 1) / columns;
+  size_t exit_col = (exit - 1) % columns;
+
+  if (entry_row != 0 && entry_row != lines - 1 &&
+    entry_col != 0 && entry_col != columns - 1) {
+    throw std::invalid_argument("The entry cannot be inside the maze!");
+  }
+
+  if (exit_row != 0 && exit_row != lines - 1 &&
+    exit_col != 0 && exit_col != columns - 1) {
+    throw std::invalid_argument("The exit cannot be inside the maze!");
+  }
+
+  DSU dsu(lines * columns);
+  Matrix<bool> result(2 * lines + 1, 2 * columns + 1);
+
+  for (size_t i = 0; i < 2 * lines + 1; i++) {
+    for (size_t j = 0; j < 2 * columns + 1; j++) {
+      result[i][j] = true;
+    }
+  }
+
+  for (size_t i = 0; i < lines; i++) {
+    for (size_t j = 0; j < columns; j++) {
+      result[2 * i + 1][2 * j + 1] = false;
+    }
+  }
+
+  std::random_device rd;
+  std::mt19937 gen(rd());
+
+  struct Wall {
+    size_t cell1;
+    size_t cell2;
+    size_t wall_row;
+    size_t wall_col;
+  };
+
+  TVector<Wall> walls;
+
+  for (size_t i = 0; i < lines - 1; i++) {
+    for (size_t j = 0; j < columns; j++) {
+      size_t cell1 = i * columns + j;
+      size_t cell2 = (i + 1) * columns + j;
+      walls.push_back({ cell1, cell2, 2 * i + 2, 2 * j + 1 });
+    }
+  }
+
+  for (size_t i = 0; i < lines; i++) {
+    for (size_t j = 0; j < columns - 1; j++) {
+      size_t cell1 = i * columns + j;
+      size_t cell2 = i * columns + j + 1;
+      walls.push_back({ cell1, cell2, 2 * i + 1, 2 * j + 2 });
+    }
+  }
+
+  std::shuffle(walls.begin(), walls.end(), gen);
+
+  for (const auto& wall : walls) {
+    if (dsu.find(wall.cell1) != dsu.find(wall.cell2)) {
+      dsu.union_op(wall.cell1, wall.cell2);
+      result[wall.wall_row][wall.wall_col] = false;
+    }
+  }
+
+  if (entry_row == 0) {
+    result[0][2 * entry_col + 1] = false;
+  }
+  else if (entry_row == lines - 1) {
+    result[2 * lines][2 * entry_col + 1] = false;
+  }
+  else if (entry_col == 0) {
+    result[2 * entry_row + 1][0] = false;
+  }
+  else if (entry_col == columns - 1) {
+    result[2 * entry_row + 1][2 * columns] = false;
+  }
+
+  if (exit_row == 0) {
+    result[0][2 * exit_col + 1] = false;
+  }
+  else if (exit_row == lines - 1) {
+    result[2 * lines][2 * exit_col + 1] = false;
+  }
+  else if (exit_col == 0) {
+    result[2 * exit_row + 1][0] = false;
+  }
+  else if (exit_col == columns - 1) {
+    result[2 * exit_row + 1][2 * columns] = false;
+  }
+
+  return result;
+}
+
+void print_maze(const Matrix<bool>& maze) {
+  for (size_t i = 0; i < maze.get_lines(); i++) {
+    for (size_t j = 0; j < maze.get_columns(); j++) {
+      if (maze[i][j] == false) {
+        printf(" ");
+      } else 
+        if (i % 2 == 0) {
+          printf("-");
+        } else {
+          printf("|");
+      }
+    }
+    printf("\n");
+  }
+}
+
+void print_maze_with_color(const Matrix<bool>& maze,
+  size_t entry, size_t exit,
+  size_t lines, size_t columns) {
+  size_t entry_row = (entry - 1) / columns;
+  size_t entry_col = (entry - 1) % columns;
+  size_t exit_row = (exit - 1) / columns;
+  size_t exit_col = (exit - 1) % columns;
+
+  size_t entry_i, entry_j, exit_i, exit_j;
+
+  if (entry_row == 0) {
+    entry_i = 0;
+    entry_j = 2 * entry_col + 1;
+  }
+  else if (entry_row == lines - 1) {
+    entry_i = 2 * lines;
+    entry_j = 2 * entry_col + 1;
+  }
+  else if (entry_col == 0) {
+    entry_i = 2 * entry_row + 1;
+    entry_j = 0;
+  }
+  else if (entry_col == columns - 1) {
+    entry_i = 2 * entry_row + 1;
+    entry_j = 2 * columns;
+  }
+  else {
+    entry_i = 2 * entry_row + 1;
+    entry_j = 2 * entry_col + 1;
+  }
+
+  if (exit_row == 0) {
+    exit_i = 0;
+    exit_j = 2 * exit_col + 1;
+  }
+  else if (exit_row == lines - 1) {
+    exit_i = 2 * lines;
+    exit_j = 2 * exit_col + 1;
+  }
+  else if (exit_col == 0) {
+    exit_i = 2 * exit_row + 1;
+    exit_j = 0;
+  }
+  else if (exit_col == columns - 1) {
+    exit_i = 2 * exit_row + 1;
+    exit_j = 2 * columns;
+  }
+  else {
+    exit_i = 2 * exit_row + 1;
+    exit_j = 2 * exit_col + 1;
+  }
+
+  const char* WALL = "\033[44m  \033[0m";
+  const char* PATH = "\033[47m  \033[0m";
+  const char* ENTRY = "\033[42mE \033[0m";
+  const char* EXIT = "\033[41mX \033[0m";
+
+  for (size_t i = 0; i < maze.get_lines(); i++) {
+    for (size_t j = 0; j < maze.get_columns(); j++) {
+      if (i == entry_i && j == entry_j) {
+        printf(ENTRY);
+      }
+      else if (i == exit_i && j == exit_j) {
+        printf(EXIT);
+      }
+      else if (maze[i][j]) {
+        printf(WALL);
+      }
+      else {
+        printf(PATH);
+      }
+    }
+    printf("\n");
+  }
+
+  printf("\n\033[42mE\033[0m - Entry (cell %zu)  \033[41mX\033[0m - Exit (cell %zu)\n",
+    entry, exit);
+}

@@ -109,9 +109,9 @@ TEST(TestDSULib, RankIncreasesOnEqualRanks) {
   dsu.union_op(0, 1);
   dsu.union_op(2, 3);
 
-  dsu.union_op(0, 2);
+  dsu.union_op(2, 0);
 
-  EXPECT_EQ(dsu.find(0), dsu.find(3));
+  EXPECT_EQ(dsu.find(1), dsu.find(2));
 }
 
 TEST(TestDSULib, LargerRankBecomesRoot) {

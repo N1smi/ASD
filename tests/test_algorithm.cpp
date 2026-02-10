@@ -422,8 +422,8 @@ TEST(TestAlgorithmLib, CountIslandsAllLand) {
 
 TEST(TestAlgorithmLib, CountIslandsSingleCellIsland) {
   int data[] = {
+    1, 0, 0,
     0, 0, 0,
-    0, 1, 0,
     0, 0, 0
   };
   Matrix<int> matrix(3, 3, data, 9);
@@ -447,4 +447,49 @@ TEST(TestAlgorithmLib, CountIslands1X1) {
   int data0[] = { 0 };
   Matrix<int> matrix0(1, 1, data0, 1);
   EXPECT_EQ(countIslands(matrix0), 0);
+}
+
+TEST(TestAlgorithmLib, GenerateMaze) {
+  Matrix<bool> maze;
+
+  EXPECT_NO_THROW(generate_maze(1, 5, 5, 5));
+  EXPECT_NO_THROW(generate_maze(6, 10, 5, 5));
+  EXPECT_NO_THROW(generate_maze(21, 25, 5, 5));
+  EXPECT_NO_THROW(generate_maze(1, 21, 5, 5));
+  EXPECT_NO_THROW(maze = generate_maze(1, 25, 5, 5));
+  EXPECT_NO_THROW(maze = generate_maze(1, 400, 20, 20));
+
+  // print_maze_with_color(maze, 1, 400, 20, 20);
+  // print_maze(maze);
+}
+
+TEST(TestAlgorithmLib, MazeThrowEqualExitAndEntry) {
+  Matrix<bool> maze;
+
+  EXPECT_ANY_THROW(maze = generate_maze(1, 1, 20, 20));
+}
+
+TEST(TestAlgorithmLib, MazeThrowSmallMaze) {
+  Matrix<bool> maze;
+
+  EXPECT_ANY_THROW(maze = generate_maze(1, 16, 4, 4));
+}
+
+TEST(TestAlgorithmLib, MazeThrowInvalidEntryOrExit) {
+  Matrix<bool> maze;
+
+  EXPECT_ANY_THROW(maze = generate_maze(1, 26, 5, 5));
+  EXPECT_ANY_THROW(maze = generate_maze(0, 25, 5, 5));
+}
+
+TEST(TestAlgorithmLib, MazeThrowEntryInsideMaze) {
+  Matrix<bool> maze;
+
+  EXPECT_ANY_THROW(maze = generate_maze(13, 25, 5, 5));
+}
+
+TEST(TestAlgorithmLib, MazeThrowExitInsideMaze) {
+  Matrix<bool> maze;
+
+  EXPECT_ANY_THROW(maze = generate_maze(1, 14, 5, 5));
 }
