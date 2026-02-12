@@ -1,0 +1,6 @@
+create_project_lib(Expression)
+add_depend(Expression TList lib_tlist)
+add_depend(Expression TListStack lib_tlist_stack)
+add_depend(Expression Lexem lib_lexem)
+add_depend(Expression Parser lib_parser)
+add_depend(Expression TVector lib_tvector)

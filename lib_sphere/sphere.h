@@ -8,7 +8,8 @@
 
 class Sphere : public Circle {
   Point3D _center;
-public:
+
+ public:
   Sphere() : Circle(), _center(0, 0, 0) {}
   Sphere(Point3D center, int rad)
     : Circle(Point(center.get_x(), center.get_y()), rad), _center(center) {

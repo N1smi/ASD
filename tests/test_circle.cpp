@@ -21,10 +21,10 @@ TEST(TestCircleLib, CreateCircleWithParams) {
 TEST(TestCircleLib, CreateCircleWithCopy) {
   Point center(1, 2);
   Circle original(center, 3);
-  Circle copy(original);
-  EXPECT_EQ(1, copy.get_x());
-  EXPECT_EQ(2, copy.get_y());
-  EXPECT_EQ(3, copy.get_rad());
+  Circle copyIt(original);
+  EXPECT_EQ(1, copyIt.get_x());
+  EXPECT_EQ(2, copyIt.get_y());
+  EXPECT_EQ(3, copyIt.get_rad());
 }
 
 TEST(TestCircleLib, CirclesNoIntersection) {
@@ -67,5 +67,9 @@ TEST(TestCircleLib, IdenticalCircles) {
   Circle c2(Point(0, 0), 5);
   loc result = Circle::location_of_the_circles(c1, c2);
   EXPECT_EQ(coincidence, result);
+}
+
+TEST(TestCircleLib, ThrowWhenTryCreateWithNegativeRad) {
+  ASSERT_ANY_THROW(Circle c1(Point(0, 0), -10));
 }
 

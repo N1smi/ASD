@@ -3,9 +3,10 @@
 #ifndef LIB_CIRCLE_CIRCLE_H_
 #define LIB_CIRCLE_CIRCLE_H_
 
-#include "../lib_point/point.h"
 #include <iostream>
 #include <algorithm>
+
+#include "../lib_point/point.h"
 
 enum loc {
   coincidence, touch_in, touch_out, without_interaction, entry, interaction
@@ -15,7 +16,7 @@ class Circle {
   Point _center;
   int _rad;
 
-public:
+ public:
   Circle();
   Circle(const Circle& other);
   Circle(Point center, int rad);
