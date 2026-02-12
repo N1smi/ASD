@@ -25,7 +25,8 @@ class UnsortedTableOnArr : public Table<TKey, TValue,
 };
 
 template<class TKey, class TValue>
-void UnsortedTableOnArr<TKey, TValue>::insert(const TKey& key, const TValue& value) {
+void UnsortedTableOnArr<TKey, TValue>::insert(const TKey& key,
+  const TValue& value) {
   for (size_t i = 0; i < Base::_rows.size(); ++i) {
     if (Base::_rows[i].first == key) {
       Base::_rows[i].second = value;
