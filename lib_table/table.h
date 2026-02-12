@@ -9,27 +9,29 @@
 template <class TKey, class TValue, class Container>
 class Table : public ITable<TKey, TValue> {
  protected:
-  Container _data;
+  Container _rows;
  public:
+  Table() : _rows() {}
+  ~Table() override = default;
+
   std::ostream& print(std::ostream& os) const override;
-  friend std::ostream& operator<<(std::ostream& os, const Table& table);
 };
 
 template <class TKey, class TValue, class Container>
 std::ostream& Table<TKey, TValue, Container>::print(std::ostream& os) const {
   if (is_empty()) {
-    os << "[Empty table]";
+    os << "[Empty table]\n";
     return os;
   }
 
-  os << "=== Table (" << size() << " items) ===\n";
+  os << "========== Table ==========\n";
 
   size_t index = 0;
-  for (const auto& [key, value] : _data) {
+  for (const auto& [key, value] : _rows) {
     os << key << " " << value << "\n";
   }
 
-  os << "=======================\n";
+  os << "===========================\n";
   return os;
 }
 
