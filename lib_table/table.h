@@ -8,10 +8,10 @@
 
 template <class TKey, class TValue, class Container>
 class Table : public ITable<TKey, TValue> {
-protected:
+ protected:
   Container _data;
-public:
-  virtual std::ostream& print(std::ostream& os) const override;
+ public:
+  std::ostream& print(std::ostream& os) const override;
   friend std::ostream& operator<<(std::ostream& os, const Table& table);
 };
 
@@ -34,7 +34,8 @@ std::ostream& Table<TKey, TValue, Container>::print(std::ostream& os) const {
 }
 
 template <class TKey, class TValue, class Container>
-std::ostream& operator<<(std::ostream& os, const Table<TKey, TValue, Container>& table) {
+std::ostream& operator<<(std::ostream& os, const Table<TKey,
+  TValue, Container>& table) {
   return table.print(os);
 }
 
