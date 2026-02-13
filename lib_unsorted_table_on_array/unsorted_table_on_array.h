@@ -29,8 +29,7 @@ void UnsortedTableOnArr<TKey, TValue>::insert(const TKey& key,
   const TValue& value) {
   for (size_t i = 0; i < Base::_rows.size(); ++i) {
     if (Base::_rows[i].first == key) {
-      Base::_rows[i].second = value;
-      return;
+      throw std::invalid_argument("The inserted key is already in the table!");
     }
   }
 

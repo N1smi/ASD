@@ -15,11 +15,11 @@ TEST(TestUnsortedTableOnArrayLib, InsertElements) {
   UnsortedTableOnArr<int, std::string> table;
 
   table.insert(1, "One");
+
   EXPECT_FALSE(table.is_empty());
 
   table.insert(2, "Two");
 
-  EXPECT_FALSE(table.is_empty());
   // std::cout << table;
 
   auto* val1 = table.find(1);
@@ -31,16 +31,14 @@ TEST(TestUnsortedTableOnArrayLib, InsertElements) {
   EXPECT_EQ(*val2, "Two");
 }
 
-TEST(TestUnsortedTableOnArrayLib, UpdateExistingKey) {
+TEST(TestUnsortedTableOnArrayLib, InsertThrowWhenEqualKey) {
   UnsortedTableOnArr<int, std::string> table;
 
   table.insert(1, "One");
   EXPECT_EQ(*table.find(1), "One");
   // std::cout << table;
 
-  table.insert(1, "Uno");
-  EXPECT_EQ(*table.find(1), "Uno");
-  // std::cout << table;
+  EXPECT_ANY_THROW(table.insert(1, "Uno"));
 }
 
 TEST(TestUnsortedTableOnArrayLib, FindElements) {
