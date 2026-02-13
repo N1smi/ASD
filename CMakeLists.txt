@@ -36,6 +36,7 @@ add_subdirectory(lib_expression)
 add_subdirectory(lib_itable)
 add_subdirectory(lib_table)
 add_subdirectory(lib_unsorted_table_on_array)
+add_subdirectory(lib_monom)
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
