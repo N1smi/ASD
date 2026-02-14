@@ -65,8 +65,7 @@ class Monom {
 
     if (monom._coefficient != 1.0 && monom._coefficient != -1.0) {
       os << monom._coefficient;
-    }
-    else if (monom._coefficient == -1.0) {
+    } else if (monom._coefficient == -1.0) {
       os << "-";
     }
 
@@ -77,8 +76,7 @@ class Monom {
         if (power > 1) {
           os << "^" << power;
         }
-      }
-      else if (power < 0) {
+      } else if (power < 0) {
         os << "x" << i + 1 << "^(" << power << ")";
       }
     }
