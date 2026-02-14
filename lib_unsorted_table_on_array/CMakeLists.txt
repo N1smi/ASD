@@ -1,0 +1,3 @@
+create_project_lib(UnsortedTableOnArr)
+add_depend(UnsortedTableOnArr TVector lib_tvector)
+add_depend(UnsortedTableOnArr Table lib_table)

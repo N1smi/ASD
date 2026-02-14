@@ -209,6 +209,7 @@ class TVector {
  private:
   void defragment();
   size_t real_pos(size_t pos) const;
+  const T* real_address(size_t pos) const;
   T* real_address(size_t pos);
   bool reallocate(size_t new_size);
   void reallocate_for_deleted();
@@ -345,13 +346,13 @@ inline const T& TVector<T>::back() const {
 
 template <class T>
 inline const T* TVector<T>::begin() const noexcept {
-  T* main_address = real_address(0);
+  const T* main_address = real_address(0);
   return main_address;
 }
 
 template <class T>
 inline const T* TVector<T>::end() const noexcept {
-  T* main_address = nullptr;
+  const T* main_address = nullptr;
   if (!is_empty()) {
     main_address = (real_address(_size - 1) + 1);
   }
@@ -1071,6 +1072,21 @@ void TVector<T>::replace_arrays
   _states = new_states;
   _capacity = new_capacity;
   _deleted = 0;
+}
+
+template<class T>
+const T* TVector<T>::real_address(size_t pos) const {
+  if (_deleted == 0) return &_data[pos];
+  size_t busy_count = 0;
+  for (size_t i = 0; i < _size + _deleted; i++) {
+    if (_states[i] == busy) {
+      if (busy_count == pos) {
+        return &_data[i];
+      }
+      busy_count++;
+    }
+  }
+  return nullptr;
 }
 
 #endif  // LIB_TVECTOR_TVECTOR_H_
