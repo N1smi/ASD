@@ -11,9 +11,10 @@
 template<class TKey, class TValue>
 class UnsortedTableOnArr : public Table<TKey, TValue,
   TVector<std::pair<TKey, TValue>>> {
- public:
+ protected:
   using Base = Table<TKey, TValue, TVector<std::pair<TKey, TValue>>>;
 
+ public:
   UnsortedTableOnArr() = default;
   ~UnsortedTableOnArr() override = default;
 
