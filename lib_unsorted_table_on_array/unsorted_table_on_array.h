@@ -3,14 +3,15 @@
 #ifndef LIB_UNSORTED_TABLE_ON_ARRAY_UNSORTED_TABLE_ON_ARRAY_H_
 #define LIB_UNSORTED_TABLE_ON_ARRAY_UNSORTED_TABLE_ON_ARRAY_H_
 
-#include<utility>
-#include<stdexcept>
+#include <stdexcept>
+#include <utility>
+
 #include "../lib_table/table.h"
 #include "../lib_tvector/tvector.h"
 
-template<class TKey, class TValue>
-class UnsortedTableOnArr : public Table<TKey, TValue,
-  TVector<std::pair<TKey, TValue>>> {
+template <class TKey, class TValue>
+class UnsortedTableOnArr
+    : public Table<TKey, TValue, TVector<std::pair<TKey, TValue>>> {
  protected:
   using Base = Table<TKey, TValue, TVector<std::pair<TKey, TValue>>>;
 
@@ -25,18 +26,18 @@ class UnsortedTableOnArr : public Table<TKey, TValue,
   bool is_empty() const noexcept override;
 };
 
-template<class TKey, class TValue>
+template <class TKey, class TValue>
 bool UnsortedTableOnArr<TKey, TValue>::insert(const TKey& key,
-  const TValue& value) {
+                                              const TValue& value) {
   if (find(key) != nullptr) {
     return false;
   }
 
-  Base::_rows.push_back({ key, value });
+  Base::_rows.push_back({key, value});
   return true;
 }
 
-template<class TKey, class TValue>
+template <class TKey, class TValue>
 bool UnsortedTableOnArr<TKey, TValue>::erase(const TKey& key) {
   for (size_t i = 0; i < Base::_rows.size(); ++i) {
     if (Base::_rows[i].first == key) {
@@ -48,7 +49,7 @@ bool UnsortedTableOnArr<TKey, TValue>::erase(const TKey& key) {
   return false;
 }
 
-template<class TKey, class TValue>
+template <class TKey, class TValue>
 TValue* UnsortedTableOnArr<TKey, TValue>::find(const TKey& key) {
   for (size_t i = 0; i < Base::_rows.size(); ++i) {
     if (Base::_rows[i].first == key) {
@@ -59,7 +60,7 @@ TValue* UnsortedTableOnArr<TKey, TValue>::find(const TKey& key) {
   return nullptr;
 }
 
-template<class TKey, class TValue>
+template <class TKey, class TValue>
 const TValue* UnsortedTableOnArr<TKey, TValue>::find(const TKey& key) const {
   for (size_t i = 0; i < Base::_rows.size(); ++i) {
     if (Base::_rows[i].first == key) {
@@ -70,7 +71,7 @@ const TValue* UnsortedTableOnArr<TKey, TValue>::find(const TKey& key) const {
   return nullptr;
 }
 
-template<class TKey, class TValue>
+template <class TKey, class TValue>
 bool UnsortedTableOnArr<TKey, TValue>::is_empty() const noexcept {
   return Base::_rows.is_empty();
 }
