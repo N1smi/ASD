@@ -17,35 +17,34 @@ class UnsortedTableOnArr : public Table<TKey, TValue,
   UnsortedTableOnArr() = default;
   ~UnsortedTableOnArr() override = default;
 
-  void insert(const TKey& key, const TValue& value) override;
-  void erase(const TKey& key) override;
+  bool insert(const TKey& key, const TValue& value) override;
+  bool erase(const TKey& key) override;
   TValue* find(const TKey& key) override;
   const TValue* find(const TKey&) const override;
   bool is_empty() const noexcept override;
 };
 
 template<class TKey, class TValue>
-void UnsortedTableOnArr<TKey, TValue>::insert(const TKey& key,
+bool UnsortedTableOnArr<TKey, TValue>::insert(const TKey& key,
   const TValue& value) {
-  for (size_t i = 0; i < Base::_rows.size(); ++i) {
-    if (Base::_rows[i].first == key) {
-      throw std::invalid_argument("The inserted key is already in the table!");
-    }
+  if (find(key) != nullptr) {
+    return false;
   }
 
   Base::_rows.push_back({ key, value });
+  return true;
 }
 
 template<class TKey, class TValue>
-void UnsortedTableOnArr<TKey, TValue>::erase(const TKey& key) {
+bool UnsortedTableOnArr<TKey, TValue>::erase(const TKey& key) {
   for (size_t i = 0; i < Base::_rows.size(); ++i) {
     if (Base::_rows[i].first == key) {
       Base::_rows.erase(i);
-      return;
+      return true;
     }
   }
 
-  throw std::invalid_argument("There is no such key in the table.");
+  return false;
 }
 
 template<class TKey, class TValue>

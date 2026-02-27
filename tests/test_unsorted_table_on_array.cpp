@@ -14,11 +14,11 @@ TEST(TestUnsortedTableOnArrayLib, CreateDefaultTable) {
 TEST(TestUnsortedTableOnArrayLib, InsertElements) {
   UnsortedTableOnArr<int, std::string> table;
 
-  table.insert(1, "One");
+  EXPECT_TRUE(table.insert(1, "One"));
 
   EXPECT_FALSE(table.is_empty());
 
-  table.insert(2, "Two");
+  EXPECT_TRUE(table.insert(2, "Two"));
 
   // std::cout << table;
 
@@ -31,14 +31,16 @@ TEST(TestUnsortedTableOnArrayLib, InsertElements) {
   EXPECT_EQ(*val2, "Two");
 }
 
-TEST(TestUnsortedTableOnArrayLib, InsertThrowWhenEqualKey) {
+TEST(TestUnsortedTableOnArrayLib, InsertExistentKey) {
   UnsortedTableOnArr<int, std::string> table;
 
-  table.insert(1, "One");
+  EXPECT_TRUE(table.insert(1, "One"));
+
   EXPECT_EQ(*table.find(1), "One");
+
   // std::cout << table;
 
-  EXPECT_ANY_THROW(table.insert(1, "Uno"));
+  EXPECT_FALSE(table.insert(1, "Uno"));
 }
 
 TEST(TestUnsortedTableOnArrayLib, FindElements) {
@@ -64,20 +66,21 @@ TEST(TestUnsortedTableOnArrayLib, EraseElements) {
   table.insert(3, "Three");
   // std::cout << table;
 
-  table.erase(2);
+  EXPECT_TRUE(table.erase(2));
+
   // std::cout << table;
   EXPECT_EQ(table.find(2), nullptr);
   EXPECT_NE(table.find(1), nullptr);
   EXPECT_NE(table.find(3), nullptr);
 }
 
-TEST(TestUnsortedTableOnArrayLib, EraseElementsThrowWhenInvalidKey) {
+TEST(TestUnsortedTableOnArrayLib, EraseElementsNonExistentKey) {
   UnsortedTableOnArr<int, std::string> table;
   table.insert(1, "One");
   table.insert(2, "Two");
   table.insert(3, "Three");
 
-  EXPECT_ANY_THROW(table.erase(6));
+  EXPECT_FALSE(table.erase(6));
 }
 
 TEST(TestUnsortedTableOnArrayLib, IsEmptyTrue) {
