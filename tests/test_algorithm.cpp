@@ -1,17 +1,16 @@
 // Copyright 2025 Smirnov Nikita
 
 #include <gtest/gtest.h>
-#include <string>
-#include<stdexcept>
-#include<iostream>
+
+#include <iostream>
 #include <set>
+#include <stdexcept>
+#include <string>
+
 #include "../lib_algorithm/algorithm.h"
 
 TEST(TestAlgorithmLib, FLMNormal) {
-  int data[] = {
-    3, 1, 2,
-    5, 8, 4,
-    7, 6, 9 };
+  int data[] = {3, 1, 2, 5, 8, 4, 7, 6, 9};
   Matrix<int> matrix(3, 3, data, 9);
 
   int result = find_local_min(matrix);
@@ -19,7 +18,7 @@ TEST(TestAlgorithmLib, FLMNormal) {
 }
 
 TEST(TestAlgorithmLib, FLMThrowWhenDifferentDimension) {
-  int data[] = { 3, 1, 2, 5, 8, 4 };
+  int data[] = {3, 1, 2, 5, 8, 4};
   Matrix<int> matrix(3, 2, data, 6);
 
   EXPECT_ANY_THROW(find_local_min(matrix));
@@ -32,14 +31,14 @@ TEST(TestAlgorithmLib, FLMThrowWhenZeroDimension) {
 }
 
 TEST(TestAlgorithmLib, FLMSingleElement) {
-  int data[] = { 5 };
+  int data[] = {5};
   Matrix<int> matrix(1, 1, data, 1);
 
   EXPECT_EQ(find_local_min(matrix), 5);
 }
 
 TEST(TestAlgorithmLib, FLM2X2) {
-  int data[] = { 2, 3, 4, 1 };
+  int data[] = {2, 3, 4, 1};
   Matrix<int> matrix(2, 2, data, 4);
   int result = find_local_min(matrix);
 
@@ -47,7 +46,7 @@ TEST(TestAlgorithmLib, FLM2X2) {
 }
 
 TEST(TestAlgorithmLib, FLMMoreMins) {
-  int data[] = { 2, 5, 3, 6, 4, 7, 8, 9, 1 };
+  int data[] = {2, 5, 3, 6, 4, 7, 8, 9, 1};
   Matrix<int> matrix(3, 3, data, 9);
   int result = find_local_min(matrix);
 
@@ -55,7 +54,7 @@ TEST(TestAlgorithmLib, FLMMoreMins) {
 }
 
 TEST(TestAlgorithmLib, FLM4X4) {
-  int data[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 10, 20, 30, 40, 50, 60 };
+  int data[] = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 10, 20, 30, 40, 50, 60};
   Matrix<int> matrix(4, 4, data, 16);
   int result = find_local_min(matrix);
 
@@ -107,105 +106,114 @@ TEST(TestAlgorithmLib, ReadExprValidExpr) {
 }
 
 TEST(TestAlgorithmLib, ReadExprMissOperation) {
-  EXPECT_THROW({
-     try {
-         read_expression("3 * (15 + (x y)*(2*x - 7*y^2))");
-     }
-catch (const std::invalid_argument& e) {
-  EXPECT_STREQ("Missing operation", e.what());
-  throw;
-}
-    }, std::invalid_argument);
+  EXPECT_THROW(
+      {
+        try {
+          read_expression("3 * (15 + (x y)*(2*x - 7*y^2))");
+        } catch (const std::invalid_argument& e) {
+          EXPECT_STREQ("Missing operation", e.what());
+          throw;
+        }
+      },
+      std::invalid_argument);
 }
 
 TEST(TestAlgorithmLib, ReadExprMissFirstOperand) {
-  EXPECT_THROW({
-      try {
+  EXPECT_THROW(
+      {
+        try {
           read_expression("+ 5");
-      }
-catch (const std::invalid_argument& e) {
-  EXPECT_STREQ("Missing first operand in operation +", e.what());
-  throw;
-}
-    }, std::invalid_argument);
+        } catch (const std::invalid_argument& e) {
+          EXPECT_STREQ("Missing first operand in operation +", e.what());
+          throw;
+        }
+      },
+      std::invalid_argument);
 }
 
 TEST(TestAlgorithmLib, ReadExprMissSecondOperand) {
-  EXPECT_THROW({
-      try {
+  EXPECT_THROW(
+      {
+        try {
           read_expression("3 * (15 + (x + y)*(2*x - 7*y^))");
-      }
-catch (const std::invalid_argument& e) {
-  EXPECT_STREQ("Missing second operand in operation ^", e.what());
-  throw;
-}
-    }, std::invalid_argument);
+        } catch (const std::invalid_argument& e) {
+          EXPECT_STREQ("Missing second operand in operation ^", e.what());
+          throw;
+        }
+      },
+      std::invalid_argument);
 
-  EXPECT_THROW({
-    try {
-        read_expression("(x * )");
-    }
-catch (const std::invalid_argument& e) {
-  EXPECT_STREQ("Missing second operand in operation *", e.what());
-  throw;
-}
-    }, std::invalid_argument);
+  EXPECT_THROW(
+      {
+        try {
+          read_expression("(x * )");
+        } catch (const std::invalid_argument& e) {
+          EXPECT_STREQ("Missing second operand in operation *", e.what());
+          throw;
+        }
+      },
+      std::invalid_argument);
 
-  EXPECT_THROW({
-     try {
-         read_expression("x + y + ");
-     }
-catch (const std::invalid_argument& e) {
-  EXPECT_STREQ("Missing second operand in operation +", e.what());
-  throw;
-}
-    }, std::invalid_argument);
+  EXPECT_THROW(
+      {
+        try {
+          read_expression("x + y + ");
+        } catch (const std::invalid_argument& e) {
+          EXPECT_STREQ("Missing second operand in operation +", e.what());
+          throw;
+        }
+      },
+      std::invalid_argument);
 }
 
 TEST(TestAlgorithmLib, ReadExprMissClosedBracket) {
-  EXPECT_THROW({
-    try {
-        read_expression("((x + y)*(x - y)");
-    }
-catch (const std::invalid_argument& e) {
-  EXPECT_STREQ("Missing closed bracket", e.what());
-  throw;
-}
-    }, std::invalid_argument);
+  EXPECT_THROW(
+      {
+        try {
+          read_expression("((x + y)*(x - y)");
+        } catch (const std::invalid_argument& e) {
+          EXPECT_STREQ("Missing closed bracket", e.what());
+          throw;
+        }
+      },
+      std::invalid_argument);
 }
 
 TEST(TestAlgorithmLib, ReadExprMissOpenedBracket) {
-  EXPECT_THROW({
-    try {
-        read_expression("(x * x + y ^ 2))*(8 + (y - 3))");
-    }
-catch (const std::invalid_argument& e) {
-  EXPECT_STREQ("Missing opened bracket", e.what());
-  throw;
-}
-    }, std::invalid_argument);
+  EXPECT_THROW(
+      {
+        try {
+          read_expression("(x * x + y ^ 2))*(8 + (y - 3))");
+        } catch (const std::invalid_argument& e) {
+          EXPECT_STREQ("Missing opened bracket", e.what());
+          throw;
+        }
+      },
+      std::invalid_argument);
 
-  EXPECT_THROW({
-      try {
+  EXPECT_THROW(
+      {
+        try {
           read_expression("(x + y]");
-      }
-catch (const std::invalid_argument& e) {
-  EXPECT_STREQ("Missing opened bracket", e.what());
-  throw;
-}
-    }, std::invalid_argument);
+        } catch (const std::invalid_argument& e) {
+          EXPECT_STREQ("Missing opened bracket", e.what());
+          throw;
+        }
+      },
+      std::invalid_argument);
 }
 
 TEST(TestAlgorithmLib, ReadExprInvalidCharacter) {
-  EXPECT_THROW({
-    try {
-        read_expression("x $ y");
-    }
-catch (const std::invalid_argument& e) {
-  EXPECT_STREQ("Invalid character in expression", e.what());
-  throw;
-}
-    }, std::invalid_argument);
+  EXPECT_THROW(
+      {
+        try {
+          read_expression("x $ y");
+        } catch (const std::invalid_argument& e) {
+          EXPECT_STREQ("Invalid character in expression", e.what());
+          throw;
+        }
+      },
+      std::invalid_argument);
 }
 
 TEST(TestAlgorithmLib, IsLoopedTListHareAndTurtleTrue) {
@@ -306,7 +314,6 @@ TEST(TestAlgorithmLib, IsLoopedReversedAlgorithmFalse) {
   EXPECT_EQ(current->next, nullptr);
 }
 
-
 TEST(TestAlgorithmLib, IsLoopedReversedAlgorithmEmptyList) {
   TList<int> list;
 
@@ -385,11 +392,8 @@ TEST(TestAlgorithmLib, FindLoopStartSingleElementTrue) {
 
 TEST(TestAlgorithmLib, CountIslandsBasic) {
   int data[] = {
-  0, 1, 0, 0, 1,
-  0, 1, 1, 0, 1,
-  1, 1, 0, 1, 1,
-  0, 0, 0, 0, 1,
-  1, 0, 1, 1, 1, };
+      0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1,
+  };
   Matrix<int> matrix(5, 5, data, 25);
 
   EXPECT_EQ(countIslands(matrix), 3);
@@ -401,50 +405,35 @@ TEST(TestAlgorithmLib, CountIslandsEmptyMatrix) {
 }
 
 TEST(TestAlgorithmLib, CountIslandsAllWater) {
-  int data[] = {
-    0, 0, 0,
-    0, 0, 0,
-    0, 0, 0
-  };
+  int data[] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
   Matrix<int> matrix(3, 3, data, 9);
   EXPECT_EQ(countIslands(matrix), 0);
 }
 
 TEST(TestAlgorithmLib, CountIslandsAllLand) {
-  int data[] = {
-    1, 1, 1,
-    1, 1, 1,
-    1, 1, 1
-  };
+  int data[] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
   Matrix<int> matrix(3, 3, data, 9);
   EXPECT_EQ(countIslands(matrix), 1);
 }
 
 TEST(TestAlgorithmLib, CountIslandsSingleCellIsland) {
-  int data[] = {
-    1, 0, 0,
-    0, 0, 0,
-    0, 0, 0
-  };
+  int data[] = {1, 0, 0, 0, 0, 0, 0, 0, 0};
   Matrix<int> matrix(3, 3, data, 9);
   EXPECT_EQ(countIslands(matrix), 1);
 }
 
 TEST(TestAlgorithmLib, CountIslandsDiagonalNotConnected) {
-  int data[] = {
-    1, 0,
-    0, 1
-  };
+  int data[] = {1, 0, 0, 1};
   Matrix<int> matrix(2, 2, data, 4);
   EXPECT_EQ(countIslands(matrix), 2);
 }
 
 TEST(TestAlgorithmLib, CountIslands1X1) {
-  int data1[] = { 1 };
+  int data1[] = {1};
   Matrix<int> matrix1(1, 1, data1, 1);
   EXPECT_EQ(countIslands(matrix1), 1);
 
-  int data0[] = { 0 };
+  int data0[] = {0};
   Matrix<int> matrix0(1, 1, data0, 1);
   EXPECT_EQ(countIslands(matrix0), 0);
 }
@@ -459,8 +448,8 @@ TEST(TestAlgorithmLib, GenerateMaze) {
   EXPECT_NO_THROW(maze = generate_maze(1, 25, 5, 5));
   EXPECT_NO_THROW(maze = generate_maze(1, 64, 8, 8));
 
-   // print_maze_with_color(maze, 1, 64, 8, 8);
-   // print_maze(maze);
+  // print_maze_with_color(maze, 1, 64, 8, 8);
+  // print_maze(maze);
 }
 
 TEST(TestAlgorithmLib, MazeThrowEqualExitAndEntry) {
