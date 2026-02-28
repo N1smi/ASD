@@ -3,10 +3,11 @@
 #ifndef LIB_MONOM_MONOM_H_
 #define LIB_MONOM_MONOM_H_
 
-#include<iostream>
 #include <cmath>
+#include <iostream>
+#include <string>
 
-template<size_t N = 3>
+template <size_t N = 3>
 class Monom {
   double _coefficient;
   int _powers[N];
@@ -29,6 +30,10 @@ class Monom {
 
   bool operator==(const Monom& monom) const;
   bool operator!=(const Monom& monom) const;
+  bool operator>(const Monom& monom) const;
+  bool operator<(const Monom& monom) const;
+  bool operator>=(const Monom& monom) const;
+  bool operator<=(const Monom& monom) const;
 
   Monom operator+(const Monom& monom) const;
   Monom operator-(const Monom& monom) const;
@@ -51,6 +56,8 @@ class Monom {
   Monom& operator/=(double scalar);
 
   double calculate(const double values[N]) const;
+
+  static Monom<N> parseFromString(const std::string& str);
 
   friend std::ostream& operator<<(std::ostream& os, const Monom& monom) {
     if (monom._coefficient == 0) {
@@ -85,36 +92,35 @@ class Monom {
   }
 
   friend std::istream& operator>>(std::istream& is, Monom& monom) {
-    is >> monom._coefficient;
-    for (size_t i = 0; i < N; i++) {
-      is >> monom._powers[i];
-    }
+    std::string str;
+    is >> str;
+    monom = parseFromString(str);
     return is;
   }
 };
 
-template<size_t N>
+template <size_t N>
 Monom<N>::Monom(double coef) : _coefficient(coef) {
   for (size_t i = 0; i < N; i++) {
     _powers[i] = 0;
   }
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N>::Monom(double coef, const int powers[N]) : _coefficient(coef) {
   for (size_t i = 0; i < N; i++) {
     _powers[i] = powers[i];
   }
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N>::Monom(const Monom<N>& other) : _coefficient(other._coefficient) {
   for (size_t i = 0; i < N; i++) {
     _powers[i] = other._powers[i];
   }
 }
 
-template<size_t N>
+template <size_t N>
 bool Monom<N>::isConstant() const {
   for (size_t i = 0; i < N; i++) {
     if (_powers[i] != 0) {
@@ -124,7 +130,7 @@ bool Monom<N>::isConstant() const {
   return true;
 }
 
-template<size_t N>
+template <size_t N>
 bool Monom<N>::operator==(const Monom& monom) const {
   for (size_t i = 0; i < N; i++) {
     if (_powers[i] != monom._powers[i]) {
@@ -135,61 +141,93 @@ bool Monom<N>::operator==(const Monom& monom) const {
   return true;
 }
 
-template<size_t N>
+template <size_t N>
 bool Monom<N>::operator!=(const Monom& monom) const {
   return !(*this == monom);
 }
 
-template<size_t N>
+template <size_t N>
+bool Monom<N>::operator>(const Monom& monom) const {
+  for (size_t i = 0; i < N; i++) {
+    if (_powers[i] != monom._powers[i]) {
+      return _powers[i] > monom._powers[i];
+    }
+  }
+
+  return false;
+}
+
+template <size_t N>
+bool Monom<N>::operator<(const Monom& monom) const {
+  for (size_t i = 0; i < N; i++) {
+    if (_powers[i] != monom._powers[i]) {
+      return _powers[i] < monom._powers[i];
+    }
+  }
+
+  return false;
+}
+
+template <size_t N>
+bool Monom<N>::operator>=(const Monom& monom) const {
+  return *this > monom || *this == monom;
+}
+
+template <size_t N>
+bool Monom<N>::operator<=(const Monom& monom) const {
+  return *this < monom || *this == monom;
+}
+
+template <size_t N>
 Monom<N> Monom<N>::operator+(const Monom<N>& monom) const {
   Monom result = *this;
   result += monom;
   return result;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N> Monom<N>::operator-(const Monom<N>& monom) const {
   Monom result = *this;
   result -= monom;
   return result;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N> Monom<N>::operator*(const Monom<N>& monom) const {
   Monom result = *this;
   result *= monom;
   return result;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N> Monom<N>::operator/(const Monom<N>& monom) const {
   Monom result = *this;
   result /= monom;
   return result;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N> Monom<N>::operator*(double scalar) const {
   Monom result = *this;
   result *= scalar;
   return result;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N> Monom<N>::operator-() const {
   Monom result = *this;
   result._coefficient = -result._coefficient;
   return result;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N> Monom<N>::operator/(double scalar) const {
   Monom result = *this;
   result /= scalar;
   return result;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N>& Monom<N>::operator+=(const Monom<N>& monom) {
   if (*this != monom) {
     throw std::invalid_argument("Cannot add non-similar monoms!");
@@ -199,7 +237,7 @@ Monom<N>& Monom<N>::operator+=(const Monom<N>& monom) {
   return *this;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N>& Monom<N>::operator-=(const Monom<N>& monom) {
   if (*this != monom) {
     throw std::invalid_argument("Cannot sub non-similar monoms!");
@@ -209,7 +247,7 @@ Monom<N>& Monom<N>::operator-=(const Monom<N>& monom) {
   return *this;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N>& Monom<N>::operator*=(const Monom<N>& monom) {
   _coefficient *= monom._coefficient;
 
@@ -220,7 +258,7 @@ Monom<N>& Monom<N>::operator*=(const Monom<N>& monom) {
   return *this;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N>& Monom<N>::operator/=(const Monom<N>& monom) {
   if (monom._coefficient == 0) {
     throw std::invalid_argument("Division by zero!");
@@ -235,7 +273,7 @@ Monom<N>& Monom<N>::operator/=(const Monom<N>& monom) {
   return *this;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N>& Monom<N>::operator=(const Monom<N>& monom) {
   if (this != &monom) {
     _coefficient = monom._coefficient;
@@ -247,14 +285,14 @@ Monom<N>& Monom<N>::operator=(const Monom<N>& monom) {
   return *this;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N>& Monom<N>::operator*=(double scalar) {
   _coefficient *= scalar;
 
   return *this;
 }
 
-template<size_t N>
+template <size_t N>
 Monom<N>& Monom<N>::operator/=(double scalar) {
   if (scalar == 0) {
     throw std::invalid_argument("Division by zero!");
@@ -265,7 +303,7 @@ Monom<N>& Monom<N>::operator/=(double scalar) {
   return *this;
 }
 
-template<size_t N>
+template <size_t N>
 double Monom<N>::calculate(const double values[N]) const {
   double result = _coefficient;
   for (size_t i = 0; i < N; i++) {
@@ -273,6 +311,69 @@ double Monom<N>::calculate(const double values[N]) const {
   }
 
   return result;
+}
+
+template <size_t N>
+Monom<N> Monom<N>::parseFromString(const std::string& str) {
+  double coef = 1.0;
+  int powers[N] = {0};
+
+  size_t pos = 0;
+
+  if (str[pos] == '-') {
+    coef = -1.0;
+    pos++;
+  } else if (str[pos] == '+') {
+    pos++;
+  }
+
+  if (pos < str.length() && (isdigit(str[pos]) || str[pos] == '.')) {
+    size_t end;
+    double num = std::stod(str.substr(pos), &end);
+    coef *= num;
+    pos += end;
+  }
+
+  while (pos < str.length()) {
+    if (str[pos] != 'x') break;
+    pos++;
+
+    int varNum = 0;
+    while (pos < str.length() && isdigit(str[pos])) {
+      varNum = varNum * 10 + (str[pos] - '0');
+      pos++;
+    }
+
+    if (varNum < 1 || varNum > static_cast<size_t>(N)) {
+      throw std::invalid_argument("Variable index out of range!");
+    }
+
+    int power = 1;
+    if (pos < str.length() && str[pos] == '^') {
+      pos++;
+
+      if (pos < str.length() && str[pos] == '(') pos++;
+
+      int sign = 1;
+      if (pos < str.length() && str[pos] == '-') {
+        sign = -1;
+        pos++;
+      }
+
+      power = 0;
+      while (pos < str.length() && isdigit(str[pos])) {
+        power = power * 10 + (str[pos] - '0');
+        pos++;
+      }
+
+      power *= sign;
+
+      if (pos < str.length() && str[pos] == ')') pos++;
+    }
+    powers[varNum - 1] = power;
+  }
+
+  return Monom<N>(coef, powers);
 }
 
 #endif  // LIB_MONOM_MONOM_H_
