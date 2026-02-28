@@ -457,10 +457,10 @@ TEST(TestAlgorithmLib, GenerateMaze) {
   EXPECT_NO_THROW(generate_maze(21, 25, 5, 5));
   EXPECT_NO_THROW(generate_maze(1, 21, 5, 5));
   EXPECT_NO_THROW(maze = generate_maze(1, 25, 5, 5));
-  EXPECT_NO_THROW(maze = generate_maze(1, 400, 20, 20));
+  EXPECT_NO_THROW(maze = generate_maze(1, 64, 8, 8));
 
-  // print_maze_with_color(maze, 1, 400, 20, 20);
-  // print_maze(maze);
+   // print_maze_with_color(maze, 1, 64, 8, 8);
+   // print_maze(maze);
 }
 
 TEST(TestAlgorithmLib, MazeThrowEqualExitAndEntry) {

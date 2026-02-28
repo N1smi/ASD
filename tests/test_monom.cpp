@@ -1,7 +1,9 @@
 // Copyright 2026 Smirnov Nikita
 
 #include <gtest/gtest.h>
+
 #include <sstream>
+
 #include "../lib_monom/monom.h"
 
 TEST(TestMonomLib, CreateDefaultMonom) {
@@ -23,7 +25,7 @@ TEST(TestMonomLib, CreateScalarMonom) {
 }
 
 TEST(TestMonomLib, CreateMonomWithPowers) {
-  int powers[3] = { 1, 2, 3};
+  int powers[3] = {1, 2, 3};
   Monom<3> monom(10.0, powers);
 
   EXPECT_DOUBLE_EQ(monom.getCoefficient(), 10.0);
@@ -33,7 +35,7 @@ TEST(TestMonomLib, CreateMonomWithPowers) {
 }
 
 TEST(TestMonomLib, CopyMonom) {
-  int powers[3] = { 1, 2, 3 };
+  int powers[3] = {1, 2, 3};
   Monom<3> monom(10.0, powers);
 
   Monom<3> monom_copy(monom);
@@ -45,7 +47,7 @@ TEST(TestMonomLib, CopyMonom) {
 }
 
 TEST(TestMonomLib, StrictEqual) {
-  int powers[3] = { 1, 2, 3 };
+  int powers[3] = {1, 2, 3};
   Monom<3> monom1(10.0, powers);
 
   Monom<3> monom2(20.0, powers);
@@ -55,10 +57,10 @@ TEST(TestMonomLib, StrictEqual) {
 }
 
 TEST(TestMonomLib, StrictNotEqual) {
-  int powers1[3] = { 1, 2, 3 };
+  int powers1[3] = {1, 2, 3};
   Monom<3> monom1(10.0, powers1);
 
-  int powers2[3] = { -1, 0, 3 };
+  int powers2[3] = {-1, 0, 3};
   Monom<3> monom2(10.0, powers2);
 
   EXPECT_TRUE(monom1 != monom2);
@@ -66,7 +68,7 @@ TEST(TestMonomLib, StrictNotEqual) {
 }
 
 TEST(TestMonomLib, PlusEqual) {
-  int powers[3] = { 1, 2, 3 };
+  int powers[3] = {1, 2, 3};
   Monom<3> monom1(1.0, powers);
   Monom<3> monom2(10.0, powers);
 
@@ -77,9 +79,9 @@ TEST(TestMonomLib, PlusEqual) {
 }
 
 TEST(TestMonomLib, PlusEqualThrowWhenNonSimilar) {
-  int powers1[3] = { 1, 2, 3 };
+  int powers1[3] = {1, 2, 3};
   Monom<3> monom1(1.0, powers1);
-  int powers2[3] = { -1, 0, 3 };
+  int powers2[3] = {-1, 0, 3};
   Monom<3> monom2(10.0, powers2);
 
   EXPECT_THROW(monom1 += monom2, std::invalid_argument);
@@ -89,7 +91,7 @@ TEST(TestMonomLib, PlusEqualThrowWhenNonSimilar) {
 }
 
 TEST(TestMonomLib, MinusEqual) {
-  int powers[3] = { 1, 2, 3 };
+  int powers[3] = {1, 2, 3};
   Monom<3> monom1(5.0, powers);
   Monom<3> monom2(10.0, powers);
 
@@ -100,9 +102,9 @@ TEST(TestMonomLib, MinusEqual) {
 }
 
 TEST(TestMonomLib, MinusEqualThrowWhenNonSimilar) {
-  int powers1[3] = { 1, 2, 3 };
+  int powers1[3] = {1, 2, 3};
   Monom<3> monom1(22.0, powers1);
-  int powers2[3] = { -1, 0, 3 };
+  int powers2[3] = {-1, 0, 3};
   Monom<3> monom2(10.0, powers2);
 
   EXPECT_THROW(monom1 -= monom2, std::invalid_argument);
@@ -112,9 +114,9 @@ TEST(TestMonomLib, MinusEqualThrowWhenNonSimilar) {
 }
 
 TEST(TestMonomLib, MultEqual) {
-  int powers1[3] = { 1, 2, 3 };
+  int powers1[3] = {1, 2, 3};
   Monom<3> monom1(22.0, powers1);
-  int powers2[3] = { -1, 0, 3 };
+  int powers2[3] = {-1, 0, 3};
   Monom<3> monom2(10.0, powers2);
 
   monom1 *= monom2;
@@ -132,9 +134,9 @@ TEST(TestMonomLib, MultEqual) {
 }
 
 TEST(TestMonomLib, DivEqual) {
-  int powers1[3] = { 3, 2, 3 };
+  int powers1[3] = {3, 2, 3};
   Monom<3> monom1(22.0, powers1);
-  int powers2[3] = { 2, 3, 4 };
+  int powers2[3] = {2, 3, 4};
   Monom<3> monom2(2.0, powers2);
 
   monom1 /= monom2;
@@ -152,9 +154,9 @@ TEST(TestMonomLib, DivEqual) {
 }
 
 TEST(TestMonomLib, DivEqualThrowWhenDivByZero) {
-  int powers1[3] = { 3, 2, 3 };
+  int powers1[3] = {3, 2, 3};
   Monom<3> monom1(22.0, powers1);
-  int powers2[3] = { 2, 3, 4 };
+  int powers2[3] = {2, 3, 4};
   Monom<3> monom2(0.0, powers2);
 
   EXPECT_THROW(monom1 /= monom2, std::invalid_argument);
@@ -172,7 +174,7 @@ TEST(TestMonomLib, DivEqualThrowWhenDivByZero) {
 }
 
 TEST(TestMonomLib, Plus) {
-  int powers[3] = { 1, 2, 3 };
+  int powers[3] = {1, 2, 3};
   Monom<3> monom1(1.0, powers);
   Monom<3> monom2(10.0, powers);
 
@@ -184,8 +186,8 @@ TEST(TestMonomLib, Plus) {
 }
 
 TEST(TestMonomLib, PlusThrowsWhenNonSimilar) {
-  int powers1[3] = { 1, 2, 3 };
-  int powers2[3] = { 3, 2, 1 };
+  int powers1[3] = {1, 2, 3};
+  int powers2[3] = {3, 2, 1};
 
   Monom<3> monom1(1.0, powers1);
   Monom<3> monom2(10.0, powers2);
@@ -194,30 +196,30 @@ TEST(TestMonomLib, PlusThrowsWhenNonSimilar) {
 }
 
 TEST(TestMonomLib, Minus) {
-  int powers[3] = { 1, 2, 3 };
+  int powers[3] = {1, 2, 3};
   Monom<3> monom1(5.0, powers);
   Monom<3> monom2(10.0, powers);
 
   Monom<3> result = monom1 - monom2;
 
-  EXPECT_DOUBLE_EQ(result .getCoefficient(), -5.0);
+  EXPECT_DOUBLE_EQ(result.getCoefficient(), -5.0);
   EXPECT_DOUBLE_EQ(monom1.getCoefficient(), 5.0);
   EXPECT_DOUBLE_EQ(monom2.getCoefficient(), 10.0);
 }
 
 TEST(TestMonomLib, MinusThrowWhenNonSimilar) {
-  int powers1[3] = { 1, 2, 3 };
+  int powers1[3] = {1, 2, 3};
   Monom<3> monom1(22.0, powers1);
-  int powers2[3] = { -1, 0, 3 };
+  int powers2[3] = {-1, 0, 3};
   Monom<3> monom2(10.0, powers2);
 
   EXPECT_THROW(monom1 - monom2, std::invalid_argument);
 }
 
 TEST(TestMonomLib, Mult) {
-  int powers1[3] = { 1, 2, 3 };
+  int powers1[3] = {1, 2, 3};
   Monom<3> monom1(22.0, powers1);
-  int powers2[3] = { -1, 0, 3 };
+  int powers2[3] = {-1, 0, 3};
   Monom<3> monom2(10.0, powers2);
 
   Monom<3> result = monom1 * monom2;
@@ -240,9 +242,9 @@ TEST(TestMonomLib, Mult) {
 }
 
 TEST(TestMonomLib, Div) {
-  int powers1[3] = { 3, 2, 3 };
+  int powers1[3] = {3, 2, 3};
   Monom<3> monom1(22.0, powers1);
-  int powers2[3] = { 2, 3, 4 };
+  int powers2[3] = {2, 3, 4};
   Monom<3> monom2(2.0, powers2);
 
   Monom<3> result = monom1 / monom2;
@@ -265,16 +267,16 @@ TEST(TestMonomLib, Div) {
 }
 
 TEST(TestMonomLib, DivThrowWhenDivByZero) {
-  int powers1[3] = { 3, 2, 3 };
+  int powers1[3] = {3, 2, 3};
   Monom<3> monom1(22.0, powers1);
-  int powers2[3] = { 2, 3, 4 };
+  int powers2[3] = {2, 3, 4};
   Monom<3> monom2(0.0, powers2);
 
   EXPECT_THROW(monom1 / monom2, std::invalid_argument);
 }
 
 TEST(TestMonomLib, MultEqualScalar) {
-  int powers1[3] = { 1, 2, 3 };
+  int powers1[3] = {1, 2, 3};
   Monom<3> monom1(22.0, powers1);
 
   monom1 *= 2.0;
@@ -287,7 +289,7 @@ TEST(TestMonomLib, MultEqualScalar) {
 }
 
 TEST(TestMonomLib, DivEqualScalar) {
-  int powers1[3] = { 3, 2, 3 };
+  int powers1[3] = {3, 2, 3};
   Monom<3> monom1(22.0, powers1);
 
   monom1 /= 2.0;
@@ -300,7 +302,7 @@ TEST(TestMonomLib, DivEqualScalar) {
 }
 
 TEST(TestMonomLib, DivEqualScalarThrowWhenDivByZero) {
-  int powers1[3] = { 3, 2, 3 };
+  int powers1[3] = {3, 2, 3};
   Monom<3> monom1(22.0, powers1);
 
   EXPECT_THROW(monom1 /= 0.0, std::invalid_argument);
@@ -313,7 +315,7 @@ TEST(TestMonomLib, DivEqualScalarThrowWhenDivByZero) {
 }
 
 TEST(TestMonomLib, MultScalar) {
-  int powers1[3] = { 1, 2, 3 };
+  int powers1[3] = {1, 2, 3};
   Monom<3> monom1(22.0, powers1);
 
   Monom<3> result = monom1 * 2.0;
@@ -327,7 +329,7 @@ TEST(TestMonomLib, MultScalar) {
 }
 
 TEST(TestMonomLib, DivScalar) {
-  int powers1[3] = { 3, 2, 3 };
+  int powers1[3] = {3, 2, 3};
   Monom<3> monom1(22.0, powers1);
 
   Monom<3> result = monom1 / 2.0;
@@ -341,7 +343,7 @@ TEST(TestMonomLib, DivScalar) {
 }
 
 TEST(TestMonomLib, DivScalarThrowWhenDivByZero) {
-  int powers1[3] = { 3, 2, 3 };
+  int powers1[3] = {3, 2, 3};
   Monom<3> monom1(22.0, powers1);
 
   EXPECT_THROW(monom1 / 0.0, std::invalid_argument);
@@ -354,7 +356,7 @@ TEST(TestMonomLib, DivScalarThrowWhenDivByZero) {
 }
 
 TEST(TestMonomLib, UnaryMinus) {
-  int powers1[3] = { 3, 2, 3 };
+  int powers1[3] = {3, 2, 3};
   Monom<3> monom1(22.0, powers1);
 
   Monom<3> result = -monom1;
@@ -372,7 +374,7 @@ TEST(TestMonomLib, UnaryMinus) {
 }
 
 TEST(TestMonomLib, AssignmentOperator) {
-  int powers[3] = { 1, 2, 3 };
+  int powers[3] = {1, 2, 3};
   Monom<3> monom1(22.0, powers);
   Monom<3> monom2;
 
@@ -387,7 +389,7 @@ TEST(TestMonomLib, AssignmentOperator) {
 }
 
 TEST(TestMonomLib, AssignmentSelfAssignment) {
-  int powers[3] = { 1, 2, 3 };
+  int powers[3] = {1, 2, 3};
   Monom<3> monom(22.0, powers);
 
   monom = monom;
@@ -399,10 +401,10 @@ TEST(TestMonomLib, AssignmentSelfAssignment) {
 }
 
 TEST(TestMonomLib, CalculateMonom) {
-  int powers[3] = { 1, 2, 3 };
+  int powers[3] = {1, 2, 3};
   Monom<3> monom(22.0, powers);
 
-  double values[3] = { 2.0, 10.1, 3.0 };
+  double values[3] = {2.0, 10.1, 3.0};
   double result = monom.calculate(values);
 
   EXPECT_NEAR(result, 121187.88, 1e-6);
@@ -422,9 +424,8 @@ TEST(TestMonomLib, ConstantMonomOutput) {
   EXPECT_EQ(ss.str(), "5");
 }
 
-
 TEST(TestMonomLib, CoeffOneOutput) {
-  int p[3] = { 1, 0, 0 };
+  int p[3] = {1, 0, 0};
   Monom<3> m(1.0, p);
   std::stringstream ss;
   ss << m;
@@ -432,7 +433,7 @@ TEST(TestMonomLib, CoeffOneOutput) {
 }
 
 TEST(TestMonomLib, CoeffMinusOneOuput) {
-  int p[3] = { 1, 0, 0 };
+  int p[3] = {1, 0, 0};
   Monom<3> m(-1.0, p);
   std::stringstream ss;
   ss << m;
@@ -440,9 +441,80 @@ TEST(TestMonomLib, CoeffMinusOneOuput) {
 }
 
 TEST(TestMonomLib, VariablesOutput) {
-  int p[3] = { 1, -2, 3 };
+  int p[3] = {1, -2, 3};
   Monom<3> m(2.5, p);
   std::stringstream ss;
   ss << m;
   EXPECT_EQ(ss.str(), "2.5x1x2^(-2)x3^3");
+}
+
+TEST(TestMonomLib, ComparisonOperators) {
+  int p1[3] = {2, 1, 0};
+  int p2[3] = {1, 2, 3};
+  int p3[3] = {2, 1, 0};
+
+  Monom<3> m1(1.0, p1);
+  Monom<3> m2(1.0, p2);
+  Monom<3> m3(1.0, p3);
+
+  EXPECT_TRUE(m1 > m2);
+  EXPECT_FALSE(m2 > m1);
+  EXPECT_FALSE(m1 > m3);
+
+  EXPECT_TRUE(m2 < m1);
+  EXPECT_FALSE(m1 < m2);
+  EXPECT_FALSE(m1 < m3);
+
+  EXPECT_TRUE(m1 >= m2);
+  EXPECT_TRUE(m1 >= m3);
+  EXPECT_FALSE(m2 >= m1);
+
+  EXPECT_TRUE(m2 <= m1);
+  EXPECT_TRUE(m3 <= m1);
+  EXPECT_FALSE(m1 <= m2);
+}
+
+TEST(TestMonomLib, parseMonomPositiveCoefficient) {
+  auto m = Monom<3>::parseFromString("2.5x1x2^2x3^3");
+  EXPECT_DOUBLE_EQ(m.getCoefficient(), 2.5);
+  EXPECT_EQ(m.getPower(0), 1);
+  EXPECT_EQ(m.getPower(1), 2);
+  EXPECT_EQ(m.getPower(2), 3);
+}
+
+TEST(TestMonomLib, parseMonomNegativeCoefficient) {
+  auto m = Monom<3>::parseFromString("-3.5x1^2x2");
+  EXPECT_DOUBLE_EQ(m.getCoefficient(), -3.5);
+  EXPECT_EQ(m.getPower(0), 2);
+  EXPECT_EQ(m.getPower(1), 1);
+  EXPECT_EQ(m.getPower(2), 0);
+}
+
+TEST(TestMonomLib, parseMonomNoCoefficient) {
+  auto m = Monom<3>::parseFromString("x1x2^-2x3^3");
+  EXPECT_DOUBLE_EQ(m.getCoefficient(), 1.0);
+  EXPECT_EQ(m.getPower(0), 1);
+  EXPECT_EQ(m.getPower(1), -2);
+  EXPECT_EQ(m.getPower(2), 3);
+}
+
+TEST(TestMonomLib, parseMonomWithParentheses) {
+  auto m = Monom<3>::parseFromString("2x1^(-2)x2^3");
+  EXPECT_DOUBLE_EQ(m.getCoefficient(), 2);
+  EXPECT_EQ(m.getPower(0), -2);
+  EXPECT_EQ(m.getPower(1), 3);
+  EXPECT_EQ(m.getPower(2), 0);
+}
+
+TEST(TestMonomLib, parseMonomOnlyConstant) {
+  auto m = Monom<3>::parseFromString("5.5");
+  EXPECT_DOUBLE_EQ(m.getCoefficient(), 5.5);
+  EXPECT_EQ(m.getPower(0), 0);
+  EXPECT_EQ(m.getPower(1), 0);
+  EXPECT_EQ(m.getPower(2), 0);
+}
+
+TEST(TestMonomLib, parseMonomThrowWhenInvalidVarNum) {
+  EXPECT_ANY_THROW(auto m = Monom<3>::parseFromString("x1x2^2x3^3x4^5"));
+  EXPECT_ANY_THROW(auto m = Monom<3>::parseFromString("x1x2^2x3^3x0^5"));
 }
