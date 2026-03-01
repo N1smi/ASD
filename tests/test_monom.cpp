@@ -518,3 +518,34 @@ TEST(TestMonomLib, parseMonomThrowWhenInvalidVarNum) {
   EXPECT_ANY_THROW(auto m = Monom<3>::parseFromString("x1x2^2x3^3x4^5"));
   EXPECT_ANY_THROW(auto m = Monom<3>::parseFromString("x1x2^2x3^3x0^5"));
 }
+
+TEST(TestMonomLib, parseMonomInvalidCharacters) {
+  EXPECT_THROW(Monom<3>::parseFromString("2.5x1x2^2x3^3@"),
+               std::invalid_argument);
+
+  EXPECT_THROW(Monom<3>::parseFromString("2.5x1y2^2x3^3"),
+               std::invalid_argument);
+
+  EXPECT_THROW(Monom<3>::parseFromString("2..5x1x2^2x3^3"),
+               std::invalid_argument);
+
+  EXPECT_THROW(Monom<3>::parseFromString("2.5.x1x2^2x3^3"),
+               std::invalid_argument);
+}
+
+TEST(TestMonomLib, InvalidPowerFormat) {
+  EXPECT_THROW(Monom<3>::parseFromString("2.5x1^"), std::invalid_argument);
+
+  EXPECT_THROW(Monom<3>::parseFromString("2.5x1^a"), std::invalid_argument);
+
+  EXPECT_THROW(Monom<3>::parseFromString("2.5x1^(-2"), std::invalid_argument);
+
+  EXPECT_THROW(Monom<3>::parseFromString("2.5x1^-2)"), std::invalid_argument);
+}
+
+TEST(TestMonomLib, parseMonomMissingVariableNumber) {
+  EXPECT_THROW(Monom<3>::parseFromString("2.5xx2^2x3^3"),
+               std::invalid_argument);
+
+  EXPECT_THROW(Monom<3>::parseFromString("2.5x1x"), std::invalid_argument);
+}
