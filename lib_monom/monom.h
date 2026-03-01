@@ -316,14 +316,15 @@ double Monom<N>::calculate(const double values[N]) const {
 template <size_t N>
 Monom<N> Monom<N>::parseFromString(const std::string& str) {
   double coef = 1.0;
-  int powers[N] = {0};
+  int powers[N] = { 0 };
 
   size_t pos = 0;
 
   if (str[pos] == '-') {
     coef = -1.0;
     pos++;
-  } else if (str[pos] == '+') {
+  }
+  else if (str[pos] == '+') {
     pos++;
   }
 
@@ -335,13 +336,21 @@ Monom<N> Monom<N>::parseFromString(const std::string& str) {
   }
 
   while (pos < str.length()) {
-    if (str[pos] != 'x') break;
+    if (str[pos] != 'x') {
+      throw std::invalid_argument("Expected 'x' at position " + std::to_string(pos));
+    }
     pos++;
 
     int varNum = 0;
+    bool hasDigits = false;
     while (pos < str.length() && isdigit(str[pos])) {
       varNum = varNum * 10 + (str[pos] - '0');
       pos++;
+      hasDigits = true;
+    }
+
+    if (!hasDigits) {
+      throw std::invalid_argument("Missing variable number after 'x'");
     }
 
     if (varNum < 1 || varNum > static_cast<size_t>(N)) {
@@ -352,7 +361,11 @@ Monom<N> Monom<N>::parseFromString(const std::string& str) {
     if (pos < str.length() && str[pos] == '^') {
       pos++;
 
-      if (pos < str.length() && str[pos] == '(') pos++;
+      bool hasParenthesis = false;
+      if (pos < str.length() && str[pos] == '(') {
+        hasParenthesis = true;
+        pos++;
+      }
 
       int sign = 1;
       if (pos < str.length() && str[pos] == '-') {
@@ -360,16 +373,32 @@ Monom<N> Monom<N>::parseFromString(const std::string& str) {
         pos++;
       }
 
+      if (pos >= str.length() || !isdigit(str[pos])) {
+        throw std::invalid_argument("Expected digits after '^'");
+      }
+
       power = 0;
+      bool hasPowerDigits = false;
       while (pos < str.length() && isdigit(str[pos])) {
         power = power * 10 + (str[pos] - '0');
         pos++;
+        hasPowerDigits = true;
+      }
+
+      if (!hasPowerDigits) {
+        throw std::invalid_argument("Expected digits after '^'");
       }
 
       power *= sign;
 
-      if (pos < str.length() && str[pos] == ')') pos++;
+      if (hasParenthesis) {
+        if (pos >= str.length() || str[pos] != ')') {
+          throw std::invalid_argument("Expected ')' after power");
+        }
+        pos++;
+      }
     }
+
     powers[varNum - 1] = power;
   }
 

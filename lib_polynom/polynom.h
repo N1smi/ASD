@@ -19,8 +19,8 @@ class Polynom {
   Polynom(const Polynom& other);
   ~Polynom() = default;
 
-  bool operator==(const Polynom& monom) const;
-  bool operator!=(const Polynom& monom) const;
+  bool operator==(const Polynom& other) const;
+  bool operator!=(const Polynom& other) const;
 
   Polynom operator+(const Polynom& other) const;
   Polynom operator-(const Polynom& other) const;
@@ -70,7 +70,19 @@ class Polynom {
     return os;
   }
 
-  friend std::istream& operator>>(std::istream& is, Polynom& polynom);
+  friend std::istream& operator>>(std::istream& is, Polynom& polynom) {
+    std::string str;
+    std::getline(is, str);
+
+    try {
+      polynom = Polynom<N>(str);
+    }
+    catch (const std::exception& e) {
+      is.setstate(std::ios::failbit);
+    }
+
+    return is;
+  }
 };
 
 template <size_t N>
@@ -142,6 +154,10 @@ Polynom<N>::Polynom(const std::string& str) {
       pos++;
     }
 
+    if (bracketLevel != 0) {
+      throw std::invalid_argument("Unbalanced parentheses in monom!");
+    }
+
     std::string monomStr = s.substr(signPos, pos - signPos);
 
     try {
@@ -153,13 +169,167 @@ Polynom<N>::Polynom(const std::string& str) {
   }
 }
 
-// template <size_t N>
-// Polynom<N>& Polynom<N>::operator+=(const Polynom<N>& other) {
-//   for (const auto& monom : other._monoms) {
-//     addMonom(monom);
-//   }
-//
-//   return *this;
-// }
+template <size_t N>
+bool Polynom<N>::operator==(const Polynom<N>& other) const {
+  auto it1 = _monoms.begin();
+  auto it2 = other._monoms.begin();
+
+  while (it1 != _monoms.end() && it2 != other._monoms.end()) {
+    if (*it1 != *it2 || (*it1).getCoefficient() != (*it2).getCoefficient()) {
+      return false;
+    }
+
+    ++it1;
+    ++it2;
+  }
+
+  return (it1 == _monoms.end() && it2 == other._monoms.end());
+}
+
+template <size_t N>
+bool Polynom<N>::operator!=(const Polynom<N>& other) const {
+  return !(*this == other);
+}
+
+template <size_t N>
+Polynom<N> Polynom<N>::operator+(const Polynom<N>& other) const {
+  Polynom<N> result = *this;
+  result += other;
+  return result;
+}
+
+template <size_t N>
+Polynom<N> Polynom<N>::operator-(const Polynom<N>& other) const {
+  Polynom<N> result = *this;
+  result -= other;
+  return result;
+}
+
+template <size_t N>
+Polynom<N> Polynom<N>::operator*(const Polynom<N>& other) const {
+  Polynom<N> result = *this;
+  result *= other;
+  return result;
+}
+
+template <size_t N>
+Polynom<N> Polynom<N>::operator+(const Monom<N>& other) const {
+  Polynom<N> result = *this;
+  result += other;
+  return result;
+}
+
+template <size_t N>
+Polynom<N> Polynom<N>::operator-(const Monom<N>& other) const {
+  Polynom<N> result = *this;
+  result -= other;
+  return result;
+}
+
+template <size_t N>
+Polynom<N> Polynom<N>::operator*(const Monom<N>& other) const {
+  Polynom<N> result = *this;
+  result *= other;
+  return result;
+}
+
+template <size_t N>
+Polynom<N> Polynom<N>::operator*(double scalar) const {
+  Polynom<N> result = *this;
+  result *= scalar;
+  return result;
+}
+
+template <size_t N>
+Polynom<N>& Polynom<N>::operator+=(const Polynom<N>& other) {
+  for (const auto& monom : other._monoms) {
+    *this += monom;
+  }
+
+  return *this;
+}
+
+template <size_t N>
+Polynom<N>& Polynom<N>::operator-=(const Polynom<N>& other) {
+  for (const auto& monom : other._monoms) {
+    *this -= monom;
+  }
+
+  return *this;
+}
+
+template <size_t N>
+Polynom<N>& Polynom<N>::operator*=(const Polynom<N>& other) {
+  Polynom<N> result;
+
+  for (const auto& monom : other._monoms) {
+    result += (*this * monom);
+  }
+
+  *this = result;
+  return *this;
+}
+
+template <size_t N>
+Polynom<N>& Polynom<N>::operator-=(const Monom<N>& other) {
+  return *this += (-other);
+}
+
+template <size_t N>
+Polynom<N>& Polynom<N>::operator*=(const Monom<N>& other) {
+  if (other.getCoefficient() == 0) {
+    _monoms.clear();
+    return *this;
+  }
+
+  for (auto& monom : _monoms) {
+    monom *= other;
+  }
+
+  return *this;
+}
+
+template <size_t N>
+Polynom<N>& Polynom<N>::operator=(const Polynom<N>& other) {
+  if (this != &other) {
+    _monoms = other._monoms;
+  }
+  return *this;
+}
+
+template <size_t N>
+Polynom<N>& Polynom<N>::operator*=(double scalar) {
+  if (scalar == 0.0) {
+    _monoms.clear();
+    return *this;
+  }
+
+  for (auto& monom : _monoms) {
+    monom *= scalar;
+  }
+
+  return *this;
+}
+
+template <size_t N>
+Polynom<N> Polynom<N>::operator-() const {
+  Polynom<N> result = *this;
+
+  for (auto& monom : result._monoms) {
+    monom = -monom;
+  }
+
+  return result;
+}
+
+template <size_t N>
+double Polynom<N>::calculate(const double values[N]) const {
+  double result = 0.0;
+  for (const auto& monom : _monoms) {
+    result += monom.calculate(values);
+  }
+
+  return result;
+}
 
 #endif  // LIB_POLYNOM_POLYNOM_H_
