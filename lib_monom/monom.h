@@ -316,15 +316,14 @@ double Monom<N>::calculate(const double values[N]) const {
 template <size_t N>
 Monom<N> Monom<N>::parseFromString(const std::string& str) {
   double coef = 1.0;
-  int powers[N] = { 0 };
+  int powers[N] = {0};
 
   size_t pos = 0;
 
   if (str[pos] == '-') {
     coef = -1.0;
     pos++;
-  }
-  else if (str[pos] == '+') {
+  } else if (str[pos] == '+') {
     pos++;
   }
 
@@ -337,7 +336,8 @@ Monom<N> Monom<N>::parseFromString(const std::string& str) {
 
   while (pos < str.length()) {
     if (str[pos] != 'x') {
-      throw std::invalid_argument("Expected 'x' at position " + std::to_string(pos));
+      throw std::invalid_argument("Expected 'x' at position " +
+                                  std::to_string(pos));
     }
     pos++;
 
@@ -378,15 +378,9 @@ Monom<N> Monom<N>::parseFromString(const std::string& str) {
       }
 
       power = 0;
-      bool hasPowerDigits = false;
       while (pos < str.length() && isdigit(str[pos])) {
         power = power * 10 + (str[pos] - '0');
         pos++;
-        hasPowerDigits = true;
-      }
-
-      if (!hasPowerDigits) {
-        throw std::invalid_argument("Expected digits after '^'");
       }
 
       power *= sign;
