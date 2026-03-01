@@ -1,0 +1,2 @@
+create_project_lib(SortedTableOnArr)
+add_depend(SortedTableOnArr UnsortedTableOnArr lib_unsorted_table_on_array)
