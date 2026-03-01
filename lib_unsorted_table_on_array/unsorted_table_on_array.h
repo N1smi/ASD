@@ -3,7 +3,6 @@
 #ifndef LIB_UNSORTED_TABLE_ON_ARRAY_UNSORTED_TABLE_ON_ARRAY_H_
 #define LIB_UNSORTED_TABLE_ON_ARRAY_UNSORTED_TABLE_ON_ARRAY_H_
 
-#include <stdexcept>
 #include <utility>
 
 #include "../lib_table/table.h"
