@@ -349,7 +349,7 @@ TEST(TestPolynomLib, Calculate) {
 }
 
 TEST(TestPolynomLib, PlusEqualPolynom) {
-  Polynom<3> p1("2x1x2 + 3x3");
+  Polynom<3> p1("2x1x2 + 3x3+3x1^2");
   Polynom<3> p2("4x1x2 - 2x3 + 5");
 
   p1 += p2;
@@ -357,7 +357,7 @@ TEST(TestPolynomLib, PlusEqualPolynom) {
   std::stringstream ss;
   ss << p1;
 
-  EXPECT_EQ(ss.str(), "6x1x2+x3+5");
+  EXPECT_EQ(ss.str(), "3x1^2+6x1x2+x3+5");
 }
 
 TEST(TestPolynomLib, MinusEqualPolynom) {

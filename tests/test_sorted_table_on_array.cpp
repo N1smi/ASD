@@ -37,6 +37,8 @@ TEST(TestSortedTableOnArrayLib, InsertElements) {
   auto* val3 = table.find(4);
   EXPECT_NE(val3, nullptr);
   EXPECT_EQ(*val3, "Four");
+
+  EXPECT_TRUE(val1 < val2 && val2 < val3);
 }
 
 TEST(TestSortedTableOnArrayLib, InsertExistentKey) {
