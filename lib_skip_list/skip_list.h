@@ -58,7 +58,8 @@ class SkipList {
 
 template <class TKey, class TValue>
 SkipList<TKey, TValue>::SkipList(size_t max_levels)
-    : _MAX_LEVELS(max_levels), _current_level(0), _rng(std::random_device{}()) {
+    : _MAX_LEVELS(max_levels), _current_level(0),
+  _rng(std::random_device {}()) {
   _head = new Node(std::make_pair(TKey(), TValue()), max_levels);
 }
 
