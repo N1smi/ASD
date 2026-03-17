@@ -41,6 +41,7 @@ add_subdirectory(lib_skip_list)
 add_subdirectory(lib_polynom)
 add_subdirectory(lib_sorted_table_on_array)
 add_subdirectory(lib_unsorted_table_on_list)
+add_subdirectory(lib_bstree)
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
