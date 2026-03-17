@@ -1,8 +1,10 @@
-// Copyright 2026 Smirnov Nikita 
+// Copyright 2026 Smirnov Nikita
 
 #include <gtest/gtest.h>
 
 #include <sstream>
+#include <iostream>
+#include <string>
 
 #include "../lib_bstree/bstree.h"
 
@@ -131,7 +133,7 @@ TEST(TestBSTreeLib, EraseNodeWithOnlyLeftChild) {
   tree.insert(5, "five");
   tree.insert(3, "three");
 
-  tree.erase(5); 
+  tree.erase(5);
 
   EXPECT_EQ(tree.find(5), nullptr);
   EXPECT_NE(tree.find(3), nullptr);
@@ -169,7 +171,6 @@ TEST(TestBSTreeLib, EraseInEmptyBSTree) {
   BSTree<int, std::string> tree;
 
   EXPECT_THROW(tree.erase(10), std::invalid_argument);
-
 }
 
 TEST(TestBSTreeLib, EraseWithNonExistentKey) {
