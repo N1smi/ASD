@@ -125,8 +125,8 @@ void BSTree<TKey, TValue>::erase(const TKey& key) {
       throw std::invalid_argument("The element with this key does not exist!");
     }
 
-    targetPtr = (parent->_left && parent->_left->_data.first == key) ? &parent->_left
-      : &parent->_right;
+    targetPtr = (parent->_left && parent->_left->_data.first == key)
+      ? &parent->_left : &parent->_right;
   }
 
   Node* toDelete = *targetPtr;
