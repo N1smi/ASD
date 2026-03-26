@@ -145,7 +145,7 @@ void BSTree<TKey, TValue>::erase(const TKey& key) {
 
     erase(sKey);
 
-    const_cast<TKey&>(toDelete->_data.first) = sKey;
+    toDelete->_data.first = sKey;
     toDelete->_data.second = sValue;
   }
 }

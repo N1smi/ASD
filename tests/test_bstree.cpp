@@ -41,6 +41,8 @@ TEST(TestBSTreeLib, InsertLeftRight) {
   tree.insert(3, "three");
   tree.insert(20, "twenty");
 
+  // tree.print();
+
   std::stringstream ss;
   std::streambuf* old_cout = std::cout.rdbuf(ss.rdbuf());
 
