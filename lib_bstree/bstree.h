@@ -4,6 +4,7 @@
 #define LIB_BSTREE_BSTREE_H_
 
 #include<utility>
+#include <stack>
 #include<stdexcept>
 #include<iostream>
 
@@ -22,12 +23,91 @@ class BSTree {
  private:
   Node* _root;
 
+  template <typename ValueType>
+  class IteratorBase {
+   public:
+    using NodeType = typename std::conditional<
+      std::is_const<ValueType>::value,
+      const Node,
+      Node
+    >::type;
+
+    using Reference = typename std::conditional<
+      std::is_const<ValueType>::value,
+      const std::pair<TKey, TValue>&,
+      std::pair<TKey, TValue>&
+    >::type;
+
+    using Pointer = typename std::conditional<
+      std::is_const<ValueType>::value,
+      const std::pair<TKey, TValue>*,
+      std::pair<TKey, TValue>*
+    >::type;
+
+   private:
+    std::stack<NodeType*> _stack;
+
+    void push_left(NodeType* node) {
+      while (node) {
+        _stack.push(node);
+        node = node->_left;
+      }
+    }
+
+   public:
+    explicit IteratorBase(NodeType* root) {
+      push_left(root);
+    }
+
+    IteratorBase() = default;
+
+    Reference operator*() const {
+      return _stack.top()->_data;
+    }
+
+    Pointer operator->() const {
+      return &(_stack.top()->_data);
+    }
+
+    IteratorBase& operator++() {
+      if (_stack.empty()) return *this;
+      NodeType* node = _stack.top();
+      _stack.pop();
+
+      if (node->_right) {
+        push_left(node->_right);
+      }
+
+      return *this;
+    }
+
+    bool operator==(const IteratorBase& other) const {
+      if (_stack.empty() || other._stack.empty()) {
+        return _stack.empty() == other._stack.empty();
+      }
+      return _stack.top() == other._stack.top();
+    }
+
+    bool operator!=(const IteratorBase& other) const {
+      return !(*this == other);
+    }
+  };
+
  public:
+  using iterator = IteratorBase<TValue>;
+  using const_iterator = IteratorBase<const TValue>;
+
   BSTree();
   BSTree(const BSTree&) = delete;
   BSTree& operator=(const BSTree&) = delete;
 
   ~BSTree();
+
+  iterator begin() noexcept { return iterator(_root); }
+  iterator end() noexcept { return iterator(); }
+  const_iterator begin() const noexcept { return const_iterator(_root); }
+
+  const_iterator end() const noexcept { return const_iterator(); }
 
   bool is_empty() const noexcept { return _root == nullptr; }
 
