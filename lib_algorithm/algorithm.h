@@ -4,12 +4,16 @@
 #define LIB_ALGORITHM_ALGORITHM_H_
 
 #include <iostream>
+#include <utility>
 #include<stdexcept>
 #include <string>
 #include "../lib_matrix/matrix.h"
 #include "../lib_tdynamic_stack/tdynamic_stack.h"
 #include "../lib_tlist/tlist.h"
 #include "../lib_dsu/dsu.h"
+#include "../lib_priority_queue/priority_queue.h"
+#include "../lib_tvector/tvector.h"
+
 
 int find_local_min(const Matrix<int>& matrix);
 
@@ -123,5 +127,25 @@ void print_maze(const Matrix<bool>& maze);
 void print_maze_with_color(const Matrix<bool>& maze,
   size_t entry, size_t exit,
   size_t lines, size_t columns);
+
+template <class T>
+void find_most_important(const TVector<std::pair<size_t, T>> data, size_t K) {
+  PriorityQueue<T> q;
+  for (size_t i = 0; i < data.size(); i++) {
+    q.push(data[i].first, data[i].second);
+  }
+
+  std::cout << K <<  " important: " << std::endl;
+
+  for (size_t i = 0; i < K; i++) {
+    try {
+      std::cout << q.top() << std::endl;
+      q.pop();
+    }
+    catch (const std::runtime_error& e) {
+      break;
+    }
+  }
+}
 
 #endif  // LIB_ALGORITHM_ALGORITHM_H_
