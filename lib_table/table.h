@@ -14,6 +14,11 @@ class Table : public ITable<TKey, TValue> {
   Table() : _rows() {}
   ~Table() override = default;
 
+  auto begin() { return _rows.begin(); }
+  auto end() { return _rows.end(); }
+  auto begin() const { return _rows.begin(); }
+  auto end() const { return _rows.end(); }
+
   std::ostream& print(std::ostream& os) const override;
 };
 
