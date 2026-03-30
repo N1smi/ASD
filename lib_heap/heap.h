@@ -25,6 +25,7 @@ class Heap {
   size_t get_right(size_t pos) { return 2 * pos + 2; }
   size_t get_left(size_t pos) { return 2 * pos + 1; }
 
+  const T& top() const;
   void insert(const T& val);
   T pop();
 
@@ -36,6 +37,12 @@ class Heap {
   void siftup(size_t pos);
   void siftdown(size_t pos);
 };
+
+template <class T>
+const T& Heap<T>::top() const {
+  if (_data.is_empty()) throw std::runtime_error("Heap is empty!");
+  return _data[0];
+}
 
 template <class T>
 void Heap<T>::insert(const T& val) {
