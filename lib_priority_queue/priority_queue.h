@@ -36,13 +36,13 @@ class PriorityQueue {
   size_t _cur_id;
 
  public:
-   PriorityQueue() : _cur_id(0), _data() {}
-   ~PriorityQueue() = default;
+  PriorityQueue() : _cur_id(0), _data() {}
+  ~PriorityQueue() = default;
 
-   inline const T& top() { return _data.top()._value; }
-   void push(size_t priority, const T& val);
+  inline const T& top() { return _data.top()._value; }
+  void push(size_t priority, const T& val);
 
-   void pop();
+  void pop();
 };
 
 template <class T>
