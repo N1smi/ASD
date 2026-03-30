@@ -482,3 +482,20 @@ TEST(TestAlgorithmLib, MazeThrowExitInsideMaze) {
 
   EXPECT_ANY_THROW(maze = generate_maze(1, 14, 5, 5));
 }
+
+TEST(TestAlgorithmLib, FindMostImportant) {
+  TVector <std::pair<size_t, std::string>> data;
+
+  data.push_back({ 10, "Urgent Task" });
+  data.push_back({ 1, "Background Process" });
+  data.push_back({ 50, "Critical Bug" });
+  data.push_back({ 5, "Minor Fix" });
+  data.push_back({ 10, "Second Urgent Task" });
+  data.push_back({ 10, "Third Urgent Task" });
+  data.push_back({ 10, "Four Urgent Task" });
+
+
+  size_t K = 5;
+
+  find_most_important(data, K);
+}
