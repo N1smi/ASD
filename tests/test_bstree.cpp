@@ -212,3 +212,29 @@ TEST(TestBSTreeLib, EraseSuccessorWithLeftChild) {
   EXPECT_EQ(*tree.find(8), "successor");
   EXPECT_NE(tree.find(7), nullptr);
 }
+
+TEST(TestBSTreeLib, IteratorTest) {
+  BSTree<int, std::string> tree;
+
+  tree.insert(5, "five");
+  tree.insert(3, "three");
+  tree.insert(8, "eight");
+  tree.insert(1, "one");
+  tree.insert(4, "four");
+  tree.insert(9, "nine");
+
+  std::vector<int> expected_keys = { 1, 3, 4, 5, 8, 9 };
+  std::vector<std::string> expected_values = { "one", "three", "four", "five", "eight", "nine" };
+
+  auto it = tree.begin();
+  for (size_t i = 0; i < expected_keys.size(); ++i) {
+    ASSERT_NE(it, tree.end());
+
+    EXPECT_EQ(it->first, expected_keys[i]);
+    EXPECT_EQ(it->second, expected_values[i]);
+
+    ++it;
+  }
+
+  EXPECT_EQ(it, tree.end());
+}
