@@ -2,6 +2,8 @@
 
 #include <gtest/gtest.h>
 
+#include <string>
+#include <vector>
 #include "../lib_sorted_table_on_bstree/sorted_table_on_bstree.h"
 
 TEST(TestSortedTableOnBSTreeLib, CreateDefaultTable) {

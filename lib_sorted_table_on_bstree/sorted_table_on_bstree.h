@@ -24,7 +24,8 @@ class SortedTableOnBSTree
 };
 
 template <class TKey, class TValue>
-bool SortedTableOnBSTree<TKey, TValue>::insert(const TKey& key, const TValue& value) {
+bool SortedTableOnBSTree<TKey, TValue>::insert(const TKey& key,
+  const TValue& value) {
   if (find(key) != nullptr) {
     return false;
   }

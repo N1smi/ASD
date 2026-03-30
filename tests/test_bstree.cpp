@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "../lib_bstree/bstree.h"
 
@@ -224,7 +225,8 @@ TEST(TestBSTreeLib, IteratorTest) {
   tree.insert(9, "nine");
 
   std::vector<int> expected_keys = { 1, 3, 4, 5, 8, 9 };
-  std::vector<std::string> expected_values = { "one", "three", "four", "five", "eight", "nine" };
+  std::vector<std::string> expected_values = { "one", "three",
+    "four", "five", "eight", "nine" };
 
   auto it = tree.begin();
   for (size_t i = 0; i < expected_keys.size(); ++i) {
