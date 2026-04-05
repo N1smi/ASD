@@ -22,11 +22,89 @@ class Tree {
 
   Node* _root;
 
+  template <typename ValueType>
+  class IteratorBase {
+   public:
+    using NodeType = typename std::conditional<
+      std::is_const<ValueType>::value,
+      const Node,
+      Node
+    >::type;
+
+    using Reference = typename std::conditional<
+      std::is_const<ValueType>::value,
+      const std::pair<TKey, TValue>&,
+      std::pair<TKey, TValue>&
+    >::type;
+
+    using Pointer = typename std::conditional<
+      std::is_const<ValueType>::value,
+      const std::pair<TKey, TValue>*,
+      std::pair<TKey, TValue>*
+    >::type;
+
+   private:
+    TListQueue<NodeType*> _queue;
+    NodeType* _current;
+
+   public:
+    explicit IteratorBase(NodeType* root) : _current(root) {
+      if (_current) _queue.push(_current);
+    }
+
+    IteratorBase() = default;
+
+    Reference operator*() const {
+      return _current->_data;
+    }
+
+    Pointer operator->() const {
+      return &(_current->_data);
+    }
+
+    IteratorBase& operator++() {
+      if (_queue.is_empty()) {
+        _current = nullptr;
+        return *this;
+      }
+
+      Node* old_node = _queue.head();
+      _queue.pop();
+
+      if (old_node->_left) _queue.push(old_node->_left);
+      if (old_node->_right) _queue.push(old_node->_right);
+
+      if (_queue.is_empty()) {
+        _current = nullptr;
+      } else {
+        _current = _queue.head();
+      }
+
+      return *this;
+    }
+
+    bool operator==(const IteratorBase& other) const {
+      return _current == other._current;
+    }
+
+    bool operator!=(const IteratorBase& other) const {
+      return !(*this == other);
+    }
+  };
+
  public:
+  using iterator = IteratorBase<TValue>;
+  using const_iterator = IteratorBase<const TValue>;
+
   Tree() : _root(nullptr) {}
   Tree(const Tree&) = delete;
   Tree& operator=(const Tree&) = delete;
   ~Tree() { clear(); }
+
+  iterator begin() noexcept { return iterator(_root); }
+  iterator end() noexcept { return iterator(); }
+  const_iterator begin() const noexcept { return const_iterator(_root); }
+  const_iterator end() const noexcept { return const_iterator(); }
 
   bool is_empty() const noexcept { return !_root; }
 
