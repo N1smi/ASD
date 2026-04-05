@@ -24,7 +24,8 @@ class UnsortedTableOnTree
 };
 
 template <class TKey, class TValue>
-bool UnsortedTableOnTree<TKey, TValue>::insert(const TKey& key, const TValue& value) {
+bool UnsortedTableOnTree<TKey, TValue>::insert(const TKey& key,
+  const TValue& value) {
   if (find(key) != nullptr) {
     return false;
   }
