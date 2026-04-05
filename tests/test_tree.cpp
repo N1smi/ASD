@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <string>
+#include <vector>
 #include "../lib_tree/tree.h"
 
 TEST(TestTreeLib, CreateDefaultTree) {
@@ -325,4 +326,21 @@ TEST(TestTreeLib, Print_width) {
   std::string expected = "1 2 3 4 5 6 7 8 9 10 11 ";
 
   EXPECT_EQ(ss.str(), expected);
+}
+
+TEST(TestTreeLib, IteratorOrderMatchesWidth) {
+  Tree<int, std::string> tree;
+  tree.insert(1, "1");
+  tree.insert(2, "2");
+  tree.insert(3, "3");
+  tree.insert(5, "5");
+  tree.insert(55, "55");
+
+  std::vector<int> keys;
+  for (auto it = tree.begin(); it != tree.end(); ++it) {
+    keys.push_back(it->first);
+  }
+
+  std::vector<int> expected = { 1, 2, 3, 5, 55 };
+  EXPECT_EQ(keys, expected);
 }
