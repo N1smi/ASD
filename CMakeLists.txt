@@ -45,6 +45,7 @@ add_subdirectory(lib_bstree)
 add_subdirectory(lib_heap)
 add_subdirectory(lib_priority_queue)
 add_subdirectory(lib_sorted_table_on_bstree)
+add_subdirectory(lib_unsorted_table_on_tree)
 add_subdirectory(lib_tree)
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 

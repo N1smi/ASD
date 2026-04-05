@@ -1,0 +1,3 @@
+create_project_lib(UnsortedTableOnTree)
+add_depend(UnsortedTableOnTree Tree lib_tree)
+add_depend(UnsortedTableOnTree Table lib_table)
