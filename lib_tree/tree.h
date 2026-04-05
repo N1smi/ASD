@@ -68,7 +68,7 @@ class Tree {
         return *this;
       }
 
-      Node* old_node = _queue.head();
+      NodeType* old_node = _queue.head();
       _queue.pop();
 
       if (old_node->_left) _queue.push(old_node->_left);
