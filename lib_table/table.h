@@ -19,7 +19,7 @@ class Table : public ITable<TKey, TValue> {
   auto begin() const { return _rows.begin(); }
   auto end() const { return _rows.end(); }
 
-  std::ostream& print(std::ostream& os) const override;
+  virtual std::ostream& print(std::ostream& os) const override;
 };
 
 template <class TKey, class TValue, class Container>
@@ -31,7 +31,6 @@ std::ostream& Table<TKey, TValue, Container>::print(std::ostream& os) const {
 
   os << "========== Table ==========\n";
 
-  size_t index = 0;
   for (const auto& [key, value] : _rows) {
     os << key << " " << value << "\n";
   }
