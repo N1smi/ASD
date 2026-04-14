@@ -499,3 +499,23 @@ TEST(TestAlgorithmLib, FindMostImportant) {
 
   // find_most_important(data, K);
 }
+
+TEST(TestAlgorithmLib, DictionaryMerging) {
+  TVector <std::pair<std::string, int>> first_d;
+
+  first_d.push_back({ "Table", 73738 });
+  first_d.push_back({ "OOP", 9238 });
+  first_d.push_back({ "Hash-function", 38 });
+  first_d.push_back({ "Vector", 3938 });
+
+  TVector <std::pair<std::string, int>> second_d;
+
+  second_d.push_back({ "Interface", 73898 });
+  second_d.push_back({ "Vector", 11387 });
+  second_d.push_back({ "Hash-function", 33928 });
+  second_d.push_back({ "List", 9284 });
+
+  HashTableOA<int> merge = dictionary_merge(first_d, second_d);
+
+  // std::cout << merge;
+}

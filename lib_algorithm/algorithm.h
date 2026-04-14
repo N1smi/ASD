@@ -13,6 +13,7 @@
 #include "../lib_dsu/dsu.h"
 #include "../lib_priority_queue/priority_queue.h"
 #include "../lib_tvector/tvector.h"
+#include "../lib_hash_table_oa/hash_table_oa.h"
 
 
 int find_local_min(const Matrix<int>& matrix);
@@ -146,6 +147,22 @@ void find_most_important(const TVector<std::pair<size_t, T>> data, size_t K) {
       break;
     }
   }
+}
+
+template <class T>
+HashTableOA<T> dictionary_merge(const TVector<std::pair<std::string,
+  T>>& first_d, const TVector<std::pair<std::string, T>>& second_d) {
+  HashTableOA<T> table(first_d.size() + second_d.size());
+
+  for (size_t i = 0; i < first_d.size(); i++) {
+    table.insert(first_d[i].first, first_d[i].second);
+  }
+
+  for (size_t i = 0; i < second_d.size(); i++) {
+    table.insert(second_d[i].first, second_d[i].second);
+  }
+
+  return table;
 }
 
 #endif  // LIB_ALGORITHM_ALGORITHM_H_
