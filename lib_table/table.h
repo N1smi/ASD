@@ -19,7 +19,7 @@ class Table : public ITable<TKey, TValue> {
   auto begin() const { return _rows.begin(); }
   auto end() const { return _rows.end(); }
 
-  virtual std::ostream& print(std::ostream& os) const override;
+  std::ostream& print(std::ostream& os) const override;
 };
 
 template <class TKey, class TValue, class Container>
