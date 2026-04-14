@@ -31,8 +31,8 @@ std::ostream& Table<TKey, TValue, Container>::print(std::ostream& os) const {
 
   os << "========== Table ==========\n";
 
-  for (const auto& [key, value] : _rows) {
-    os << key << " " << value << "\n";
+  for (auto it = _rows.begin(); it != _rows.end(); ++it) {
+    print_item(os, *it);
   }
 
   os << "===========================\n";
@@ -43,6 +43,16 @@ template <class TKey, class TValue, class Container>
 std::ostream& operator<<(std::ostream& os, const Table<TKey,
   TValue, Container>& table) {
   return table.print(os);
+}
+
+template <typename T1, typename T2>
+void print_item(std::ostream& os, const std::pair<T1, T2>& item) {
+  os << item.first << " " << item.second << "\n";
+}
+
+template <typename T>
+void print_item(std::ostream& os, const T& item) {
+  os << "[Bucket with complex data]\n";
 }
 
 #endif  // LIB_TABLE_TABLE_H_
