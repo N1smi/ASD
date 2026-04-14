@@ -4,6 +4,7 @@
 #define LIB_HASH_TABLE_CHAINS_HASH_TABLE_CHAINS_H_
 
 #include <utility>
+#include <string>
 
 #include "../lib_table/table.h"
 #include "../lib_tvector/tvector.h"
@@ -18,11 +19,11 @@ class HashTableChains
   size_t _size;
   size_t _count;
 
-protected:
+ protected:
   using Base = Table<std::string,
     TValue, TVector<TList<std::pair<std::string, TValue>>>>;
 
-public:
+ public:
   explicit HashTableChains(size_t size = SIZE);
   ~HashTableChains() override = default;
 
@@ -33,7 +34,7 @@ public:
   bool is_empty() const noexcept override { return _count == 0; }
 
   std::ostream& print(std::ostream& os) const override;
-private:
+ private:
   size_t h(const std::string& key) const noexcept;
 };
 
@@ -44,7 +45,8 @@ HashTableChains<TValue>::HashTableChains(size_t size)
 }
 
 template <class TValue>
-bool HashTableChains<TValue>::insert(const std::string& key, const TValue& value) {
+bool HashTableChains<TValue>::insert(const std::string& key,
+  const TValue& value) {
   if (find(key)) {
     return false;
   }
@@ -67,7 +69,8 @@ bool HashTableChains<TValue>::erase(const std::string& key) {
 
   size_t index = 0;
 
-  for (auto it = Base::_rows[hash].begin(); it != Base::_rows[hash].end(); ++it) {
+  for (auto it = Base::_rows[hash].begin();
+    it != Base::_rows[hash].end(); ++it) {
     if ((*it).first == key) {
       Base::_rows[hash].erase(index);
       _count--;
@@ -92,7 +95,8 @@ const TValue* HashTableChains<TValue>::find(const std::string& key) const {
 
   size_t hash = h(key);
 
-  for (auto it = Base::_rows[hash].begin(); it != Base::_rows[hash].end(); ++it) {
+  for (auto it = Base::_rows[hash].begin();
+    it != Base::_rows[hash].end(); ++it) {
     if ((*it).first == key) {
       return &((*it).second);
     }
