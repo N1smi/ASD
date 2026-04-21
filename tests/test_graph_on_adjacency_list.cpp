@@ -3,7 +3,9 @@
 #include <gtest/gtest.h>
 #include <utility>
 #include <sstream>
+#include <iostream>
 #include <cstdint>
+#include <string>
 
 #include "../lib_graph_on_adjacency_list/graph_on_adjacency_list.h"
 #include "../lib_tvector/tvector.h"
@@ -78,7 +80,8 @@ TEST(TestGraphOnAdjacencyListLib, CreateWeightedGraph) {
 
   std::cout.rdbuf(old_cout);
 
-  std::string expected = "[1]: 2 (w: 3) 3 (w: 4)\n[2]: no edges\n[3]: 2 (w: 2)\n";
+  std::string expected =
+    "[1]: 2 (w: 3) 3 (w: 4)\n[2]: no edges\n[3]: 2 (w: 2)\n";
 
   EXPECT_EQ(ss.str(), expected);
 }

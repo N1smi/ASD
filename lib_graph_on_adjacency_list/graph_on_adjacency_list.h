@@ -6,6 +6,8 @@
 #include <utility>
 #include <cstdint>
 #include <stdexcept>
+#include <iostream>
+
 #include "../lib_tvector/tvector.h"
 #include "../lib_tlist/tlist.h"
 
@@ -16,7 +18,8 @@ class GraphOnAdjacencyList {
   bool _weighted;
 
  public:
-  GraphOnAdjacencyList(const TVector<std::pair<std::pair<T, T>, size_t>>& data, bool oriented, bool weighted);
+  GraphOnAdjacencyList(const TVector<std::pair<std::pair<T, T>, size_t>>& data,
+    bool oriented, bool weighted);
   ~GraphOnAdjacencyList() = default;
 
   void add_edge(const T& vertex_1, const T& vertex_2, size_t weight = SIZE_MAX);
@@ -42,7 +45,8 @@ GraphOnAdjacencyList<T>::GraphOnAdjacencyList(const
 }
 
 template <class T>
-void GraphOnAdjacencyList<T>::add_edge(const T& vertex_1, const T& vertex_2, size_t weight) {
+void GraphOnAdjacencyList<T>::add_edge(const T& vertex_1,
+  const T& vertex_2, size_t weight) {
   size_t idx1 = get_or_create_vertex_index(vertex_1);
   size_t idx2 = get_or_create_vertex_index(vertex_2);
 
@@ -60,7 +64,8 @@ void GraphOnAdjacencyList<T>::add_edge(const T& vertex_1, const T& vertex_2, siz
 }
 
 template <class T>
-void GraphOnAdjacencyList<T>::delete_edge(const T& vertex_1, const T& vertex_2) {
+void GraphOnAdjacencyList<T>::delete_edge(const T& vertex_1,
+  const T& vertex_2) {
   size_t idx1 = get_vertex_index(vertex_1);
   size_t idx2 = get_vertex_index(vertex_2);
 
@@ -149,7 +154,8 @@ size_t GraphOnAdjacencyList<T>::get_or_create_vertex_index(const T& vertex) {
 }
 
 template<class T>
-size_t GraphOnAdjacencyList<T>::find_edge(const TList<std::pair<T, size_t>>& list, const T& vertex) {
+size_t GraphOnAdjacencyList<T>::find_edge(const TList<std::pair<T,
+  size_t>>& list, const T& vertex) {
   if (list.is_empty()) return SIZE_MAX;
 
   size_t index = 0;
