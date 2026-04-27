@@ -41,10 +41,16 @@ GraphOnAdjacencyMatrix<T>::GraphOnAdjacencyMatrix(
   const TVector<std::pair<std::pair<T, T>, size_t>>& data,
   bool oriented, bool weighted) :
   _oriented(oriented),
-  _weighted(weighted),
-  _data(STEP_OF_CAPACITY, STEP_OF_CAPACITY) {
-  for (size_t i = 0; i < STEP_OF_CAPACITY; ++i)
-        for (size_t j = 0; j < STEP_OF_CAPACITY; ++j)
+  _weighted(weighted) {
+  for (size_t i = 0; i < data.size(); i++) {
+    get_or_create_vertex_index(data[i].first.first);
+    get_or_create_vertex_index(data[i].first.second);
+  }
+
+  _data = Matrix<std::pair<bool, size_t>>(_vertices.size(), _vertices.size());
+
+  for (size_t i = 0; i < _vertices.size(); ++i)
+        for (size_t j = 0; j < _vertices.size(); ++j)
             _data[i][j] = {false, SIZE_MAX};
 
   for (size_t i = 0; i < data.size(); i++) {

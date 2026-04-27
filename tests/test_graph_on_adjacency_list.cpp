@@ -175,6 +175,16 @@ TEST(TestGraphOnAdjacencyListLib, DeleteSelfLoop) {
   std::cout.rdbuf(old_cout);
 
   EXPECT_EQ(ss.str(), "[1]: no edges\n");
+
+  std::stringstream ss_2;
+  std::streambuf* old_cout1 = std::cout.rdbuf(ss_2.rdbuf());
+
+  graph.delete_vertex(1);
+
+  graph.print();
+  std::cout.rdbuf(old_cout1);
+
+  EXPECT_EQ(ss_2.str(), "Graph is empty.\n");
 }
 
 TEST(TestGraphOnAdjacencyListLib, DeleteVertex) {
