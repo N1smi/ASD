@@ -19,12 +19,12 @@ struct AVLNode : public BSTNode<TKey, TValue> {
 
 template <typename TKey, typename TValue>
 class AVLTree : public BSTree<TKey, TValue, AVLNode<TKey, TValue>> {
-private:
+ private:
   using Node = AVLNode<TKey, TValue>;
 
   using BSTree<TKey, TValue, Node>::_root;
 
-public:
+ public:
   AVLTree() = default;
   ~AVLTree() = default;
 
@@ -34,14 +34,15 @@ public:
   bool is_valid_avl() const {
     return is_balanced_recursive(_root);
   }
-protected:
+
+ protected:
   void setupParent(Node* child, Node* parent) override {
     if (child) {
       child->_parent = parent;
     }
   }
 
-private:
+ private:
   void left_rotate(Node* grandpa);
   void right_rotate(Node* grandpa);
 
@@ -68,7 +69,8 @@ void AVLTree<TKey, TValue>::insert(const TKey& key, const TValue& val) {
 
 template <typename TKey, typename TValue>
 void AVLTree<TKey, TValue>::erase(const TKey& key) {
-  Node* balanceStart = static_cast<Node*>(BSTree<TKey, TValue, Node>::erase(key));
+  Node* balanceStart =
+    static_cast<Node*>(BSTree<TKey, TValue, Node>::erase(key));
 
   if (balanceStart) {
     recover_balance(balanceStart);
@@ -170,7 +172,8 @@ template <typename TKey, typename TValue>
 int AVLTree<TKey, TValue>::get_balance(Node* node) {
   if (node == nullptr) return 0;
 
-  return get_height(static_cast<Node*>(node->_left)) - get_height(static_cast<Node*>(node->_right));
+  return get_height(static_cast<Node*>(node->_left))
+    - get_height(static_cast<Node*>(node->_right));
 }
 
 template <typename TKey, typename TValue>
@@ -193,9 +196,7 @@ void AVLTree<TKey, TValue>::recover_balance(Node* node) {
       } else {
         LR(node);
       }
-    }
-
-    else if (balance < -1) {
+    } else if (balance < -1) {
       if (get_balance(static_cast<Node*>(node->_right)) <= 0) {
         RR(node);
       } else {
@@ -218,8 +219,8 @@ bool AVLTree<TKey, TValue>::is_balanced_recursive(Node* node) const {
 
   int real_h = std::max(
     const_cast<AVLTree*>(this)->get_height(static_cast<Node*>(node->_left)),
-    const_cast<AVLTree*>(this)->get_height(static_cast<Node*>(node->_right))
-  ) + 1;
+    const_cast<AVLTree*>(this)->get_height(static_cast<Node*>(node->_right)))
+    + 1;
 
   if (node->_height != real_h) {
     return false;
