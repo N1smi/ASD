@@ -51,6 +51,7 @@ add_subdirectory(lib_hash_table_oa)
 add_subdirectory(lib_graph_on_adjacency_list)
 add_subdirectory(lib_hash_table_chains)
 add_subdirectory(lib_graph_on_adjacency_matrix)
+add_subdirectory(lib_avltree)
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
