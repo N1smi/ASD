@@ -4,25 +4,32 @@
 #define LIB_BSTREE_BSTREE_H_
 
 #include<utility>
-#include <stack>
+#include<stack>
 #include<stdexcept>
 #include<iostream>
 
-template <class TKey, class TValue>
+template <typename TKey, typename TValue>
+struct BSTNode {
+  std::pair<TKey, TValue> _data;
+  BSTNode* _left = nullptr;
+  BSTNode* _right = nullptr;
+
+  explicit BSTNode(const std::pair<TKey, TValue>& val) : _data(val) {}
+  virtual ~BSTNode() = default;
+};
+
+template <class TKey, class TValue, class Node = BSTNode<TKey, TValue>>
 class BSTree {
- private:
-  struct Node {
-    std::pair<TKey, TValue> _data;
-    Node* _left;
-    Node* _right;
-
-    explicit Node(const std::pair<TKey, TValue>& value_)
-      : _data(value_), _left(nullptr), _right(nullptr) {}
-  };
-
- private:
+ protected:
   Node* _root;
 
+  Node* createNode(const TKey& key, const TValue& val) {
+    return new Node({ key, val });
+  }
+
+  virtual void setupParent(Node* child, Node* parent) {}
+
+ private:
   template <typename ValueType>
   class IteratorBase {
    public:
@@ -50,7 +57,7 @@ class BSTree {
     void push_left(NodeType* node) {
       while (node) {
         _stack.push(node);
-        node = node->_left;
+        node = static_cast<NodeType*>(node->_left);
       }
     }
 
@@ -113,8 +120,8 @@ class BSTree {
 
   TValue* find(const TKey& key) noexcept;
   const TValue* find(const TKey& key) const noexcept;
-  void insert(const TKey& key, const TValue& val);
-  void erase(const TKey& key);
+  Node* insert(const TKey& key, const TValue& val);
+  Node* erase(const TKey& key);
 
   void print() const;
 
@@ -125,21 +132,21 @@ class BSTree {
   Node* find_max_left(Node* node) const noexcept;
 };
 
-template <class TKey, class TValue>
-BSTree<TKey, TValue>::BSTree() : _root(nullptr) {}
+template <class TKey, class TValue, class Node>
+BSTree<TKey, TValue, Node>::BSTree() : _root(nullptr) {}
 
-template <class TKey, class TValue>
-BSTree<TKey, TValue>::~BSTree() {
+template <class TKey, class TValue, class Node>
+BSTree<TKey, TValue, Node>::~BSTree() {
   clear(_root);
 }
 
-template <class TKey, class TValue>
-TValue* BSTree<TKey, TValue>::find(const TKey& key) noexcept {
+template <class TKey, class TValue, class Node>
+TValue* BSTree<TKey, TValue, Node>::find(const TKey& key) noexcept {
   return const_cast<TValue*>(std::as_const(*this).find(key));
 }
 
-template <class TKey, class TValue>
-const TValue* BSTree<TKey, TValue>::find(const TKey& key) const noexcept {
+template <class TKey, class TValue, class Node>
+const TValue* BSTree<TKey, TValue, Node>::find(const TKey& key) const noexcept {
   if (is_empty()) return nullptr;
 
   if (_root->_data.first == key) {
@@ -161,12 +168,9 @@ const TValue* BSTree<TKey, TValue>::find(const TKey& key) const noexcept {
   return nullptr;
 }
 
-template <class TKey, class TValue>
-void BSTree<TKey, TValue>::insert(const TKey& key, const TValue& val) {
-  if (is_empty()) {
-    _root = new Node({ key, val });
-    return;
-  }
+template <class TKey, class TValue, class Node>
+Node* BSTree<TKey, TValue, Node>::insert(const TKey& key, const TValue& val) {
+  if (is_empty()) return _root = createNode(key, val);
 
   Node* cur = _root;
   Node* parent = nullptr;
@@ -175,31 +179,37 @@ void BSTree<TKey, TValue>::insert(const TKey& key, const TValue& val) {
     parent = cur;
 
     if (cur->_data.first > key) {
-      cur = cur->_left;
+      cur = static_cast<Node*>(cur->_left);
     } else if (cur->_data.first < key) {
-      cur = cur->_right;
+      cur = static_cast<Node*>(cur->_right);
     } else {
       throw std::invalid_argument("The element with the inserted "
         "key already exists!");
     }
   }
 
+  Node* newNode = createNode(key, val);
   if (parent->_data.first > key) {
-    parent->_left = new Node({ key, val });
+    parent->_left = newNode;
   } else {
-    parent->_right = new Node({ key, val });
+    parent->_right = newNode;
   }
+
+  setupParent(newNode, parent);
+
+  return newNode;
 }
 
-template <class TKey, class TValue>
-void BSTree<TKey, TValue>::erase(const TKey& key) {
+template <class TKey, class TValue, class Node>
+Node* BSTree<TKey, TValue, Node>::erase(const TKey& key) {
   if (is_empty()) throw
     std::invalid_argument("You cannot delete element in empty tree!");
 
   Node** targetPtr = &_root;
+  Node* parent = nullptr;
 
   if (_root->_data.first != key) {
-    Node* parent = find_parent(key);
+    parent = find_parent(key);
 
     if (!parent) {
       throw std::invalid_argument("The element with this key does not exist!");
@@ -211,42 +221,47 @@ void BSTree<TKey, TValue>::erase(const TKey& key) {
 
   Node* toDelete = *targetPtr;
 
-  if (!toDelete->_left) {
-    *targetPtr = toDelete->_right;
+  if (!toDelete->_left || !toDelete->_right) {
+    Node* child = toDelete->_left ? toDelete->_left : toDelete->_right;
+    *targetPtr = child;
+
+    if (child) {
+      setupParent(child, parent);
+    }
+
     delete toDelete;
-  } else if (!toDelete->_right) {
-    *targetPtr = toDelete->_left;
-    delete toDelete;
+    return parent;
   } else {
     Node* successor = find_max_left(toDelete->_left);
 
     TKey sKey = successor->_data.first;
     TValue sValue = successor->_data.second;
 
-    erase(sKey);
+    Node* balanceStart = erase(sKey);
 
     toDelete->_data.first = sKey;
     toDelete->_data.second = sValue;
+
+    return balanceStart;
   }
 }
 
-template <class TKey, class TValue>
-void BSTree<TKey, TValue>::print() const {
+template <class TKey, class TValue, class Node>
+void BSTree<TKey, TValue, Node>::print() const {
   print_DLCR_rec(_root);
 }
 
-template <class TKey, class TValue>
-void BSTree<TKey, TValue>::clear(Node* node) {
+template <class TKey, class TValue, class Node>
+void BSTree<TKey, TValue, Node>::clear(Node* node) {
   if (node) {
-    clear(node->_left);
-    clear(node->_right);
+    clear(static_cast<Node*>(node->_left));
+    clear(static_cast<Node*>(node->_right));
     delete node;
   }
 }
 
-template <class TKey, class TValue>
-typename BSTree<TKey, TValue>::Node*
-BSTree<TKey, TValue>::find_parent(const TKey& key) const noexcept {
+template <class TKey, class TValue, class Node>
+Node* BSTree<TKey, TValue, Node>::find_parent(const TKey& key) const noexcept {
   if (is_empty() || _root->_data.first == key) return nullptr;
 
   Node* cur = _root;
@@ -255,28 +270,27 @@ BSTree<TKey, TValue>::find_parent(const TKey& key) const noexcept {
     if (cur->_left && cur->_left->_data.first == key) return cur;
     if (cur->_right && cur->_right->_data.first == key) return cur;
 
-    if (cur->_data.first > key) cur = cur->_left;
-    else cur = cur->_right;
+    if (cur->_data.first > key) cur = static_cast<Node*>(cur->_left);
+    else cur = static_cast<Node*>(cur->_right);
   }
 
   return nullptr;
 }
 
-template <class TKey, class TValue>
-void BSTree<TKey, TValue>::print_DLCR_rec(Node* node) const {
+template <class TKey, class TValue, class Node>
+void BSTree<TKey, TValue, Node>::print_DLCR_rec(Node* node) const {
   if (node == nullptr) return;
 
-  print_DLCR_rec(node->_left);
+  print_DLCR_rec(static_cast<Node*>(node->_left));
 
   std::cout << "[key: " << node->_data.first << ", val: "
     << node->_data.second << "]";
 
-  print_DLCR_rec(node->_right);
+  print_DLCR_rec(static_cast<Node*>(node->_right));
 }
 
-template <class TKey, class TValue>
-typename BSTree<TKey, TValue>::Node*
-BSTree<TKey, TValue>::find_max_left(Node* node) const noexcept {
+template <class TKey, class TValue, class Node>
+Node* BSTree<TKey, TValue, Node>::find_max_left(Node* node) const noexcept {
   if (!node) return nullptr;
 
   while (node->_right) {
