@@ -82,7 +82,7 @@ class BSTree {
       _stack.pop();
 
       if (node->_right) {
-        push_left(node->_right);
+        push_left(static_cast<NodeType*>(node->_right));
       }
 
       return *this;
