@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include <string>
+#include <vector>
 #include "../lib_avltree/avltree.h"
 
 TEST(TestAVLTreeLib, CreateDefaultAVLTree) {
@@ -55,7 +56,7 @@ TEST(TestAVLTreeLib, InsertRotationRL) {
   EXPECT_TRUE(tree.is_valid_avl());
 }
 
-TEST(TestAVLTreeLib, InsertSibSaveRightRotation) {
+TEST(TestAVLTreeLib, SibSaveRightRotation) {
   AVLTree<int, std::string> tree;
 
   tree.insert(15, "grandpa");
@@ -70,7 +71,7 @@ TEST(TestAVLTreeLib, InsertSibSaveRightRotation) {
   EXPECT_TRUE(tree.is_valid_avl());
 }
 
-TEST(TestAVLTreeLib, InsertSibSaveLeftRotation) {
+TEST(TestAVLTreeLib, SibSaveLeftRotation) {
   AVLTree<int, std::string> tree;
 
   tree.insert(10, "grandpa");
@@ -149,4 +150,90 @@ TEST(TestAVLTreeLib, GreatGrandpaLeftConnectRightRotation) {
   EXPECT_NE(tree.find(60), nullptr);
   EXPECT_NE(tree.find(80), nullptr);
   EXPECT_NE(tree.find(40), nullptr);
+}
+
+TEST(TestAVLTreeLib, InsertExistentKey) {
+  AVLTree<int, std::string> tree;
+  tree.insert(10, "ten");
+  tree.insert(20, "twenty");
+
+  EXPECT_ANY_THROW(tree.insert(20, "twenty"));
+}
+
+TEST(TestAVLTreeLib, EraseWithSingleRotate) {
+  AVLTree<int, int> tree;
+
+  std::vector<int> keys = { 50, 25, 80, 15, 35, 90, 10 };
+  for (int k : keys) tree.insert(k, k);
+
+  tree.erase(90);
+
+  EXPECT_TRUE(tree.is_valid_avl());
+  EXPECT_NE(tree.find(35), nullptr);
+  EXPECT_NE(tree.find(50), nullptr);
+  EXPECT_NE(tree.find(25), nullptr);
+}
+
+TEST(TestAVLTreeLib, EraseWithDoubleRotate) {
+  AVLTree<int, int> tree;
+
+  std::vector<int> keys = { 50, 25, 100, 11, 30, 90, 150,
+  8, 12, 27, 31, 80, 120, 160, 2, 9, 13, 28, 180, 1};
+  for (int k : keys) tree.insert(k, k);
+
+  tree.erase(150);
+
+  EXPECT_TRUE(tree.is_valid_avl());
+  EXPECT_NE(tree.find(120), nullptr);
+  EXPECT_NE(tree.find(160), nullptr);
+  EXPECT_NE(tree.find(50), nullptr);
+  EXPECT_NE(tree.find(30), nullptr);
+}
+
+TEST(TestAVLTreeLib, EraseNonExistentKey) {
+  AVLTree<int, std::string> tree;
+  tree.insert(10, "ten");
+  tree.insert(20, "twenty");
+
+  EXPECT_ANY_THROW(tree.erase(99));
+}
+
+TEST(TestAVLTreeLib, EraseRootWithChilds) {
+  AVLTree<int, std::string> tree;
+  tree.insert(20, "twenty");
+  tree.insert(10, "ten");
+  tree.insert(5, "five");
+
+  tree.erase(20);
+
+  EXPECT_TRUE(tree.is_valid_avl());
+
+  EXPECT_NE(tree.find(10), nullptr);
+  EXPECT_NE(tree.find(5), nullptr);
+}
+
+TEST(TestAVLTreeLib, EraseNodeWithDeepSuccessor) {
+  AVLTree<int, int> tree;
+
+  std::vector<int> keys = { 50, 25, 100, 11, 30, 90, 150,
+  8, 12, 27, 31, 80, 120, 160, 2, 9, 13, 28, 180, 1 };
+  for (int k : keys) tree.insert(k, k);
+
+  tree.erase(50);
+
+  EXPECT_TRUE(tree.is_valid_avl());
+
+  EXPECT_NE(tree.find(31), nullptr);
+  EXPECT_NE(tree.find(28), nullptr);
+  EXPECT_NE(tree.find(11), nullptr);
+  EXPECT_NE(tree.find(25), nullptr);
+}
+
+TEST(TestAVLTreeLib, EraseToEmpty) {
+  AVLTree<int, int> tree;
+  tree.insert(10, 10);
+  tree.erase(10);
+
+  EXPECT_TRUE(tree.is_empty());
+  EXPECT_TRUE(tree.is_valid_avl());
 }

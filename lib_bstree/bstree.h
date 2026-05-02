@@ -216,13 +216,15 @@ Node* BSTree<TKey, TValue, Node>::erase(const TKey& key) {
     }
 
     targetPtr = (parent->_left && parent->_left->_data.first == key)
-      ? &parent->_left : &parent->_right;
+      ? (reinterpret_cast<Node**>(&parent->_left))
+      : (reinterpret_cast<Node**>(&parent->_right));
   }
 
   Node* toDelete = *targetPtr;
 
   if (!toDelete->_left || !toDelete->_right) {
-    Node* child = toDelete->_left ? toDelete->_left : toDelete->_right;
+    Node* child = toDelete->_left ? static_cast<Node*>(toDelete->_left)
+      : static_cast<Node*>(toDelete->_right);
     *targetPtr = child;
 
     if (child) {
@@ -232,7 +234,7 @@ Node* BSTree<TKey, TValue, Node>::erase(const TKey& key) {
     delete toDelete;
     return parent;
   } else {
-    Node* successor = find_max_left(toDelete->_left);
+    Node* successor = find_max_left(static_cast<Node*>(toDelete->_left));
 
     TKey sKey = successor->_data.first;
     TValue sValue = successor->_data.second;
@@ -294,7 +296,7 @@ Node* BSTree<TKey, TValue, Node>::find_max_left(Node* node) const noexcept {
   if (!node) return nullptr;
 
   while (node->_right) {
-    node = node->_right;
+    node = static_cast<Node*>(node->_right);
   }
 
   return node;
