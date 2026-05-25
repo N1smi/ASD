@@ -2,7 +2,9 @@
 
 #include <gtest/gtest.h>
 #include <vector>
+#include <memory>
 #include <random>
+#include <algorithm>
 #include <string>
 #include <set>
 
@@ -129,5 +131,137 @@ TEST(TestRBTreeLib, InsertRandomStressTest) {
 
   for (int key : unique_keys) {
     EXPECT_NE(tree.find(key), nullptr);
+  }
+}
+
+TEST(TestRBTreeLib, EraseChildLeftSibRedT1T2Black) {
+  RBTree<int, std::string> tree;
+
+  tree.insert(10, "parent");
+  tree.insert(5, "toDelete");
+  tree.insert(15, "sib");
+  tree.insert(11, "");
+  tree.insert(19, "");
+  tree.insert(25, "");
+
+  tree.erase(5);
+
+  EXPECT_TRUE(tree.is_valid_rb());
+}
+
+TEST(TestRBTreeLib, EraseChildLeftInnerRed) {
+  RBTree<int, std::string> tree;
+  tree.insert(10, "parent");
+  tree.insert(5, "child_to_delete");
+  tree.insert(20, "sib_black");
+  tree.insert(15, "inner_red");
+
+  tree.erase(5);
+  EXPECT_TRUE(tree.is_valid_rb());
+}
+
+TEST(TestRBTreeLib, EraseChildLeftOuterRed) {
+  RBTree<int, std::string> tree;
+  tree.insert(10, "parent");
+  tree.insert(5, "child_to_delete");
+  tree.insert(15, "sib_black");
+  tree.insert(20, "outer_red");
+
+  tree.erase(5);
+  EXPECT_TRUE(tree.is_valid_rb());
+}
+
+TEST(TestRBTreeLib, EraseCascade) {
+  RBTree<int, std::string> tree;
+
+  tree.insert(40, "global_root");
+  tree.insert(20, "");
+  tree.insert(60, "");
+  tree.insert(10, "");
+  tree.insert(32, "");
+  tree.insert(15, "");
+  tree.insert(50, "");
+  tree.insert(70, "");
+  tree.insert(55, "");
+  tree.insert(45, "");
+  tree.insert(42, "");
+
+  tree.erase(42);
+  tree.erase(45);
+  tree.erase(55);
+
+  tree.erase(50);
+
+  EXPECT_TRUE(tree.is_valid_rb());
+}
+
+TEST(TestRBTreeLib, EraseChildRightSibRedT1T2Black) {
+  RBTree<int, std::string> tree;
+  tree.insert(10, "parent");
+  tree.insert(15, "child_to_delete");
+  tree.insert(5, "sib_red");
+  tree.insert(4, "sib_left_black");
+  tree.insert(7, "sib_right_black");
+  tree.insert(2, "");
+
+  tree.erase(15);
+  EXPECT_TRUE(tree.is_valid_rb());
+}
+
+TEST(TestRBTreeLib, EraseChildRightInnerRed) {
+  RBTree<int, std::string> tree;
+  tree.insert(20, "parent");
+  tree.insert(25, "child_to_delete");
+  tree.insert(10, "sib_black");
+  tree.insert(15, "inner_red");
+
+  tree.erase(25);
+  EXPECT_TRUE(tree.is_valid_rb());
+}
+
+TEST(TestRBTreeLib, EraseChildRightOuterRed) {
+  RBTree<int, std::string> tree;
+  tree.insert(20, "parent");
+  tree.insert(25, "child_to_delete");
+  tree.insert(10, "sib_black");
+  tree.insert(5, "outer_red");
+
+  tree.erase(25);
+  EXPECT_TRUE(tree.is_valid_rb());
+}
+
+TEST(TestRBTreeLib, EraseRootScenarios) {
+  RBTree<int, std::string> tree;
+
+  tree.insert(10, "root");
+  tree.erase(10);
+  EXPECT_TRUE(tree.is_empty());
+
+  tree.insert(20, "root");
+  tree.insert(15, "left");
+  tree.erase(20);
+  EXPECT_TRUE(tree.is_valid_rb());
+  EXPECT_NE(tree.find(15), nullptr);
+}
+
+TEST(TestRBTreeLib, EraseRandomStressTest) {
+  RBTree<int, int> tree;
+  std::vector<int> values;
+  for (int i = 0; i < 1000; ++i) values.push_back(i);
+
+  std::mt19937 rng(1337);
+
+  std::shuffle(values.begin(), values.end(), rng);
+
+  for (int v : values) {
+    tree.insert(v, v);
+    ASSERT_TRUE(tree.is_valid_rb());
+  }
+
+  std::shuffle(values.begin(), values.end(), rng);
+
+  for (int v : values) {
+    tree.erase(v);
+    ASSERT_TRUE(tree.is_valid_rb());
   }
 }
