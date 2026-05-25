@@ -129,9 +129,10 @@ class BSTree {
   void print() const;
 
  private:
-  FindResult find_max_left_with_parent(Node* node, Node* parent) const noexcept {
+  FindResult find_max_left_with_parent(Node* node, Node* parent)
+    const noexcept {
     if (!node) return { nullptr, nullptr };
- 
+
     while (node->_right) {
       parent = node;
       node = static_cast<Node*>(node->_right);
@@ -150,8 +151,8 @@ class BSTree {
     return { cur, parent };
   }
   Node* create_node(const TKey& key, const TValue& val) {
-     return new Node({ key, val });
-   }
+    return new Node({ key, val });
+  }
   void clear(Node* node);
   void print_DLCR_rec(Node* node) const;
 };
@@ -236,7 +237,7 @@ Node* BSTree<TKey, TValue, Node>::erase(const TKey& key) {
     FindResult successor_result =
       find_max_left_with_parent(static_cast<Node*>(toDelete->_left),
         toDelete);
-    
+
     Node* successor = successor_result.node;
 
     TKey sKey = successor->_data.first;
