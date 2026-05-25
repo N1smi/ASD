@@ -54,6 +54,7 @@ add_subdirectory(lib_graph_on_adjacency_matrix)
 add_subdirectory(lib_avltree)
 add_subdirectory(lib_sorted_table_on_avltree)
 add_subdirectory(lib_rbtree)
+add_subdirectory(lib_sorted_table_on_rbtree)
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
