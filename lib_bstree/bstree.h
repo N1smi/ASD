@@ -23,13 +23,16 @@ class BSTree {
  protected:
   Node* _root;
 
-  Node* createNode(const TKey& key, const TValue& val) {
-    return new Node({ key, val });
-  }
+  virtual void setup_parent(Node* child, Node* parent) {}
 
-  virtual void setupParent(Node* child, Node* parent) {}
+  virtual Node* erase_node(Node* toDelete, Node* parent);
 
  private:
+  struct FindResult {
+    Node* node = nullptr;
+    Node* parent = nullptr;
+  };
+
   template <typename ValueType>
   class IteratorBase {
    public:
@@ -126,10 +129,31 @@ class BSTree {
   void print() const;
 
  private:
+  FindResult find_max_left_with_parent(Node* node, Node* parent) const noexcept {
+    if (!node) return { nullptr, nullptr };
+ 
+    while (node->_right) {
+      parent = node;
+      node = static_cast<Node*>(node->_right);
+    }
+
+    return { node, parent };
+  }
+  FindResult find_with_parent(const TKey& key) const noexcept {
+    Node* cur = _root;
+    Node* parent = nullptr;
+    while (cur && cur->_data.first != key) {
+      parent = cur;
+      if (key < cur->_data.first) cur = static_cast<Node*>(cur->_left);
+      else cur = static_cast<Node*>(cur->_right);
+    }
+    return { cur, parent };
+  }
+  Node* create_node(const TKey& key, const TValue& val) {
+     return new Node({ key, val });
+   }
   void clear(Node* node);
-  Node* find_parent(const TKey& key) const noexcept;
   void print_DLCR_rec(Node* node) const;
-  Node* find_max_left(Node* node) const noexcept;
 };
 
 template <class TKey, class TValue, class Node>
@@ -153,24 +177,18 @@ const TValue* BSTree<TKey, TValue, Node>::find(const TKey& key) const noexcept {
     return &_root->_data.second;
   }
 
-  Node* parent = find_parent(key);
+  FindResult result = find_with_parent(key);
 
-  if (!parent) return nullptr;
+  Node* node = result.node;
 
-  if (parent->_left && parent->_left->_data.first == key) {
-    return &parent->_left->_data.second;
-  }
+  if (!node) return nullptr;
 
-  if (parent->_right && parent->_right->_data.first == key) {
-    return &parent->_right->_data.second;
-  }
-
-  return nullptr;
+  return &node->_data.second;
 }
 
 template <class TKey, class TValue, class Node>
 Node* BSTree<TKey, TValue, Node>::insert(const TKey& key, const TValue& val) {
-  if (is_empty()) return _root = createNode(key, val);
+  if (is_empty()) return _root = create_node(key, val);
 
   Node* cur = _root;
   Node* parent = nullptr;
@@ -188,14 +206,14 @@ Node* BSTree<TKey, TValue, Node>::insert(const TKey& key, const TValue& val) {
     }
   }
 
-  Node* newNode = createNode(key, val);
+  Node* newNode = create_node(key, val);
   if (parent->_data.first > key) {
     parent->_left = newNode;
   } else {
     parent->_right = newNode;
   }
 
-  setupParent(newNode, parent);
+  setup_parent(newNode, parent);
 
   return newNode;
 }
@@ -205,47 +223,32 @@ Node* BSTree<TKey, TValue, Node>::erase(const TKey& key) {
   if (is_empty()) throw
     std::invalid_argument("You cannot delete element in empty tree!");
 
-  Node** targetPtr = &_root;
-  Node* parent = nullptr;
+  FindResult result = find_with_parent(key);
 
-  if (_root->_data.first != key) {
-    parent = find_parent(key);
+  Node* toDelete = result.node;
+  Node* del_parent = result.parent;
 
-    if (!parent) {
-      throw std::invalid_argument("The element with this key does not exist!");
-    }
-
-    targetPtr = (parent->_left && parent->_left->_data.first == key)
-      ? (reinterpret_cast<Node**>(&parent->_left))
-      : (reinterpret_cast<Node**>(&parent->_right));
+  if (!toDelete) {
+    throw std::invalid_argument("The element with this key does not exist!");
   }
 
-  Node* toDelete = *targetPtr;
-
-  if (!toDelete->_left || !toDelete->_right) {
-    Node* child = toDelete->_left ? static_cast<Node*>(toDelete->_left)
-      : static_cast<Node*>(toDelete->_right);
-    *targetPtr = child;
-
-    if (child) {
-      setupParent(child, parent);
-    }
-
-    delete toDelete;
-    return parent;
-  } else {
-    Node* successor = find_max_left(static_cast<Node*>(toDelete->_left));
+  if (toDelete->_left && toDelete->_right) {
+    FindResult successor_result =
+      find_max_left_with_parent(static_cast<Node*>(toDelete->_left),
+        toDelete);
+    
+    Node* successor = successor_result.node;
 
     TKey sKey = successor->_data.first;
     TValue sValue = successor->_data.second;
 
-    Node* balanceStart = erase(sKey);
-
     toDelete->_data.first = sKey;
     toDelete->_data.second = sValue;
 
-    return balanceStart;
+    return erase_node(successor, successor_result.parent);;
   }
+
+  return erase_node(toDelete, del_parent);
 }
 
 template <class TKey, class TValue, class Node>
@@ -263,23 +266,6 @@ void BSTree<TKey, TValue, Node>::clear(Node* node) {
 }
 
 template <class TKey, class TValue, class Node>
-Node* BSTree<TKey, TValue, Node>::find_parent(const TKey& key) const noexcept {
-  if (is_empty() || _root->_data.first == key) return nullptr;
-
-  Node* cur = _root;
-
-  while (cur) {
-    if (cur->_left && cur->_left->_data.first == key) return cur;
-    if (cur->_right && cur->_right->_data.first == key) return cur;
-
-    if (cur->_data.first > key) cur = static_cast<Node*>(cur->_left);
-    else cur = static_cast<Node*>(cur->_right);
-  }
-
-  return nullptr;
-}
-
-template <class TKey, class TValue, class Node>
 void BSTree<TKey, TValue, Node>::print_DLCR_rec(Node* node) const {
   if (node == nullptr) return;
 
@@ -292,14 +278,26 @@ void BSTree<TKey, TValue, Node>::print_DLCR_rec(Node* node) const {
 }
 
 template <class TKey, class TValue, class Node>
-Node* BSTree<TKey, TValue, Node>::find_max_left(Node* node) const noexcept {
-  if (!node) return nullptr;
+Node* BSTree<TKey, TValue, Node>::erase_node(Node* toDelete, Node* parent) {
+  Node* child = toDelete->_left ? static_cast<Node*>(toDelete->_left)
+    : static_cast<Node*>(toDelete->_right);
 
-  while (node->_right) {
-    node = static_cast<Node*>(node->_right);
+  if (!parent) {
+    _root = child;
+  } else {
+    if (parent->_left == toDelete) {
+      parent->_left = child;
+    } else {
+      parent->_right = child;
+    }
   }
 
-  return node;
+  if (child) {
+    setup_parent(child, parent);
+  }
+
+  delete toDelete;
+  return parent;
 }
 
 #endif  // LIB_BSTREE_BSTREE_H_

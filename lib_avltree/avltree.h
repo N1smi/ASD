@@ -36,7 +36,7 @@ class AVLTree : public BSTree<TKey, TValue, AVLNode<TKey, TValue>> {
   }
 
  protected:
-  void setupParent(Node* child, Node* parent) override {
+  void setup_parent(Node* child, Node* parent) override {
     if (child) {
       child->_parent = parent;
     }
@@ -51,8 +51,8 @@ class AVLTree : public BSTree<TKey, TValue, AVLNode<TKey, TValue>> {
   void LR(Node* grandpa);
   void RL(Node* grandpa);
 
-  int get_height(Node* node);
-  int get_balance(Node* node);
+  int get_height(Node* node) const;
+  int get_balance(Node* node) const;
 
   void recalc_height(Node* node);
   void recover_balance(Node* node);
@@ -74,8 +74,6 @@ void AVLTree<TKey, TValue>::erase(const TKey& key) {
 
   if (balanceStart) {
     recover_balance(balanceStart);
-  } else if (!is_empty()) {
-    recover_balance(_root);
   }
 }
 
@@ -162,14 +160,14 @@ void AVLTree<TKey, TValue>::RL(Node* grandpa) {
 }
 
 template <typename TKey, typename TValue>
-int AVLTree<TKey, TValue>::get_height(Node* node) {
+int AVLTree<TKey, TValue>::get_height(Node* node) const {
   if (node == nullptr) return 0;
 
   return node->_height;
 }
 
 template <typename TKey, typename TValue>
-int AVLTree<TKey, TValue>::get_balance(Node* node) {
+int AVLTree<TKey, TValue>::get_balance(Node* node) const {
   if (node == nullptr) return 0;
 
   return get_height(static_cast<Node*>(node->_left))
