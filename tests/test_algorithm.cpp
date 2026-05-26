@@ -589,3 +589,14 @@ TEST(TestAlgorithmLib, DijkstraDisconnectedGraph) {
   EXPECT_EQ(parents[idx_3], SIZE_MAX);
   EXPECT_EQ(parents[idx_4], SIZE_MAX);
 }
+
+TEST(TestAlgorithmLib, PrintMazeWithShortestPath) {
+  size_t lines = 10;
+  size_t columns = 10;
+  size_t entry = 1;
+  size_t exit = 100;
+
+  Matrix<bool> maze = generate_maze(entry, exit, lines, columns);
+
+  // print_maze_with_shortest_path(maze, entry, exit, lines, columns);
+}

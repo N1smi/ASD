@@ -129,6 +129,16 @@ void print_maze_with_color(const Matrix<bool>& maze,
   size_t entry, size_t exit,
   size_t lines, size_t columns);
 
+GraphOnAdjacencyList<std::string> build_maze_graph(const Matrix<bool>& maze);
+
+Matrix<bool> find_maze_path(const GraphOnAdjacencyList<std::string>& graph,
+  const std::string& start, const std::string& target,
+  size_t lines, size_t cols);
+
+void print_maze_with_shortest_path(const Matrix<bool>& maze,
+  size_t entry, size_t exit,
+  size_t lines, size_t columns);
+
 template <class T>
 void find_most_important(const TVector<std::pair<size_t, T>> data, size_t K) {
   PriorityQueue<T> q;
