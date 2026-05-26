@@ -26,12 +26,22 @@ class GraphOnAdjacencyList {
   void delete_edge(const T& vertex_1, const T& vertex_2);
   void delete_vertex(const T& vertex);
 
+  size_t get_count_vertex() const { return _data.size(); }
+
+  const TList<std::pair<T, size_t>>& get_adjacency_list(size_t index) const {
+    return _data[index];
+  }
+
+  T get_vertex_by_index(size_t index) const {
+    return (*_data[index].begin()).first;
+  }
+
   void print();
 
+  size_t get_vertex_index(const T& vertex) const;
  private:
   size_t get_or_create_vertex_index(const T& vertex);
   size_t find_edge(const TList<std::pair<T, size_t>>& list, const T& vertex);
-  size_t get_vertex_index(const T& vertex);
 };
 
 template<class T>
@@ -175,7 +185,7 @@ size_t GraphOnAdjacencyList<T>::find_edge(const TList<std::pair<T,
 }
 
 template<class T>
-size_t GraphOnAdjacencyList<T>::get_vertex_index(const T& vertex) {
+size_t GraphOnAdjacencyList<T>::get_vertex_index(const T& vertex) const  {
   for (size_t i = 0; i < _data.size(); i++) {
     if ((*_data[i].begin()).first == vertex) {
       return i;
