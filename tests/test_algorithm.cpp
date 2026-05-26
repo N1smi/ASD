@@ -519,3 +519,73 @@ TEST(TestAlgorithmLib, DictionaryMerging) {
 
   // std::cout << merge;
 }
+
+TEST(TestAlgorithmLib, DijkstraStandardGraph) {
+  TVector<std::pair<std::pair<std::string, std::string>, size_t>> edges;
+  edges.push_back({ {"A", "B"}, 4 });
+  edges.push_back({ {"A", "C"}, 2 });
+  edges.push_back({ {"B", "C"}, 1 });
+  edges.push_back({ {"B", "D"}, 5 });
+  edges.push_back({ {"C", "D"}, 8 });
+  edges.push_back({ {"C", "E"}, 10 });
+  edges.push_back({ {"D", "E"}, 2 });
+
+  GraphOnAdjacencyList<std::string> graph(edges, false, true);
+
+  auto result = dijkstra(std::string("A"), graph);
+  const auto& distances = result.first;
+  const auto& parents = result.second;
+
+  size_t idx_A = graph.get_vertex_index("A");
+  size_t idx_B = graph.get_vertex_index("B");
+  size_t idx_C = graph.get_vertex_index("C");
+  size_t idx_D = graph.get_vertex_index("D");
+  size_t idx_E = graph.get_vertex_index("E");
+
+  EXPECT_EQ(distances[idx_A], 0);
+  EXPECT_EQ(distances[idx_B], 3);
+  EXPECT_EQ(distances[idx_C], 2);
+  EXPECT_EQ(distances[idx_D], 8);
+  EXPECT_EQ(distances[idx_E], 10);
+
+  EXPECT_EQ(parents[idx_E], idx_D);
+  EXPECT_EQ(parents[idx_D], idx_B);
+  EXPECT_EQ(parents[idx_B], idx_C);
+  EXPECT_EQ(parents[idx_C], idx_A);
+  EXPECT_EQ(parents[idx_A], SIZE_MAX);
+}
+
+TEST(TestAlgorithmLib, DijkstraNonExistentStartVertex) {
+  TVector<std::pair<std::pair<char, char>, size_t>> edges;
+  edges.push_back({ {'X', 'Y'}, 3 });
+
+  GraphOnAdjacencyList<char> graph(edges, false, true);
+
+  ASSERT_THROW(dijkstra('Z', graph), std::logic_error);
+}
+
+TEST(TestAlgorithmLib, DijkstraDisconnectedGraph) {
+  TVector<std::pair<std::pair<int, int>, size_t>> edges;
+  edges.push_back({ {1, 2}, 5 });
+  edges.push_back({ {3, 4}, 10 });
+
+  GraphOnAdjacencyList<int> graph(edges, false, true);
+
+  auto result = dijkstra(1, graph);
+  const auto& distances = result.first;
+  const auto& parents = result.second;
+
+  size_t idx_1 = graph.get_vertex_index(1);
+  size_t idx_2 = graph.get_vertex_index(2);
+  size_t idx_3 = graph.get_vertex_index(3);
+  size_t idx_4 = graph.get_vertex_index(4);
+
+  EXPECT_EQ(distances[idx_1], 0);
+  EXPECT_EQ(distances[idx_2], 5);
+
+  EXPECT_EQ(distances[idx_3], SIZE_MAX);
+  EXPECT_EQ(distances[idx_4], SIZE_MAX);
+
+  EXPECT_EQ(parents[idx_3], SIZE_MAX);
+  EXPECT_EQ(parents[idx_4], SIZE_MAX);
+}
