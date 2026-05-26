@@ -166,7 +166,8 @@ HashTableOA<T> dictionary_merge(const TVector<std::pair<std::string,
 }
 
 template <class T>
-std::pair<TVector<size_t>, TVector<size_t>> dijkstra(const T& start, const GraphOnAdjacencyList<T>& graph) {
+std::pair<TVector<size_t>, TVector<size_t>> dijkstra(const T& start,
+  const GraphOnAdjacencyList<T>& graph) {
   size_t vertex_count = graph.get_count_vertex();
   size_t start_idx = graph.get_vertex_index(start);
 
