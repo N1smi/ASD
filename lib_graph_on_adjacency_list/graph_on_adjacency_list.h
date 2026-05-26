@@ -39,6 +39,7 @@ class GraphOnAdjacencyList {
   void print();
 
   size_t get_vertex_index(const T& vertex) const;
+
  private:
   size_t get_or_create_vertex_index(const T& vertex);
   size_t find_edge(const TList<std::pair<T, size_t>>& list, const T& vertex);
