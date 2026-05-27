@@ -3,6 +3,9 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include <string>
+#include <set>
+#include <memory>
+#include <random>
 #include <vector>
 #include "../lib_avltree/avltree.h"
 
@@ -236,4 +239,50 @@ TEST(TestAVLTreeLib, EraseToEmpty) {
 
   EXPECT_TRUE(tree.is_empty());
   EXPECT_TRUE(tree.is_valid_avl());
+}
+
+TEST(TestAVLTreeLib, InsertRandomStressTest) {
+  AVLTree<int, int> tree;
+  std::mt19937 gen(42);
+  std::uniform_int_distribution<> distrib(1, 100000);
+
+  std::set<int> unique_keys;
+
+  for (int i = 0; i < 1000; ++i) {
+    int val = distrib(gen);
+
+    if (unique_keys.find(val) == unique_keys.end()) {
+      tree.insert(val, i);
+      unique_keys.insert(val);
+
+      ASSERT_TRUE(tree.is_valid_avl());
+    }
+  }
+
+  for (int key : unique_keys) {
+    EXPECT_NE(tree.find(key), nullptr);
+  }
+}
+
+
+TEST(TestAVLTreeLib, EraseRandomStressTest) {
+  AVLTree<int, int> tree;
+  std::vector<int> values;
+  for (int i = 0; i < 1000; ++i) values.push_back(i);
+
+  std::mt19937 rng(1337);
+
+  std::shuffle(values.begin(), values.end(), rng);
+
+  for (int v : values) {
+    tree.insert(v, v);
+    ASSERT_TRUE(tree.is_valid_avl());
+  }
+
+  std::shuffle(values.begin(), values.end(), rng);
+
+  for (int v : values) {
+    tree.erase(v);
+    ASSERT_TRUE(tree.is_valid_avl());
+  }
 }

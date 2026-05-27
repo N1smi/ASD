@@ -246,7 +246,7 @@ Node* BSTree<TKey, TValue, Node>::erase(const TKey& key) {
     toDelete->_data.first = sKey;
     toDelete->_data.second = sValue;
 
-    return erase_node(successor, successor_result.parent);;
+    return erase_node(successor, successor_result.parent);
   }
 
   return erase_node(toDelete, del_parent);
