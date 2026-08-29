@@ -1,0 +1,4 @@
+create_project_lib(HashTableChains)
+add_depend(HashTableChains TList lib_tlist)
+add_depend(HashTableChains TVector lib_tvector)
+add_depend(HashTableChains Table lib_table)

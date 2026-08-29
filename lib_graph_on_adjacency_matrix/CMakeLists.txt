@@ -1,0 +1,3 @@
+create_project_lib(GraphOnAdjacencyMatrix)
+add_depend(GraphOnAdjacencyMatrix TVector lib_tvector)
+add_depend(GraphOnAdjacencyMatrix  Matrix lib_matrix)

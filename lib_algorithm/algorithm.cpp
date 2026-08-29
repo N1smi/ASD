@@ -344,6 +344,97 @@ void print_maze(const Matrix<bool>& maze) {
   }
 }
 
+GraphOnAdjacencyList<std::string> build_maze_graph(const Matrix<bool>& maze) {
+  TVector<std::pair<std::pair<std::string, std::string>, size_t>> edges;
+  int direct_i[] = { 1, -1, 0, 0 };
+  int direct_j[] = { 0, 0, 1, -1 };
+
+  for (size_t i = 0; i < maze.get_lines(); i++) {
+    for (size_t j = 0; j < maze.get_columns(); j++) {
+      if (maze[i][j]) continue;
+      for (int d = 0; d < 4; d++) {
+        size_t neighbour_i = i + direct_i[d];
+        size_t neighbour_j = j + direct_j[d];
+        if (neighbour_i < maze.get_lines() && neighbour_j < maze.get_columns()
+          && !maze[neighbour_i][neighbour_j]) {
+          edges.push_back({ {std::to_string(i) + "_" + std::to_string(j),
+            std::to_string(neighbour_i) + "_"
+            + std::to_string(neighbour_j)}, 1 });
+        }
+      }
+    }
+  }
+
+  return GraphOnAdjacencyList<std::string>(edges, true, true);
+}
+
+Matrix<bool> find_maze_path(const GraphOnAdjacencyList<std::string>& graph,
+  const std::string& start, const std::string& target,
+  size_t lines, size_t cols) {
+  auto result = dijkstra(start, graph);
+  Matrix<bool> path_mask(lines, cols);
+
+  size_t target_idx = graph.get_vertex_index(target);
+  if (target_idx != SIZE_MAX && result.first[target_idx] != SIZE_MAX) {
+    size_t curr = target_idx;
+    while (curr != SIZE_MAX) {
+      std::string name = graph.get_vertex_by_index(curr);
+      size_t pos = name.find('_');
+      path_mask[std::stoull(name.substr(0, pos))]
+        [std::stoull(name.substr(pos + 1))] = true;
+      curr = result.second[curr];
+    }
+  }
+
+  return path_mask;
+}
+
+void print_maze_with_shortest_path(const Matrix<bool>& maze,
+  size_t entry, size_t exit,
+  size_t lines, size_t columns) {
+  size_t entry_row = (entry - 1) / columns, entry_col = (entry - 1) % columns;
+  size_t exit_row = (exit - 1) / columns, exit_col = (exit - 1) % columns;
+  size_t entry_i, entry_j, exit_i, exit_j;
+
+  auto calc_coord = [&](size_t row, size_t col, size_t& i, size_t& j) {
+    if (row == 0) {
+      i = 0; j = 2 * col + 1;
+    } else if (row == lines - 1) {
+      i = 2 * lines; j = 2 * col + 1;
+    } else if (col == 0) {
+      i = 2 * row + 1; j = 0;
+    } else {
+      i = 2 * row + 1; j = 2 * columns;
+    }
+    };
+
+  calc_coord(entry_row, entry_col, entry_i, entry_j);
+  calc_coord(exit_row, exit_col, exit_i, exit_j);
+
+  auto graph = build_maze_graph(maze);
+  auto path_mask = find_maze_path(graph,
+    std::to_string(entry_i) + "_" + std::to_string(entry_j),
+    std::to_string(exit_i) + "_" + std::to_string(exit_j),
+    maze.get_lines(), maze.get_columns());
+
+  const char* WALL = "\033[44m  \033[0m";
+  const char* PATH = "\033[47m  \033[0m";
+  const char* ENTRY = "\033[42mE \033[0m";
+  const char* EXIT = "\033[41mX \033[0m";
+  const char* SHORT_PATH = "\033[42m* \033[0m";
+
+  for (size_t i = 0; i < maze.get_lines(); i++) {
+    for (size_t j = 0; j < maze.get_columns(); j++) {
+      if (i == entry_i && j == entry_j) printf("\033[42mE \033[0m");
+      else if (i == exit_i && j == exit_j) printf("\033[41mX \033[0m");
+      else if (path_mask[i][j]) printf("\033[42m* \033[0m");
+      else if (maze[i][j]) printf("\033[44m  \033[0m");
+      else printf("\033[47m  \033[0m");
+    }
+    printf("\n");
+  }
+}
+
 void print_maze_with_color(const Matrix<bool>& maze,
   size_t entry, size_t exit,
   size_t lines, size_t columns) {

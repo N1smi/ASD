@@ -1,0 +1,2 @@
+create_project_lib(PriorityQueue)
+add_depend(PriorityQueue Heap lib_heap)

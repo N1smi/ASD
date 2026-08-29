@@ -1,0 +1,3 @@
+create_project_lib(GraphOnAdjacencyList)
+add_depend(GraphOnAdjacencyList TVector lib_tvector)
+add_depend(GraphOnAdjacencyList  TList lib_tlist)
